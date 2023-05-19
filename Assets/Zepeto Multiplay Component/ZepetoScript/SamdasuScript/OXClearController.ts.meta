@@ -1,0 +1,36 @@
+fileFormatVersion: 2
+guid: 34b1633b17cb5cf4b9626b74cb7564b0
+importerOverride: ZEPETO.Script.Compiler:ZEPETO.Script:TypescriptAssetImporter
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: -1123457745, guid: 54cf806323ffe4418a4ce4cc63fe6b9d, type: 3}
+  isAssemblyDeclarations: 0
+  assembly: 
+  generateAllTypes: 1
+  types: []
+  generateWrapper: 0
+  overrideWrapperTypes: 0
+  wrapperTypes: []
+  WrapperFilters: []
+  wrapperOutputDirectory: Generated
+  compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
+    { value: true });\r\nconst UnityEngine_1 = require(\"UnityEngine\");\r\nconst
+    UnityEngine_UI_1 = require(\"UnityEngine.UI\");\r\nconst ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst
+    GameManager_1 = require(\"../Managers/GameManager\");\r\nconst TypeManager_1
+    = require(\"../Managers/TypeManager\");\r\nconst OXManager_1 = require(\"./OXManager\");\r\nclass
+    OXClearController extends ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    Start()
+    {\r\n        /* Set OX Manager */\r\n        if (!this.returnPos)\r\n           
+    this.returnPos = this.transform.parent;\r\n        this.manager = this.returnPos.GetComponent($typeof(OXManager_1.default));\r\n   
+    }\r\n    OnTriggerEnter(collider) {\r\n        if (this.manager.isComplete) {\r\n           
+    console.log(` <<<<<<<< COMPLETE >>>>>>>> `);\r\n            this.manager.OnClearOXZone();\r\n           
+    GameManager_1.default.instance.ClearStampMission(TypeManager_1.StampType.STAMP_OX_QUIZ);\r\n       
+    }\r\n        else {\r\n            console.log(` >>>>>>>> NO <<<<<<<< `);\r\n       
+    }\r\n    }\r\n}\r\nexports.default = OXClearController;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiT1hDbGVhckNvbnRyb2xsZXIuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJPWENsZWFyQ29udHJvbGxlci50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOztBQUFBLDZDQUEyRTtBQUMzRSxtREFBd0M7QUFDeEMsaURBQXFEO0FBQ3JELHlEQUFrRDtBQUNsRCx5REFBb0Q7QUFDcEQsMkNBQW9DO0FBRXBDLE1BQXFCLGlCQUFrQixTQUFRLHFDQUFxQjtJQU9oRSxLQUFLO1FBQ0Qsb0JBQW9CO1FBQ3BCLElBQUcsQ0FBQyxJQUFJLENBQUMsU0FBUztZQUFFLElBQUksQ0FBQyxTQUFTLEdBQUcsSUFBSSxDQUFDLFNBQVMsQ0FBQyxNQUFNLENBQUM7UUFDM0QsSUFBSSxDQUFDLE9BQU8sR0FBRyxJQUFJLENBQUMsU0FBUyxDQUFDLFlBQVksU0FBQyxtQkFBUyxFQUFHLENBQUM7SUFDNUQsQ0FBQztJQUVELGNBQWMsQ0FBQyxRQUFtQjtRQUM5QixJQUFHLElBQUksQ0FBQyxPQUFPLENBQUMsVUFBVSxFQUFFO1lBQ3hCLE9BQU8sQ0FBQyxHQUFHLENBQUMsOEJBQThCLENBQUMsQ0FBQztZQUM1QyxJQUFJLENBQUMsT0FBTyxDQUFDLGFBQWEsRUFBRSxDQUFDO1lBQzdCLHFCQUFXLENBQUMsUUFBUSxDQUFDLGlCQUFpQixDQUFDLHVCQUFTLENBQUMsYUFBYSxDQUFDLENBQUM7U0FDbkU7YUFBTTtZQUNILE9BQU8sQ0FBQyxHQUFHLENBQUMsd0JBQXdCLENBQUMsQ0FBQztTQUN6QztJQUNMLENBQUM7Q0FDSjtBQXRCRCxvQ0FzQkMifQ==","assetPath":"Assets/Zepeto
+    Multiplay Component/ZepetoScript/SamdasuScript/OXClearController.ts","manifest":{"properties":[{"assembly":"UnityEngine.CoreModule","name":"targetUI","type":"UnityEngine.GameObject","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]}],"name":"OXClearController","description":"","hasAnimatorMove":false},"isCompiled":true}'
+  typescriptHash: f931cc87f621e1618f60497823dda674
+  onlyWriteTrigger: 0

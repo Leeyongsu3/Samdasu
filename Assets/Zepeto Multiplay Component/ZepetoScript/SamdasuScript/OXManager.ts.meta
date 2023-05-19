@@ -1,0 +1,47 @@
+fileFormatVersion: 2
+guid: 957aae2874519404fb2ef68b31af448f
+importerOverride: ZEPETO.Script.Compiler:ZEPETO.Script:TypescriptAssetImporter
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: -1123457745, guid: 54cf806323ffe4418a4ce4cc63fe6b9d, type: 3}
+  isAssemblyDeclarations: 0
+  assembly: 
+  generateAllTypes: 1
+  types: []
+  generateWrapper: 0
+  overrideWrapperTypes: 0
+  wrapperTypes: []
+  WrapperFilters: []
+  wrapperOutputDirectory: Generated
+  compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
+    { value: true });\r\nconst UnityEngine_1 = require(\"UnityEngine\");\r\nconst
+    ZEPETO_Character_Controller_1 = require(\"ZEPETO.Character.Controller\");\r\nconst
+    ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst OXController_1 = require(\"./OXController\");\r\nclass
+    OXManager extends ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    constructor()
+    {\r\n        super(...arguments);\r\n        /* Managers Properties */\r\n       
+    this.datas = [];\r\n    }\r\n    Start() {\r\n        for (const trans of this.transform.GetComponentsInChildren($typeof(UnityEngine_1.Transform)))
+    {\r\n            const con = trans.GetComponent($typeof(OXController_1.default));\r\n           
+    if (con) {\r\n                const data = { controller: con, isPassed: false,
+    };\r\n                this.datas.push(data);\r\n            }\r\n        }\r\n   
+    }\r\n    /** Controller Call **/\r\n    /* Passed OX Block */\r\n    OnOXPassed(controller)
+    {\r\n        for (const data of this.datas) {\r\n            if (ZEPETO_Script_1.ZepetoScriptBehaviour.op_Equality(data.controller,
+    controller)) {\r\n                data.isPassed = true;\r\n                break;\r\n           
+    }\r\n        }\r\n    }\r\n    /* Fail Object Script */\r\n    OnTouchedFailObject()
+    {\r\n        const character = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.LocalPlayer.zepetoPlayer.character;\r\n       
+    character.Teleport(this.transform.position, this.transform.rotation);\r\n       
+    for (const data of this.datas) {\r\n            data.controller.Reset();\r\n       
+    }\r\n    }\r\n    /* Clear OX Zone */\r\n    OnClearOXZone() {\r\n        for
+    (const data of this.datas) {\r\n            data.controller.OnMissionClear();\r\n       
+    }\r\n    }\r\n    /* Is Complete? */\r\n    get isComplete() {\r\n        if
+    (!this.datas || this.datas.length == 0)\r\n            return false;\r\n       
+    for (const data of this.datas) {\r\n            if (!data.isPassed) {\r\n               
+    return false;\r\n            }\r\n        }\r\n        return true;\r\n    }\r\n}\r\nexports.default
+    = OXManager;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiT1hNYW5hZ2VyLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiT1hNYW5hZ2VyLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7O0FBQUEsNkNBQW9EO0FBQ3BELDZFQUE0RDtBQUU1RCxpREFBcUQ7QUFHckQsaURBQTBDO0FBRTFDLE1BQXFCLFNBQVUsU0FBUSxxQ0FBcUI7SUFBNUQ7O1FBRUkseUJBQXlCO1FBQ2pCLFVBQUssR0FBWSxFQUFFLENBQUM7SUFpRGhDLENBQUM7SUEvQ0csS0FBSztRQUNELEtBQUksTUFBTSxLQUFLLElBQUksSUFBSSxDQUFDLFNBQVMsQ0FBQyx1QkFBdUIsU0FBQyx1QkFBUyxJQUFLO1lBQ3BFLE1BQU0sR0FBRyxHQUFHLEtBQUssQ0FBQyxZQUFZLFNBQUMsc0JBQVksRUFBRyxDQUFDO1lBQy9DLElBQUcsR0FBRyxFQUFFO2dCQUNKLE1BQU0sSUFBSSxHQUFVLEVBQUUsVUFBVSxFQUFDLEdBQUcsRUFBRSxRQUFRLEVBQUMsS0FBSyxHQUFHLENBQUM7Z0JBQ3hELElBQUksQ0FBQyxLQUFLLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQyxDQUFDO2FBQ3pCO1NBQ0o7SUFDTCxDQUFDO0lBRUQsdUJBQXVCO0lBQ3ZCLHFCQUFxQjtJQUNkLFVBQVUsQ0FBQyxVQUF1QjtRQUNyQyxLQUFJLE1BQU0sSUFBSSxJQUFJLElBQUksQ0FBQyxLQUFLLEVBQUU7WUFDMUIsSUF4QkgscUNBQXFCLENBeUQ0K0osV0FBWSxDQWpDdmdLLElBQUksQ0FBQyxVQUFVLEVBQUksVUFBVSxHQUFFO2dCQUM5QixJQUFJLENBQUMsUUFBUSxHQUFHLElBQUksQ0FBQztnQkFDckIsTUFBTTthQUNUO1NBQ0o7SUFDTCxDQUFDO0lBRUQsd0JBQXdCO0lBQ2pCLG1CQUFtQjtRQUN0QixNQUFNLFNBQVMsR0FBRywyQ0FBYSxDQUFDLFFBQVEsQ0FBQyxXQUFXLENBQUMsWUFBWSxDQUFDLFNBQVMsQ0FBQztRQUM1RSxTQUFTLENBQUMsUUFBUSxDQUFDLElBQUksQ0FBQyxTQUFTLENBQUMsUUFBUSxFQUFFLElBQUksQ0FBQyxTQUFTLENBQUMsUUFBUSxDQUFDLENBQUM7UUFDckUsS0FBSSxNQUFNLElBQUksSUFBSSxJQUFJLENBQUMsS0FBSyxFQUFFO1lBQzFCLElBQUksQ0FBQyxVQUFVLENBQUMsS0FBSyxFQUFFLENBQUM7U0FDM0I7SUFDTCxDQUFDO0lBRUQsbUJBQW1CO0lBQ1osYUFBYTtRQUNoQixLQUFJLE1BQU0sSUFBSSxJQUFJLElBQUksQ0FBQyxLQUFLLEVBQUU7WUFDMUIsSUFBSSxDQUFDLFVBQVUsQ0FBQyxjQUFjLEVBQUUsQ0FBQztTQUNwQztJQUNMLENBQUM7SUFFRCxrQkFBa0I7SUFDbEIsSUFBVyxVQUFVO1FBQ2pCLElBQUcsQ0FBQyxJQUFJLENBQUMsS0FBSyxJQUFJLElBQUksQ0FBQyxLQUFLLENBQUMsTUFBTSxJQUFJLENBQUM7WUFBRSxPQUFPLEtBQUssQ0FBQztRQUN2RCxLQUFJLE1BQU0sSUFBSSxJQUFJLElBQUksQ0FBQyxLQUFLLEVBQUU7WUFDMUIsSUFBRyxDQUFDLElBQUksQ0FBQyxRQUFRLEVBQUU7Z0JBQ2YsT0FBTyxLQUFLLENBQUM7YUFDaEI7U0FDSjtRQUNELE9BQU8sSUFBSSxDQUFDO0lBQ2hCLENBQUM7Q0FDSjtBQXBERCw0QkFvREMifQ==","assetPath":"Assets/Zepeto
+    Multiplay Component/ZepetoScript/SamdasuScript/OXManager.ts","manifest":{"properties":[],"name":"OXManager","description":"","hasAnimatorMove":false},"isCompiled":true}'
+  typescriptHash: fa44a55bcdb0423c713cf75d23916a4b
+  onlyWriteTrigger: 0

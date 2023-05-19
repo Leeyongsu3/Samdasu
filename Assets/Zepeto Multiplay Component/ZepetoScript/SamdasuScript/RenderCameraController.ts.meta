@@ -1,0 +1,178 @@
+fileFormatVersion: 2
+guid: 25531fa0158cb19459530713efe6c34e
+importerOverride: ZEPETO.Script.Compiler:ZEPETO.Script:TypescriptAssetImporter
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: -1123457745, guid: 54cf806323ffe4418a4ce4cc63fe6b9d, type: 3}
+  isAssemblyDeclarations: 0
+  assembly: 
+  generateAllTypes: 1
+  types: []
+  generateWrapper: 0
+  overrideWrapperTypes: 0
+  wrapperTypes: []
+  WrapperFilters: []
+  wrapperOutputDirectory: Generated
+  compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
+    { value: true });\r\nconst __UnityEngine__ = require(\"UnityEngine\");\r\nconst
+    UnityEngine_1 = require(\"UnityEngine\");\r\nconst UnityEngine_UI_1 = require(\"UnityEngine.UI\");\r\nconst
+    ZEPETO_Character_Controller_1 = require(\"ZEPETO.Character.Controller\");\r\nconst
+    ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst ZEPETO_World_1 = require(\"ZEPETO.World\");\r\nconst
+    SyncIndexManager_1 = require(\"../Common/SyncIndexManager\");\r\nconst GameManager_1
+    = require(\"../Managers/GameManager\");\r\nconst TypeManager_1 = require(\"../Managers/TypeManager\");\r\nconst
+    UIManager_1 = require(\"../Managers/UIManager\");\r\nclass RenderCameraController
+    extends ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    constructor() {\r\n       
+    super(...arguments);\r\n        this.stickerButtons = [];\r\n        this.stickerPrefabs
+    = [];\r\n        this.stickerButtonInfos = [];\r\n        this.renderState =
+    TypeManager_1.RenderPhotoMode.Default;\r\n    }\r\n    Start() {\r\n        this.stickerPool.gameObject.SetActive(false);\r\n       
+    // TEST\r\n        if (this.renderButton) {\r\n            this.renderButton.onClick.AddListener(()
+    => this.RenderPhotoModeChanger(TypeManager_1.RenderPhotoMode.Edit_Mode));\r\n       
+    }\r\n        /* Set Sticker Button */\r\n        for (let i = 0; i < this.stickerButtons.length;
+    i++) {\r\n            const btn = this.stickerButtons[i];\r\n            const
+    item = this.stickerPrefabs[i];\r\n            const info = {\r\n               
+    button: btn,\r\n                count: 0,\r\n                countText: btn.GetComponentInChildren($typeof(UnityEngine_UI_1.Text)),\r\n               
+    countImage: btn.transform.GetChild(0).GetComponent($typeof(UnityEngine_UI_1.Image)),\r\n               
+    instances: [],\r\n            };\r\n            this.stickerButtonInfos.push(info);\r\n           
+    btn.onClick.AddListener(() => this.GetStickerObject(item, info));\r\n       
+    }\r\n        /* Set UI Init */\r\n        this.SetTextureCanvas();\r\n       
+    this.SetEditCanvas();\r\n    }\r\n    /* Render Mode Changer */\r\n    RenderPhotoModeChanger(renderChange)
+    {\r\n        console.log(`Current : ${this.renderState}`);\r\n        switch
+    (+renderChange) {\r\n            case TypeManager_1.RenderPhotoMode.Edit_Mode:\r\n               
+    ZEPETO_Character_Controller_1.ZepetoPlayers.instance.ZepetoCamera.gameObject.SetActive(false);\r\n               
+    this.renderEditCamera.gameObject.SetActive(true);\r\n                this.mainCanvas.SetActive(false);\r\n               
+    this.editCanvas.SetActive(true);\r\n                this.resultCanvas.SetActive(false);\r\n               
+    this.ControllerSet(false);\r\n                this.InfoDataUpdate();\r\n               
+    console.log(`Change to Render Edit Mode`);\r\n                break;\r\n           
+    case TypeManager_1.RenderPhotoMode.Result_Mode:\r\n                ZEPETO_Character_Controller_1.ZepetoPlayers.instance.ZepetoCamera.gameObject.SetActive(false);\r\n               
+    this.renderEditCamera.gameObject.SetActive(true);\r\n                this.TakeStickerScreen();\r\n               
+    this.mainCanvas.SetActive(false);\r\n                this.editCanvas.SetActive(false);\r\n               
+    this.resultCanvas.SetActive(true);\r\n                this.ControllerSet(false);\r\n               
+    this.InfoDataUpdate();\r\n                console.log(`Change to Render Texure
+    Mode`);\r\n                break;\r\n            default: // to Default\r\n               
+    ZEPETO_Character_Controller_1.ZepetoPlayers.instance.ZepetoCamera.gameObject.SetActive(true);\r\n               
+    this.renderEditCamera.gameObject.SetActive(false);\r\n                this.mainCanvas.SetActive(true);\r\n               
+    this.editCanvas.SetActive(false);\r\n                this.resultCanvas.SetActive(false);\r\n               
+    this.ControllerSet(true);\r\n                this.InfoDataUpdate();\r\n               
+    for (const info of this.stickerButtonInfos) {\r\n                    this.ReturnAllInstantiateSticker(info);\r\n               
+    }\r\n                this.renderState = TypeManager_1.RenderPhotoMode.Default;\r\n               
+    console.log(`Change to Default`);\r\n                break;\r\n        }\r\n   
+    }\r\n    /* Set Texture Canvas */\r\n    SetTextureCanvas() {\r\n        /* Buttons
+    */\r\n        const resultPanel = this.resultCanvas.transform.GetChild(1);\r\n       
+    const saveButton = resultPanel.GetChild(0).GetChild(0).GetComponent($typeof(UnityEngine_UI_1.Button));\r\n       
+    const shareButton = resultPanel.GetChild(0).GetChild(1).GetComponent($typeof(UnityEngine_UI_1.Button));\r\n       
+    const feedButton = resultPanel.GetChild(0).GetChild(2).GetComponent($typeof(UnityEngine_UI_1.Button));\r\n       
+    const exitButton = resultPanel.GetChild(1).GetComponent($typeof(UnityEngine_UI_1.Button));\r\n       
+    const returnButton = resultPanel.GetChild(2).GetComponent($typeof(UnityEngine_UI_1.Button));\r\n       
+    /* Button Scripts */\r\n        saveButton.onClick.AddListener(() => {\r\n           
+    ZEPETO_World_1.ZepetoWorldContent.SaveToCameraRoll(this.renderTexture, (result)
+    => { console.log(`${result}`); });\r\n            this.StartCoroutine(this.ShowToastMessage(TypeManager_1.TOAST_MESSAGE.screenShotSaveCompleted));\r\n       
+    });\r\n        shareButton.onClick.AddListener(() => {\r\n            ZEPETO_World_1.ZepetoWorldContent.Share(this.renderTexture,
+    (result) => { console.log(`${result}`); });\r\n        });\r\n        feedButton.onClick.AddListener(()
+    => {\r\n            ZEPETO_World_1.ZepetoWorldContent.CreateFeed(this.renderTexture,
+    this.feedMessage, (result) => {\r\n                if (result) {\r\n                   
+    feedButton.gameObject.SetActive(false);\r\n                    this.StartCoroutine(this.ShowToastMessage(TypeManager_1.TOAST_MESSAGE.feedCompleted));\r\n               
+    }\r\n                else {\r\n                    this.StartCoroutine(this.ShowToastMessage(TypeManager_1.TOAST_MESSAGE.feedFailed));\r\n               
+    }\r\n            });\r\n            this.StartCoroutine(this.ShowToastMessage(TypeManager_1.TOAST_MESSAGE.feedUploading));\r\n       
+    });\r\n        exitButton.onClick.AddListener(() => {\r\n            this.RenderPhotoModeChanger(TypeManager_1.RenderPhotoMode.Default);\r\n       
+    });\r\n        returnButton.onClick.AddListener(() => {\r\n            this.RenderPhotoModeChanger(TypeManager_1.RenderPhotoMode.Edit_Mode);\r\n       
+    });\r\n    }\r\n    /* Set Edit Canvas */\r\n    SetEditCanvas() {\r\n       
+    /* Buttons */\r\n        const controlPanel = this.editCanvas.transform.GetChild(1);\r\n       
+    const exitButton = controlPanel.GetChild(0).GetComponent($typeof(UnityEngine_UI_1.Button));\r\n       
+    const renderButton = controlPanel.GetChild(1).GetComponent($typeof(UnityEngine_UI_1.Button));\r\n       
+    const clearButton = controlPanel.GetChild(2).GetComponent($typeof(UnityEngine_UI_1.Button));\r\n       
+    const resetButton = controlPanel.GetChild(3).GetComponent($typeof(UnityEngine_UI_1.Button));\r\n       
+    const removeButton = controlPanel.GetChild(4).GetComponent($typeof(UnityEngine_UI_1.Button));\r\n       
+    /* Button Scripts */\r\n        exitButton.onClick.AddListener(() => {\r\n           
+    this.RenderPhotoModeChanger(TypeManager_1.RenderPhotoMode.Default);\r\n       
+    });\r\n        renderButton.onClick.AddListener(() => {\r\n            this.RenderPhotoModeChanger(TypeManager_1.RenderPhotoMode.Result_Mode);\r\n       
+    });\r\n        clearButton.onClick.AddListener(() => {\r\n            for (const
+    info of this.stickerButtonInfos) {\r\n                this.ReturnAllInstantiateSticker(info);\r\n           
+    }\r\n        });\r\n        resetButton.onClick.AddListener(() => {\r\n           
+    // NEED ITEM\r\n            const item = null;\r\n            item.transform.localScale
+    = UnityEngine_1.Vector3.one;\r\n            item.transform.rotation = UnityEngine_1.Quaternion.identity;\r\n       
+    });\r\n        removeButton.onClick.AddListener(() => {\r\n            // NEED
+    ITEM AND INFO\r\n            const item = null;\r\n            this.ReturnInstantiateSticker(item);\r\n       
+    });\r\n    }\r\n    /* Toast */\r\n    *ShowToastMessage(text) {\r\n        const
+    resultPanel = this.resultCanvas.transform.GetChild(1);\r\n        yield this.wait;\r\n       
+    const originObject = text == TypeManager_1.TOAST_MESSAGE.feedFailed ? this.toastErrorMessage
+    : this.toastSuccessMessage;\r\n        const toastMessage = UnityEngine_1.GameObject.Instantiate(originObject);\r\n       
+    toastMessage.transform.SetParent(resultPanel);\r\n        toastMessage.GetComponentInChildren($typeof(UnityEngine_UI_1.Text)).text
+    = text;\r\n        UnityEngine_1.GameObject.Destroy(toastMessage, 1);\r\n   
+    }\r\n    /* Sticker Screen Shot */\r\n    TakeStickerScreen() {\r\n        this.renderTextureCamera.gameObject.SetActive(true);\r\n       
+    this.renderTextureCamera.targetTexture = this.renderTexture;\r\n        /* Camera
+    Render */\r\n        this.StartCoroutine(this.CameraRender());\r\n    }\r\n   
+    *CameraRender() {\r\n        yield new UnityEngine_1.WaitForEndOfFrame();\r\n       
+    this.renderTextureCamera.Render();\r\n        this.renderTextureCamera.targetTexture
+    = null;\r\n        this.renderTextureCamera.gameObject.SetActive(false);\r\n       
+    GameManager_1.default.instance.ClearStampMission(TypeManager_1.StampType.STAMP_STICKER);\r\n       
+    /* Camera Render END */\r\n        this.StopCoroutine(this.CameraRender());\r\n   
+    }\r\n    /* Controller Set */\r\n    ControllerSet(controlable) {\r\n       
+    if (!this.controller) {\r\n            const controller = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.gameObject.GetComponentInChildren($typeof(ZEPETO_Character_Controller_1.UIZepetoPlayerControl));\r\n           
+    this.controller = controller.gameObject;\r\n        }\r\n        this.controller.gameObject.SetActive(controlable);\r\n       
+    if (controlable) {\r\n            ZEPETO_Character_Controller_1.ZepetoPlayers.instance.controllerData.inputAsset.Enable();\r\n           
+    // this.controller.gameObject.SetActive(controlable);\r\n        }\r\n       
+    else {\r\n            ZEPETO_Character_Controller_1.ZepetoPlayers.instance.controllerData.inputAsset.Disable();\r\n           
+    // this.controller.gameObject.SetActive(controlable);\r\n        }\r\n    }\r\n   
+    /* Get Find Button Info */\r\n    GetFindButtonInfo(item) {\r\n        for (const
+    info of this.stickerButtonInfos) {\r\n            if (info.button.name == item.name)
+    {\r\n                return info;\r\n            }\r\n        }\r\n        return
+    null;\r\n    }\r\n    /* Get Find Sticker Object */\r\n    GetStickerObject(item,
+    info) {\r\n        if (!(info.count > 0) || !(this.StringToNumber(info.countText.text)
+    > 0))\r\n            return;\r\n        for (const instance of info.instances)
+    {\r\n            if (instance.transform.parent == this.stickerPool) {\r\n               
+    const editCanvas = this.editRenderCanvas.transform;\r\n                instance.transform.position
+    = new UnityEngine_1.Vector3(editCanvas.position.x, editCanvas.position.y, 40.5);\r\n               
+    instance.transform.rotation = UnityEngine_1.Quaternion.identity;\r\n               
+    instance.transform.parent = editCanvas;\r\n                instance.SetActive(true);\r\n               
+    info.countText.text = `${UnityEngine_1.Mathf.Clamp(this.StringToNumber(info.countText.text)
+    - 1, 0, info.count)}`;\r\n                // console.log(` >>>>>>>>>>>>> GetStickerObject`);\r\n               
+    if (this.StringToNumber(info.countText.text) == 0)\r\n                    this.ButtonColorChanger(info,
+    false);\r\n                return;\r\n            }\r\n        }\r\n        this.InstantiateSticker(item,
+    info);\r\n    }\r\n    /* Instantiate Sticker */\r\n    InstantiateSticker(item,
+    info) {\r\n        if (!(info.count > 0))\r\n            return;\r\n        const
+    editCanvas = this.editRenderCanvas.transform;\r\n        const clone = UnityEngine_1.GameObject.Instantiate(item,
+    editCanvas);\r\n        info.instances.push(clone);\r\n        clone.name = info.button.name;\r\n       
+    clone.transform.position = new UnityEngine_1.Vector3(editCanvas.position.x, editCanvas.position.y,
+    40.5);\r\n        clone.transform.rotation = UnityEngine_1.Quaternion.identity;\r\n       
+    clone.SetActive(true);\r\n        info.countText.text = `${UnityEngine_1.Mathf.Clamp(this.StringToNumber(info.countText.text)
+    - 1, 0, info.count)}`;\r\n        // console.log(` >>>>>>>>>>>>> InstantiateSticker`);\r\n       
+    if (this.StringToNumber(info.countText.text) == 0)\r\n            this.ButtonColorChanger(info,
+    false);\r\n    }\r\n    /* Return Instantiate in pool */\r\n    ReturnInstantiateSticker(item,
+    info = null) {\r\n        if (!info)\r\n            info = this.GetFindButtonInfo(item);\r\n       
+    for (const instance of info.instances) {\r\n            if (__UnityEngine__.Object.op_Equality(item,
+    instance)) {\r\n                instance.transform.parent = this.stickerPool;\r\n               
+    instance.transform.position = this.stickerPool.position;\r\n                instance.transform.rotation
+    = UnityEngine_1.Quaternion.identity;\r\n                instance.SetActive(false);\r\n               
+    info.countText.text = `${UnityEngine_1.Mathf.Clamp(this.StringToNumber(info.countText.text)
+    + 1, 0, info.count)}`;\r\n                if (this.StringToNumber(info.countText.text)
+    > 0)\r\n                    this.ButtonColorChanger(info, true);\r\n               
+    break;\r\n            }\r\n        }\r\n    }\r\n    /* Return All Instantiate
+    in pool */\r\n    ReturnAllInstantiateSticker(info) {\r\n        // SyncIndexManager.STICKERS\r\n       
+    for (const instance of info.instances) {\r\n            if (instance.transform.parent
+    != this.stickerPool) {\r\n                instance.transform.parent = this.stickerPool;\r\n               
+    instance.transform.position = this.stickerPool.position;\r\n                instance.transform.rotation
+    = UnityEngine_1.Quaternion.identity;\r\n                instance.SetActive(false);\r\n           
+    }\r\n        }\r\n        info.countText.text = `${info.count}`;\r\n        this.ButtonColorChanger(info,
+    info.count > 0);\r\n    }\r\n    /* Sticker Count Update */\r\n    InfoDataUpdate()
+    {\r\n        for (const info of this.stickerButtonInfos) {\r\n            if
+    (SyncIndexManager_1.default.STICKERS.has(info.button.name)) {\r\n               
+    const sticker = SyncIndexManager_1.default.STICKERS.get(info.button.name);\r\n               
+    info.count = sticker.count;\r\n            }\r\n        }\r\n    }\r\n    /*
+    Color Changer */\r\n    ButtonColorChanger(info, enable) {\r\n        if (enable)
+    {\r\n            info.countImage.color = UIManager_1.default.instance.enabledColor;\r\n       
+    }\r\n        else {\r\n            info.countImage.color = UIManager_1.default.instance.disabledColor;\r\n       
+    }\r\n    }\r\n    /* Function String ===> Number */\r\n    StringToNumber(num)
+    {\r\n        return parseInt(num);\r\n    }\r\n}\r\nexports.default = RenderCameraController;\r\n//#
+    sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiUmVuZGVyQ2FtZXJhQ29udHJvbGxlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIlJlbmRlckNhbWVyYUNvbnRyb2xsZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7O0FBQUEsNkNBQW1KO0FBQ25KLG1EQUFxRDtBQUNyRCw2RUFBbUY7QUFDbkYsaURBQXFEO0FBQ3JELCtDQUFrRDtBQUNsRCxpRUFBMEQ7QUFDMUQseURBQWtEO0FBQ2xELHlEQUFnRztBQUNoRyxxREFBOEM7QUFFOUMsTUFBcUIsc0JBQXVCLFNBQVEscUNBQXFCO0lBQXpFOztRQWU4QixtQkFBYyxHQUFhLEVBQUUsQ0FBQztRQUM5QixtQkFBYyxHQUFpQixFQUFFLENBQUM7UUFDcEQsdUJBQWtCLEdBQWlCLEVBQUUsQ0FBQztRQVV0QyxnQkFBVyxHQUFvQiw2QkFBZSxDQUFDLE9BQU8sQ0FBQztJQThTbkUsQ0FBQztJQTFTRyxLQUFLO1FBQ0QsSUFBSSxDQUFDLFdBQVcsQ0FBQyxVQUFVLENBQUMsU0FBUyxDQUFDLEtBQUssQ0FBQyxDQUFDO1FBRTdDLE9BQU87UUFDUCxJQUFHLElBQUksQ0FBQyxZQUFZLEVBQUU7WUFDbEIsSUFBSSxDQUFDLFlBQVksQ0FBQyxPQUFPLENBQUMsV0FBVyxDQUFDLEdBQUcsRUFBRSxDQUFDLElBQUksQ0FBQyxzQkFBc0IsQ0FBQyw2QkFBZSxDQUFDLFNBQVMsQ0FBQyxDQUFDLENBQUM7U0FDdkc7UUFFRCx3QkFBd0I7UUFDeEIsS0FBSSxJQUFJLENBQUMsR0FBQyxDQUFDLEVBQUUsQ0FBQyxHQUFDLElBQUksQ0FBQyxjQUFjLENBQUMsTUFBTSxFQUFFLENBQUMsRUFBRSxFQUFFO1lBQzVDLE1BQU0sR0FBRyxHQUFHLElBQUksQ0FBQyxjQUFjLENBQUMsQ0FBQyxDQUFDLENBQUM7WUFDbkMsTUFBTSxJQUFJLEdBQUcsSUFBSSxDQUFDLGNBQWMsQ0FBQyxDQUFDLENBQUMsQ0FBQztZQUNwQyxNQUFNLElBQUksR0FBYztnQkFDcEIsTUFBTSxFQUFDLEdBQUc7Z0JBQ1YsS0FBSyxFQUFDLENBQUM7Z0JBQ1AsU0FBUyxFQUFDLEdBQUcsQ0FBQyxzQkFBc0IsU0FBQyxxQkFBSSxFQUFHO2dCQUM1QyxVQUFVLEVBQUMsR0FBRyxDQUFDLFNBQVMsQ0FBQyxRQUFRLENBQUMsQ0FBQyxDQUFDLENBQUMsWUFBWSxTQUFDLHNCQUFLLEVBQUc7Z0JBQzFELFNBQVMsRUFBQyxFQUFFO2FBQ2YsQ0FBQztZQUNGLElBQUksQ0FBQyxrQkFBa0IsQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLENBQUM7WUFDbkMsR0FBRyxDQUFDLE9BQU8sQ0FBQyxXQUFXLENBQUMsR0FBRyxFQUFFLENBQUMsSUFBSSxDQUFDLGdCQUFnQixDQUFDLElBQUksRUFBRSxJQUFJLENBQUMsQ0FBQyxDQUFDO1NBQ3BFO1FBRUQsaUJBQWlCO1FBQ2pCLElBQUksQ0FBQyxnQkFBZ0IsRUFBRSxDQUFDO1FBQ3hCLElBQUksQ0FBQyxhQUFhLEVBQUUsQ0FBQztJQUN6QixDQUFDO0lBRUQseUJBQXlCO0lBQ2pCLHNCQUFzQixDQUFDLFlBQTRCO1FBQ3ZELE9BQU8sQ0FBQyxHQUFHLENBQUMsYUFBYSxJQUFJLENBQUMsV0FBVyxFQUFFLENBQUMsQ0FBQztRQUM3QyxRQUFPLENBQUMsWUFBWSxFQUFFO1lBQ2xCLEtBQUssNkJBQWUsQ0FBQyxTQUFTO2dCQUMxQiwyQ0FBYSxDQUFDLFFBQVEsQ0FBQyxZQUFZLENBQUMsVUFBVSxDQUFDLFNBQVMsQ0FBQyxLQUFLLENBQUMsQ0FBQztnQkFDaEUsSUFBSSxDQUFDLGdCQUFnQixDQUFDLFVBQVUsQ0FBQyxTQUFTLENBQUMsSUFBSSxDQUFDLENBQUM7Z0JBQ2pELElBQUksQ0FBQyxVQUFVLENBQUMsU0FBUyxDQUFDLEtBQUssQ0FBQyxDQUFDO2dCQUNqQyxJQUFJLENBQUMsVUFBVSxDQUFDLFNBQVMsQ0FBQyxJQUFJLENBQUMsQ0FBQztnQkFDaEMsSUFBSSxDQUFDLFlBQVksQ0FBQyxTQUFTLENBQUMsS0FBSyxDQUFDLENBQUM7Z0JBQ25DLElBQUksQ0FBQyxhQUFhLENBQUMsS0FBSyxDQUFDLENBQUM7Z0JBQzFCLElBQUksQ0FBQyxjQUFjLEVBQUUsQ0FBQztnQkFDdEIsT0FBTyxDQUFDLEdBQUcsQ0FBQyw0QkFBNEIsQ0FBQyxDQUFDO2dCQUMxQyxNQUFNO1lBRVYsS0FBSyw2QkFBZSxDQUFDLFdBQVc7Z0JBQzVCLDJDQUFhLENBQUMsUUFBUSxDQUFDLFlBQVksQ0FBQyxVQUFVLENBQUMsU0FBUyxDQUFDLEtBQUssQ0FBQyxDQUFDO2dCQUNoRSxJQUFJLENBQUMsZ0JBQWdCLENBQUMsVUFBVSxDQUFDLFNBQVMsQ0FBQyxJQUFJLENBQUMsQ0FBQztnQkFDakQsSUFBSSxDQUFDLGlCQUFpQixFQUFFLENBQUM7Z0JBQ3pCLElBQUksQ0FBQyxVQUFVLENBQUMsU0FBUyxDQUFDLEtBQUssQ0FBQyxDQUFDO2dCQUNqQyxJQUFJLENBQUMsVUFBVSxDQUFDLFNBQVMsQ0FBQyxLQUFLLENBQUMsQ0FBQztnQkFDakMsSUFBSSxDQUFDLFlBQVksQ0FBQyxTQUFTLENBQUMsSUFBSSxDQUFDLENBQUM7Z0JBQ2xDLElBQUksQ0FBQyxhQUFhLENBQUMsS0FBSyxDQUFDLENBQUM7Z0JBQzFCLElBQUksQ0FBQyxjQUFjLEVBQUUsQ0FBQztnQkFDdEIsT0FBTyxDQUFDLEdBQUcsQ0FBQyw4QkFBOEIsQ0FBQyxDQUFDO2dCQUM1QyxNQUFNO1lBRVYsU0FBUyxhQUFhO2dCQUNsQiwyQ0FBYSxDQUFDLFFBQVEsQ0FBQyxZQUFZLENBQUMsVUFBVSxDQUFDLFNBQVMsQ0FBQyxJQUFJLENBQUMsQ0FBQztnQkFDL0QsSUFBSSxDQUFDLGdCQUFnQixDQUFDLFVBQVUsQ0FBQyxTQUFTLENBQUMsS0FBSyxDQUFDLENBQUM7Z0JBQ2xELElBQUksQ0FBQyxVQUFVLENBQUMsU0FBUyxDQUFDLElBQUksQ0FBQyxDQUFDO2dCQUNoQyxJQUFJLENBQUMsVUFBVSxDQUFDLFNBQVMsQ0FBQyxLQUFLLENBQUMsQ0FBQztnQkFDakMsSUFBSSxDQUFDLFlBQVksQ0FBQyxTQUFTLENBQUMsS0FBSyxDQUFDLENBQUM7Z0JBQ25DLElBQUksQ0FBQyxhQUFhLENBQUMsSUFBSSxDQUFDLENBQUM7Z0JBQ3pCLElBQUksQ0FBQyxjQUFjLEVBQUUsQ0FBQztnQkFDdEIsS0FBSSxNQUFNLElBQUksSUFBSSxJQUFJLENBQUMsa0JBQWtCLEVBQUU7b0JBQ3ZDLElBQUksQ0FBQywyQkFBMkIsQ0FBQyxJQUFJLENBQUMsQ0FBQztpQkFDMUM7Z0JBQ0QsSUFBSSxDQUFDLFdBQVcsR0FBRyw2QkFBZSxDQUFDLE9BQU8sQ0FBQztnQkFDM0MsT0FBTyxDQUFDLEdBQUcsQ0FBQyxtQkFBbUIsQ0FBQyxDQUFDO2dCQUNqQyxNQUFNO1NBQ2I7SUFDTCxDQUFDO0lBRUQsd0JBQXdCO0lBQ2hCLGdCQUFnQjtRQUNwQixhQUFhO1FBQ2IsTUFBTSxXQUFXLEdBQUcsSUFBSSxDQUFDLFlBQVksQ0FBQyxTQUFTLENBQUMsUUFBUSxDQUFDLENBQUMsQ0FBQyxDQUFDO1FBQzVELE1BQU0sVUFBVSxHQUFHLFdBQVcsQ0FBQyxRQUFRLENBQUMsQ0FBQyxDQUFDLENBQUMsUUFBUSxDQUFDLENBQUMsQ0FBQyxDQUFDLFlBQVksU0FBQyx1QkFBTSxFQUFHLENBQUM7UUFDOUUsTUFBTSxXQUFXLEdBQUcsV0FBVyxDQUFDLFFBQVEsQ0FBQyxDQUFDLENBQUMsQ0FBQyxRQUFRLENBQUMsQ0FBQyxDQUFDLENBQUMsWUFBWSxTQUFDLHVCQUFNLEVBQUcsQ0FBQztRQUMvRSxNQUFNLFVBQVUsR0FBRyxXQUFXLENBQUMsUUFBUSxDQUFDLENBQUMsQ0FBQyxDQUFDLFFBQVEsQ0FBQyxDQUFDLENBQUMsQ0FBQyxZQUFZLFNBQUMsdUJBQU0sRUFBRyxDQUFDO1FBQzlFLE1BQU0sVUFBVSxHQUFHLFdBQVcsQ0FBQyxRQUFRLENBQUMsQ0FBQyxDQUFDLENBQUMsWUFBWSxTQUFDLHVCQUFNLEVBQUcsQ0FBQztRQUNsRSxNQUFNLFlBQVksR0FBRyxXQUFXLENBQUMsUUFBUSxDQUFDLENBQUMsQ0FBQyxDQUFDLFlBQVksU0FBQyx1QkFBTSxFQUFHLENBQUM7UUFFcEUsb0JBQW9CO1FBQ3BCLFVBQVUsQ0FBQyxPQUFPLENBQUMsV0FBVyxDQUFDLEdBQUcsRUFBRTtZQUNoQyxpQ0FBa0IsQ0FBQyxnQkFBZ0IsQ0FBQyxJQUFJLENBQUMsYUFBYSxFQUFFLENBQUMsTUFBZSxFQUFFLEVBQUUsR0FBRyxPQUFPLENBQUMsR0FBRyxDQUFDLEdBQUcsTUFBTSxFQUFFLENBQUMsQ0FBQSxDQUFDLENBQUMsQ0FBQyxDQUFDO1lBQzNHLElBQUksQ0FBQyxjQUFjLENBQUMsSUFBSSxDQUFDLGdCQUFnQixDQUFDLDJCQUFhLENBQUMsdUJBQXVCLENBQUMsQ0FBQyxDQUFDO1FBQ3RGLENBQUMsQ0FBQyxDQUFDO1FBRUgsV0FBVyxDQUFDLE9BQU8sQ0FBQyxXQUFXLENBQUMsR0FBRyxFQUFFO1lBQ2pDLGlDQUFrQixDQUFDLEtBQUssQ0FBQyxJQUFJLENBQUMsYUFBYSxFQUFFLENBQUMsTUFBZSxFQUFFLEVBQUUsR0FBRyxPQUFPLENBQUMsR0FBRyxDQUFDLEdBQUcsTUFBTSxFQUFFLENBQUMsQ0FBQSxDQUFDLENBQUMsQ0FBQyxDQUFDO1FBQ3BHLENBQUMsQ0FBQyxDQUFDO1FBRUgsVUFBVSxDQUFDLE9BQU8sQ0FBQyxXQUFXLENBQUMsR0FBRyxFQUFFO1lBQ2hDLGlDQUFrQixDQUFDLFVBQVUsQ0FBQyxJQUFJLENBQUMsYUFBYSxFQUFFLElBQUksQ0FBQyxXQUFXLEVBQUUsQ0FBQyxNQUFlLEVBQUUsRUFBRTtnQkFDcEYsSUFBSSxNQUFNLEVBQUU7b0JBQ1IsVUFBVSxDQUFDLFVBQVUsQ0FBQyxTQUFTLENBQUMsS0FBSyxDQUFDLENBQUM7b0JBQ3ZDLElBQUksQ0FBQyxjQUFjLENBQUMsSUFBSSxDQUFDLGdCQUFnQixDQUFDLDJCQUFhLENBQUMsYUFBYSxDQUFDLENBQUMsQ0FBQztpQkFDM0U7cUJBQU07b0JBQ0gsSUFBSSxDQUFDLGNBQWMsQ0FBQyxJQUFJLENBQUMsZ0JBQWdCLENBQUMsMkJBQWEsQ0FBQyxVQUFVLENBQUMsQ0FBQyxDQUFDO2lCQUN4RTtZQUNMLENBQUMsQ0FBQyxDQUFDO1lBQ0gsSUFBSSxDQUFDLGNBQWMsQ0FBQyxJQUFJLENBQUMsZ0JBQWdCLENBQUMsMkJBQWEsQ0FBQyxhQUFhLENBQUMsQ0FBQyxDQUFDO1FBQzVFLENBQUMsQ0FBQyxDQUFDO1FBRUgsVUFBVSxDQUFDLE9BQU8sQ0FBQyxXQUFXLENBQUMsR0FBRyxFQUFFO1lBQ2hDLElBQUksQ0FBQyxzQkFBc0IsQ0FBQyw2QkFBZSxDQUFDLE9BQU8sQ0FBQyxDQUFDO1FBQ3pELENBQUMsQ0FBQyxDQUFDO1FBRUgsWUFBWSxDQUFDLE9BQU8sQ0FBQyxXQUFXLENBQUMsR0FBRyxFQUFFO1lBQ2xDLElBQUksQ0FBQyxzQkFBc0IsQ0FBQyw2QkFBZSxDQUFDLFNBQVMsQ0FBQyxDQUFDO1FBQzNELENBQUMsQ0FBQyxDQUFDO0lBQ1AsQ0FBQztJQUVELHFCQUFxQjtJQUNiLGFBQWE7UUFDakIsYUFBYTtRQUNiLE1BQU0sWUFBWSxHQUFHLElBQUksQ0FBQyxVQUFVLENBQUMsU0FBUyxDQUFDLFFBQVEsQ0FBQyxDQUFDLENBQUMsQ0FBQztRQUMzRCxNQUFNLFVBQVUsR0FBRyxZQUFZLENBQUMsUUFBUSxDQUFDLENBQUMsQ0FBQyxDQUFDLFlBQVksU0FBQyx1QkFBTSxFQUFHLENBQUM7UUFDbkUsTUFBTSxZQUFZLEdBQUcsWUFBWSxDQUFDLFFBQVEsQ0FBQyxDQUFDLENBQUMsQ0FBQyxZQUFZLFNBQUMsdUJBQU0sRUFBRyxDQUFDO1FBQ3JFLE1BQU0sV0FBVyxHQUFHLFlBQVksQ0FBQyxRQUFRLENBQUMsQ0FBQyxDQUFDLENBQUMsWUFBWSxTQUFDLHVCQUFNLEVBQUcsQ0FBQztRQUNwRSxNQUFNLFdBQVcsR0FBRyxZQUFZLENBQUMsUUFBUSxDQUFDLENBQUMsQ0FBQyxDQUFDLFlBQVksU0FBQyx1QkFBTSxFQUFHLENBQUM7UUFDcEUsTUFBTSxZQUFZLEdBQUcsWUFBWSxDQUFDLFFBQVEsQ0FBQyxDQUFDLENBQUMsQ0FBQyxZQUFZLFNBQUMsdUJBQU0sRUFBRyxDQUFDO1FBRXJFLG9CQUFvQjtRQUNwQixVQUFVLENBQUMsT0FBTyxDQUFDLFdBQVcsQ0FBQyxHQUFHLEVBQUU7WUFDaEMsSUFBSSxDQUFDLHNCQUFzQixDQUFDLDZCQUFlLENBQUMsT0FBTyxDQUFDLENBQUM7UUFDekQsQ0FBQyxDQUFDLENBQUM7UUFFSCxZQUFZLENBQUMsT0FBTyxDQUFDLFdBQVcsQ0FBQyxHQUFHLEVBQUU7WUFDbEMsSUFBSSxDQUFDLHNCQUFzQixDQUFDLDZCQUFlLENBQUMsV0FBVyxDQUFDLENBQUM7UUFDN0QsQ0FBQyxDQUFDLENBQUM7UUFFSCxXQUFXLENBQUMsT0FBTyxDQUFDLFdBQVcsQ0FBQyxHQUFHLEVBQUU7WUFDakMsS0FBSSxNQUFNLElBQUksSUFBSSxJQUFJLENBQUMsa0JBQWtCLEVBQUU7Z0JBQ3ZDLElBQUksQ0FBQywyQkFBMkIsQ0FBQyxJQUFJLENBQUMsQ0FBQzthQUMxQztRQUNMLENBQUMsQ0FBQyxDQUFDO1FBRUgsV0FBVyxDQUFDLE9BQU8sQ0FBQyxXQUFXLENBQUMsR0FBRyxFQUFFO1lBQ2pDLFlBQVk7WUFDWixNQUFNLElBQUksR0FBYyxJQUFJLENBQUM7WUFDN0IsSUFBSSxDQUFDLFNBQVMsQ0FBQyxVQUFVLEdBQUcscUJBQU8sQ0FBQyxHQUFHLENBQUM7WUFDeEMsSUFBSSxDQUFDLFNBQVMsQ0FBQyxRQUFRLEdBQUcsd0JBQVUsQ0FBQyxRQUFRLENBQUM7UUFDbEQsQ0FBQyxDQUFDLENBQUM7UUFFSCxZQUFZLENBQUMsT0FBTyxDQUFDLFdBQVcsQ0FBQyxHQUFHLEVBQUU7WUFDbEMscUJBQXFCO1lBQ3JCLE1BQU0sSUFBSSxHQUFjLElBQUksQ0FBQztZQUM3QixJQUFJLENBQUMsd0JBQXdCLENBQUMsSUFBSSxDQUFDLENBQUM7UUFDeEMsQ0FBQyxDQUFDLENBQUM7SUFDUCxDQUFDO0lBRUQsV0FBVztJQUNILENBQUUsZ0JBQWdCLENBQUMsSUFBWTtRQUNuQyxNQUFNLFdBQVcsR0FBRyxJQUFJLENBQUMsWUFBWSxDQUFDLFNBQVMsQ0FBQyxRQUFRLENBQUMsQ0FBQyxDQUFDLENBQUM7UUFDNUQsTUFBTSxJQUFJLENBQUMsSUFBSSxDQUFDO1FBRWhCLE1BQU0sWUFBWSxHQUFHLElBQUksSUFBSSwyQkFBYSxDQUFDLFVBQVUsQ0FBQyxDQUFDLENBQUMsSUFBSSxDQUFDLGlCQUFpQixDQUFDLENBQUMsQ0FBQyxJQUFJLENBQUMsbUJBQW1CLENBQUM7UUFDMUcsTUFBTSxZQUFZLEdBQUcsd0JBQVUsQ0FBQyxXQUFXLENBQWEsWUFBWSxDQUFDLENBQUM7UUFDdEUsWUFBWSxDQUFDLFNBQVMsQ0FBQyxTQUFTLENBQUMsV0FBVyxDQUFDLENBQUM7UUFDOUMsWUFBWSxDQUFDLHNCQUFzQixTQUFDLHFCQUFJLEdBQUksSUFBSSxHQUFHLElBQUksQ0FBQztRQUN4RCx3QkFBVSxDQUFDLE9BQU8sQ0FBQyxZQUFZLEVBQUUsQ0FBQyxDQUFDLENBQUM7SUFDeEMsQ0FBQztJQUVELHlCQUF5QjtJQUNqQixpQkFBaUI7UUFDckIsSUFBSSxDQUFDLG1CQUFtQixDQUFDLFVBQVUsQ0FBQyxTQUFTLENBQUMsSUFBSSxDQUFDLENBQUM7UUFDcEQsSUFBSSxDQUFDLG1CQUFtQixDQUFDLGFBQWEsR0FBRyxJQUFJLENBQUMsYUFBYSxDQUFDO1FBRTVELG1CQUFtQjtRQUNuQixJQUFJLENBQUMsY0FBYyxDQUFDLElBQUksQ0FBQyxZQUFZLEVBQUUsQ0FBQyxDQUFDO0lBQzdDLENBQUM7SUFDTyxDQUFFLFlBQVk7UUFDbEIsTUFBTSxJQUFJLCtCQUFpQixFQUFFLENBQUM7UUFDOUIsSUFBSSxDQUFDLG1CQUFtQixDQUFDLE1BQU0sRUFBRSxDQUFDO1FBQ2xDLElBQUksQ0FBQyxtQkFBbUIsQ0FBQyxhQUFhLEdBQUcsSUFBSSxDQUFDO1FBQzlDLElBQUksQ0FBQyxtQkFBbUIsQ0FBQyxVQUFVLENBQUMsU0FBUyxDQUFDLEtBQUssQ0FBQyxDQUFDO1FBRXJELHFCQUFXLENBQUMsUUFBUSxDQUFDLGlCQUFpQixDQUFDLHVCQUFTLENBQUMsYUFBYSxDQUFDLENBQUM7UUFDaEUsdUJBQXVCO1FBQ3ZCLElBQUksQ0FBQyxhQUFhLENBQUMsSUFBSSxDQUFDLFlBQVksRUFBRSxDQUFDLENBQUM7SUFDNUMsQ0FBQztJQUVELG9CQUFvQjtJQUNaLGFBQWEsQ0FBQyxXQUFtQjtRQUNyQyxJQUFHLENBQUMsSUFBSSxDQUFDLFVBQVUsRUFBRTtZQUNqQixNQUFNLFVBQVUsR0FBRywyQ0FBYSxDQUFDLFFBQVEsQ0FBQyxVQUFVLENBQUMsc0JBQXNCLFNBQUMsbURBQXFCLEVBQUcsQ0FBQztZQUNyRyxJQUFJLENBQUMsVUFBVSxHQUFHLFVBQVUsQ0FBQyxVQUFVLENBQUM7U0FDM0M7UUFDRCxJQUFJLENBQUMsVUFBVSxDQUFDLFVBQVUsQ0FBQyxTQUFTLENBQUMsV0FBVyxDQUFDLENBQUM7UUFDbEQsSUFBRyxXQUFXLEVBQUU7WUFDWiwyQ0FBYSxDQUFDLFFBQVEsQ0FBQyxjQUFjLENBQUMsVUFBVSxDQUFDLE1BQU0sRUFBRSxDQUFDO1lBQzFELHFEQUFxRDtTQUN4RDthQUFNO1lBQ0gsMkNBQWEsQ0FBQyxRQUFRLENBQUMsY0FBYyxDQUFDLFVBQVUsQ0FBQyxPQUFPLEVBQUUsQ0FBQztZQUMzRCxxREFBcUQ7U0FDeEQ7SUFDTCxDQUFDO0lBRUQsMEJBQTBCO0lBQ2xCLGlCQUFpQixDQUFDLElBQWU7UUFDckMsS0FBSSxNQUFNLElBQUksSUFBSSxJQUFJLENBQUMsa0JBQWtCLEVBQUU7WUFDdkMsSUFBRyxJQUFJLENBQUMsTUFBTSxDQUFDLElBQUksSUFBSSxJQUFJLENBQUMsSUFBSSxFQUFFO2dCQUM5QixPQUFPLElBQUksQ0FBQzthQUNmO1NBQ0o7UUFDRCxPQUFPLElBQUksQ0FBQztJQUNoQixDQUFDO0lBRUQsNkJBQTZCO0lBQ3JCLGdCQUFnQixDQUFDLElBQWUsRUFBRSxJQUFlO1FBQ3JELElBQUcsQ0FBQyxDQUFDLElBQUksQ0FBQyxLQUFLLEdBQUcsQ0FBQyxDQUFDLElBQUksQ0FBQyxDQUFDLElBQUksQ0FBQyxjQUFjLENBQUMsSUFBSSxDQUFDLFNBQVMsQ0FBQyxJQUFJLENBQUMsR0FBRyxDQUFDLENBQUM7WUFBRSxPQUFPO1FBQ2hGLEtBQUksTUFBTSxRQUFRLElBQUksSUFBSSxDQUFDLFNBQVMsRUFBRTtZQUNsQyxJQUFHLFFBQVEsQ0FBQyxTQUFTLENBQUMsTUFBTSxJQUFJLElBQUksQ0FBQyxXQUFXLEVBQUU7Z0JBQzlDLE1BQU0sVUFBVSxHQUFHLElBQUksQ0FBQyxnQkFBZ0IsQ0FBQyxTQUFTLENBQUM7Z0JBQ25ELFFBQVEsQ0FBQyxTQUFTLENBQUMsUUFBUSxHQUFHLElBQUkscUJBQU8sQ0FBQyxVQUFVLENBQUMsUUFBUSxDQUFDLENBQUMsRUFBRSxVQUFVLENBQUMsUUFBUSxDQUFDLENBQUMsRUFBRSxJQUFJLENBQUMsQ0FBQztnQkFDOUYsUUFBUSxDQUFDLFNBQVMsQ0FBQyxRQUFRLEdBQUcsd0JBQVUsQ0FBQyxRQUFRLENBQUM7Z0JBQ2xELFFBQVEsQ0FBQyxTQUFTLENBQUMsTUFBTSxHQUFHLFVBQVUsQ0FBQztnQkFDdkMsUUFBUSxDQUFDLFNBQVMsQ0FBQyxJQUFJLENBQUMsQ0FBQztnQkFDekIsSUFBSSxDQUFDLFNBQVMsQ0FBQyxJQUFJLEdBQUcsR0FBRyxtQkFBSyxDQUFDLEtBQUssQ0FBQyxJQUFJLENBQUMsY0FBYyxDQUFDLElBQUksQ0FBQyxTQUFTLENBQUMsSUFBSSxDQUFDLEdBQUMsQ0FBQyxFQUFFLENBQUMsRUFBRSxJQUFJLENBQUMsS0FBSyxDQUFDLEVBQUUsQ0FBQztnQkFDbEcsa0RBQWtEO2dCQUNsRCxJQUFHLElBQUksQ0FBQyxjQUFjLENBQUMsSUFBSSxDQUFDLFNBQVMsQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDO29CQUFFLElBQUksQ0FBQyxrQkFBa0IsQ0FBQyxJQUFJLEVBQUUsS0FBSyxDQUFDLENBQUM7Z0JBQ3ZGLE9BQU87YUFDVjtTQUNKO1FBQ0QsSUFBSSxDQUFDLGtCQUFrQixDQUFDLElBQUksRUFBRSxJQUFJLENBQUMsQ0FBQztJQUN4QyxDQUFDO0lBRUQseUJBQXlCO0lBQ2pCLGtCQUFrQixDQUFDLElBQWUsRUFBRSxJQUFlO1FBQ3ZELElBQUcsQ0FBQyxDQUFDLElBQUksQ0FBQyxLQUFLLEdBQUcsQ0FBQyxDQUFDO1lBQUUsT0FBTztRQUU3QixNQUFNLFVBQVUsR0FBRyxJQUFJLENBQUMsZ0JBQWdCLENBQUMsU0FBUyxDQUFDO1FBQ25ELE1BQU0sS0FBSyxHQUFHLHdCQUFVLENBQUMsV0FBVyxDQUFDLElBQUksRUFBRSxVQUFVLENBQWUsQ0FBQztRQUNyRSxJQUFJLENBQUMsU0FBUyxDQUFDLElBQUksQ0FBQyxLQUFLLENBQUMsQ0FBQztRQUMzQixLQUFLLENBQUMsSUFBSSxHQUFHLElBQUksQ0FBQyxNQUFNLENBQUMsSUFBSSxDQUFDO1FBQzlCLEtBQUssQ0FBQyxTQUFTLENBQUMsUUFBUSxHQUFHLElBQUkscUJBQU8sQ0FBQyxVQUFVLENBQUMsUUFBUSxDQUFDLENBQUMsRUFBRSxVQUFVLENBQUMsUUFBUSxDQUFDLENBQUMsRUFBRSxJQUFJLENBQUMsQ0FBQztRQUMzRixLQUFLLENBQUMsU0FBUyxDQUFDLFFBQVEsR0FBRyx3QkFBVSxDQUFDLFFBQVEsQ0FBQztRQUMvQyxLQUFLLENBQUMsU0FBUyxDQUFDLElBQUksQ0FBQyxDQUFDO1FBQ3RCLElBQUksQ0FBQyxTQUFTLENBQUMsSUFBSSxHQUFHLEdBQUcsbUJBQUssQ0FBQyxLQUFLLENBQUMsSUFBSSxDQUFDLGNBQWMsQ0FBQyxJQUFJLENBQUMsU0FBUyxDQUFDLElBQUksQ0FBQyxHQUFDLENBQUMsRUFBRSxDQUFDLEVBQUUsSUFBSSxDQUFDLEtBQUssQ0FBQyxFQUFFLENBQUM7UUFDbEcsb0RBQW9EO1FBQ3BELElBQUcsSUFBSSxDQUFDLGNBQWMsQ0FBQyxJQUFJLENBQUMsU0FBUyxDQUFDLElBQUksQ0FBQyxJQUFJLENBQUM7WUFBRSxJQUFJLENBQUMsa0JBQWtCLENBQUMsSUFBSSxFQUFFLEtBQUssQ0FBQyxDQUFDO0lBQzNGLENBQUM7SUFFRCxnQ0FBZ0M7SUFDeEIsd0JBQXdCLENBQUMsSUFBZSxFQUFFLE9BQWtCLElBQUk7UUFDcEUsSUFBRyxDQUFDLElBQUk7WUFBRSxJQUFJLEdBQUcsSUFBSSxDQUFDLGlCQUFpQixDQUFDLElBQUksQ0FBQyxDQUFDO1FBQzlDLEtBQUksTUFBTSxRQUFRLElBQUksSUFBSSxDQUFDLFNBQVMsRUFBRTtZQUNsQywyQkE3QjBFLFdBQVksQ0E2Qm5GLElBQUksRUFBSSxRQUFRLEdBQUU7Z0JBQ2pCLFFBQVEsQ0FBQyxTQUFTLENBQUMsTUFBTSxHQUFHLElBQUksQ0FBQyxXQUFXLENBQUM7Z0JBQzdDLFFBQVEsQ0FBQyxTQUFTLENBQUMsUUFBUSxHQUFHLElBQUksQ0FBQyxXQUFXLENBQUMsUUFBUSxDQUFDO2dCQUN4RCxRQUFRLENBQUMsU0FBUyxDQUFDLFFBQVEsR0FBRyx3QkFBVSxDQUFDLFFBQVEsQ0FBQztnQkFDbEQsUUFBUSxDQUFDLFNBQVMsQ0FBQyxLQUFLLENBQUMsQ0FBQztnQkFDMUIsSUFBSSxDQUFDLFNBQVMsQ0FBQyxJQUFJLEdBQUcsR0FBRyxtQkFBSyxDQUFDLEtBQUssQ0FBQyxJQUFJLENBQUMsY0FBYyxDQUFDLElBQUksQ0FBQyxTQUFTLENBQUMsSUFBSSxDQUFDLEdBQUMsQ0FBQyxFQUFFLENBQUMsRUFBRSxJQUFJLENBQUMsS0FBSyxDQUFDLEVBQUUsQ0FBQztnQkFDbEcsSUFBRyxJQUFJLENBQUMsY0FBYyxDQUFDLElBQUksQ0FBQyxTQUFTLENBQUMsSUFBSSxDQUFDLEdBQUcsQ0FBQztvQkFBRSxJQUFJLENBQUMsa0JBQWtCLENBQUMsSUFBSSxFQUFFLElBQUksQ0FBQyxDQUFDO2dCQUNyRixNQUFNO2FBQ1Q7U0FDSjtJQUNMLENBQUM7SUFFRCxvQ0FBb0M7SUFDNUIsMkJBQTJCLENBQUMsSUFBZTtRQUMvQyw0QkFBNEI7UUFDNUIsS0FBSSxNQUFNLFFBQVEsSUFBSSxJQUFJLENBQUMsU0FBUyxFQUFFO1lBQ2xDLElBQUcsUUFBUSxDQUFDLFNBQVMsQ0FBQyxNQUFNLElBQUksSUFBSSxDQUFDLFdBQVcsRUFBRTtnQkFDOUMsUUFBUSxDQUFDLFNBQVMsQ0FBQyxNQUFNLEdBQUcsSUFBSSxDQUFDLFdBQVcsQ0FBQztnQkFDN0MsUUFBUSxDQUFDLFNBQVMsQ0FBQyxRQUFRLEdBQUcsSUFBSSxDQUFDLFdBQVcsQ0FBQyxRQUFRLENBQUM7Z0JBQ3hELFFBQVEsQ0FBQyxTQUFTLENBQUMsUUFBUSxHQUFHLHdCQUFVLENBQUMsUUFBUSxDQUFDO2dCQUNsRCxRQUFRLENBQUMsU0FBUyxDQUFDLEtBQUssQ0FBQyxDQUFDO2FBQzdCO1NBQ0o7UUFDRCxJQUFJLENBQUMsU0FBUyxDQUFDLElBQUksR0FBRyxHQUFHLElBQUksQ0FBQyxLQUFLLEVBQUUsQ0FBQztRQUN0QyxJQUFJLENBQUMsa0JBQWtCLENBQUMsSUFBSSxFQUFFLElBQUksQ0FBQyxLQUFLLEdBQUcsQ0FBQyxDQUFDLENBQUM7SUFDbEQsQ0FBQztJQUVELDBCQUEwQjtJQUNsQixjQUFjO1FBQ2xCLEtBQUksTUFBTSxJQUFJLElBQUksSUFBSSxDQUFDLGtCQUFrQixFQUFFO1lBQ3ZDLElBQUcsMEJBQWdCLENBQUMsUUFBUSxDQUFDLEdBQUcsQ0FBQyxJQUFJLENBQUMsTUFBTSxDQUFDLElBQUksQ0FBQyxFQUFFO2dCQUNoRCxNQUFNLE9BQU8sR0FBRywwQkFBZ0IsQ0FBQyxRQUFRLENBQUMsR0FBRyxDQUFDLElBQUksQ0FBQyxNQUFNLENBQUMsSUFBSSxDQUFDLENBQUM7Z0JBQ2hFLElBQUksQ0FBQyxLQUFLLEdBQUcsT0FBTyxDQUFDLEtBQUssQ0FBQzthQUM5QjtTQUNKO0lBQ0wsQ0FBQztJQUVELG1CQUFtQjtJQUNYLGtCQUFrQixDQUFDLElBQWUsRUFBRSxNQUFjO1FBQ3RELElBQUcsTUFBTSxFQUFFO1lBQ1AsSUFBSSxDQUFDLFVBQVUsQ0FBQyxLQUFLLEdBQUcsbUJBQVMsQ0FBQyxRQUFRLENBQUMsWUFBWSxDQUFDO1NBQzNEO2FBQU07WUFDSCxJQUFJLENBQUMsVUFBVSxDQUFDLEtBQUssR0FBRyxtQkFBUyxDQUFDLFFBQVEsQ0FBQyxhQUFhLENBQUM7U0FDNUQ7SUFDTCxDQUFDO0lBRUQsaUNBQWlDO0lBQ3pCLGNBQWMsQ0FBQyxHQUFVO1FBQzdCLE9BQU8sUUFBUSxDQUFDLEdBQUcsQ0FBVyxDQUFDO0lBQ25DLENBQUM7Q0FDSjtBQXpVRCx5Q0F5VUMifQ==","assetPath":"Assets/Zepeto
+    Multiplay Component/ZepetoScript/SamdasuScript/RenderCameraController.ts","manifest":{"properties":[{"assembly":"UnityEngine.UI","name":"renderButton","type":"UnityEngine.UI.Button","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"Header","args":["\"Init
+    Field\""]},{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"stickerPool","type":"UnityEngine.Transform","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"mainCanvas","type":"UnityEngine.GameObject","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"Header","args":["\"Default
+    Mode\""]},{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"renderEditCamera","type":"UnityEngine.Camera","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"Header","args":["\"Edit
+    Mode\""]},{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"editCanvas","type":"UnityEngine.GameObject","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"editRenderCanvas","type":"UnityEngine.GameObject","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.UI","name":"stickerButtons","type":"UnityEngine.UI.Button[]","isArray":true,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"stickerPrefabs","type":"UnityEngine.GameObject[]","isArray":true,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"renderTextureCamera","type":"UnityEngine.Camera","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"Header","args":["\"Result
+    Mode\""]},{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"renderTexture","type":"UnityEngine.RenderTexture","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"resultCanvas","type":"UnityEngine.GameObject","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"mscorlib","name":"feedMessage","type":"System.String","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"toastSuccessMessage","type":"UnityEngine.GameObject","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"toastErrorMessage","type":"UnityEngine.GameObject","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]}],"name":"RenderCameraController","description":"","hasAnimatorMove":false},"isCompiled":true}'
+  typescriptHash: 6b609d835e1faf4927a890304584265e
+  onlyWriteTrigger: 0

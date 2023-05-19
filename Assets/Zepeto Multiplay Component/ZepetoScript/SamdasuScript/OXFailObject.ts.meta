@@ -1,0 +1,33 @@
+fileFormatVersion: 2
+guid: c9c229212587f7f4bb84bcc2d224467f
+importerOverride: ZEPETO.Script.Compiler:ZEPETO.Script:TypescriptAssetImporter
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: -1123457745, guid: 54cf806323ffe4418a4ce4cc63fe6b9d, type: 3}
+  isAssemblyDeclarations: 0
+  assembly: 
+  generateAllTypes: 1
+  types: []
+  generateWrapper: 0
+  overrideWrapperTypes: 0
+  wrapperTypes: []
+  WrapperFilters: []
+  wrapperOutputDirectory: Generated
+  compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
+    { value: true });\r\nconst __UnityEngine__ = require(\"UnityEngine\");\r\nconst
+    ZEPETO_Character_Controller_1 = require(\"ZEPETO.Character.Controller\");\r\nconst
+    ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst OXManager_1 = require(\"./OXManager\");\r\nclass
+    OXFailObject extends ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    OnTriggerEnter(collider)
+    {\r\n        const character = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.LocalPlayer.zepetoPlayer.character.gameObject;\r\n       
+    if (__UnityEngine__.Object.op_Equality(collider.gameObject, character)) {\r\n           
+    if (!this.manager)\r\n                this.manager = this.transform.parent.parent.parent.GetComponent($typeof(OXManager_1.default));\r\n           
+    this.manager.OnTouchedFailObject();\r\n        }\r\n    }\r\n}\r\nexports.default
+    = OXFailObject;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiT1hGYWlsT2JqZWN0LmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiT1hGYWlsT2JqZWN0LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7OztBQUNBLDZFQUE0RDtBQUM1RCxpREFBcUQ7QUFDckQsMkNBQW9DO0FBRXBDLE1BQXFCLFlBQWEsU0FBUSxxQ0FBcUI7SUFJM0QsY0FBYyxDQUFDLFFBQW1CO1FBQzlCLE1BQU0sU0FBUyxHQUFHLDJDQUFhLENBQUMsUUFBUSxDQUFDLFdBQVcsQ0FBQyxZQUFZLENBQUMsU0FBUyxDQUFDLFVBQVUsQ0FBQztRQUN2RiwyQkFNdzNVLFdBQVksQ0FOajRVLFFBQVEsQ0FBQyxVQUFVLEVBQUksU0FBUyxHQUFFO1lBQ2pDLElBQUcsQ0FBQyxJQUFJLENBQUMsT0FBTztnQkFBRSxJQUFJLENBQUMsT0FBTyxHQUFHLElBQUksQ0FBQyxTQUFTLENBQUMsTUFBTSxDQUFDLE1BQU0sQ0FBQyxNQUFNLENBQUMsWUFBWSxTQUFDLG1CQUFTLEVBQUcsQ0FBQztZQUMvRixJQUFJLENBQUMsT0FBTyxDQUFDLG1CQUFtQixFQUFFLENBQUM7U0FDdEM7SUFDTCxDQUFDO0NBRUo7QUFaRCwrQkFZQyJ9","assetPath":"Assets/Zepeto
+    Multiplay Component/ZepetoScript/SamdasuScript/OXFailObject.ts","manifest":{"properties":[],"name":"OXFailObject","description":"","hasAnimatorMove":false},"isCompiled":true}'
+  typescriptHash: 270c184a1e3b04a7374e0c74a4acd4d6
+  onlyWriteTrigger: 0

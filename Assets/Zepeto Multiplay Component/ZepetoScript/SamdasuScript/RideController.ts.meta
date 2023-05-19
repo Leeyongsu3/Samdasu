@@ -1,0 +1,201 @@
+fileFormatVersion: 2
+guid: 5247fdf0a5becb74db67611586d6a842
+importerOverride: ZEPETO.Script.Compiler:ZEPETO.Script:TypescriptAssetImporter
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: -1123457745, guid: 54cf806323ffe4418a4ce4cc63fe6b9d, type: 3}
+  isAssemblyDeclarations: 0
+  assembly: 
+  generateAllTypes: 1
+  types: []
+  generateWrapper: 0
+  overrideWrapperTypes: 0
+  wrapperTypes: []
+  WrapperFilters: []
+  wrapperOutputDirectory: Generated
+  compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
+    { value: true });\r\nexports.RideType = void 0;\r\nconst UnityEngine_1 = require(\"UnityEngine\");\r\nconst
+    UnityEngine_UI_1 = require(\"UnityEngine.UI\");\r\nconst ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst
+    ZEPETO_World_1 = require(\"ZEPETO.World\");\r\nclass RideController extends ZEPETO_Script_1.ZepetoScriptBehaviour
+    {\r\n    constructor() {\r\n        super(...arguments);\r\n        this.rideType
+    = RideType.NONE;\r\n        /* Controller Set */\r\n        //  private ControllerSet()
+    {\r\n        //     const controller = ZepetoPlayers.instance.gameObject.GetComponentInChildren<UIZepetoPlayerControl>();\r\n       
+    //     if(this.vehicleType == VehicleType.Bike) {\r\n        //         return;\r\n       
+    //     } else if(this.vehicleType == VehicleType.Car) {\r\n        //        
+    controller.transform.GetChild(0).GetChild(5).gameObject.SetActive(true);\r\n       
+    //         controller.transform.GetChild(0).GetChild(6).gameObject.SetActive(true);\r\n       
+    //         const joyConL = controller.transform.GetChild(0).GetChild(5).gameObject.GetComponent<JoystickController>();\r\n       
+    //         const joyConU = controller.transform.GetChild(0).GetChild(6).GetChild(0).gameObject.GetComponent<JoystickController>();\r\n       
+    //         const joyConD = controller.transform.GetChild(0).GetChild(6).GetChild(1).gameObject.GetComponent<JoystickController>();\r\n       
+    //         if(joyConL) joyConL.target = this;\r\n        //         if(joyConU)
+    joyConU.target = this;\r\n        //         if(joyConD) joyConD.target = this;\r\n       
+    //     } else if(this.vehicleType == VehicleType.Tank) {\r\n        //        
+    controller.transform.GetChild(0).GetChild(3).gameObject.SetActive(true);\r\n       
+    //         controller.transform.GetChild(0).GetChild(4).gameObject.SetActive(true);\r\n       
+    //         const joyConL = controller.transform.GetChild(0).GetChild(3).gameObject.GetComponent<JoystickController>();\r\n       
+    //         const joyConR = controller.transform.GetChild(0).GetChild(4).gameObject.GetComponent<JoystickController>();\r\n       
+    //         if(joyConL) joyConL.target = this;\r\n        //         if(joyConR)
+    joyConR.target = this;\r\n        //     } else {\r\n        //         return;\r\n       
+    //     }\r\n        //     controller.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);\r\n       
+    //     controller.transform.GetChild(0).GetChild(2).gameObject.SetActive(false);\r\n       
+    // }\r\n        // private ControllerReset() {\r\n        //     const controller
+    = ZepetoPlayers.instance.gameObject.GetComponentInChildren<UIZepetoPlayerControl>();\r\n       
+    //     if(this.vehicleType == VehicleType.Bike) {\r\n        //         return;\r\n       
+    //     } else if(this.vehicleType == VehicleType.Car) {\r\n        //        
+    controller.transform.GetChild(0).GetChild(5).gameObject.SetActive(false);\r\n       
+    //         controller.transform.GetChild(0).GetChild(6).gameObject.SetActive(false);\r\n       
+    //         const joyConL = controller.transform.GetChild(0).GetChild(5).gameObject.GetComponent<JoystickController>();\r\n       
+    //         const joyConU = controller.transform.GetChild(0).GetChild(6).GetChild(0).gameObject.GetComponent<JoystickController>();\r\n       
+    //         const joyConD = controller.transform.GetChild(0).GetChild(6).GetChild(1).gameObject.GetComponent<JoystickController>();\r\n       
+    //         if(joyConL) joyConL.target = null;\r\n        //         if(joyConU)
+    joyConU.target = null;\r\n        //         if(joyConD) joyConD.target = null;\r\n       
+    //     } else if(this.vehicleType == VehicleType.Tank) {\r\n        //        
+    controller.transform.GetChild(0).GetChild(3).gameObject.SetActive(false);\r\n       
+    //         controller.transform.GetChild(0).GetChild(4).gameObject.SetActive(false);\r\n       
+    //         const joyConL = controller.transform.GetChild(0).GetChild(3).gameObject.GetComponent<JoystickController>();\r\n       
+    //         const joyConR = controller.transform.GetChild(0).GetChild(4).gameObject.GetComponent<JoystickController>();\r\n       
+    //         if(joyConL) joyConL.target = null;\r\n        //         if(joyConR)
+    joyConR.target = null;\r\n        //     } else {\r\n        //         return;\r\n       
+    //     }\r\n        //     controller.transform.GetChild(0).GetChild(1).gameObject.SetActive(true);\r\n       
+    //     controller.transform.GetChild(0).GetChild(2).gameObject.SetActive(true);\r\n       
+    // }\r\n        //  public SetHandleValue(joyConType:JoystickType, speed:number
+    = 0, angle:number = 0) {\r\n        //     this.moveStart = true;\r\n       
+    //     if(this.vehicleType == VehicleType.Bike) {\r\n        //     } else if(this.vehicleType
+    == VehicleType.Car) {\r\n        //         if(joyConType == JoystickType.Handling)
+    {\r\n        //             this.steer.angleToFront = angle *2;\r\n        //        
+    } else if(joyConType == JoystickType.ToFront) {\r\n        //             this.valueForward.accel
+    = speed * this.moveSpeed;\r\n        //         } else if(joyConType == JoystickType.ToBack)
+    {\r\n        //             this.valueForward.accel = speed * this.moveSpeed;\r\n       
+    //         }\r\n        //     } else if(this.vehicleType == VehicleType.Tank)
+    {\r\n        //         if(joyConType == JoystickType.UDSide) {\r\n        //            
+    this.valueForward.accel = speed * this.moveSpeed;\r\n        //         } else
+    if(joyConType == JoystickType.RLSide) {\r\n        //             this.rotY.accel
+    = speed * this.rotSpeed;\r\n        //         }\r\n        //     }\r\n       
+    // }\r\n    }\r\n    // /* Position */\r\n    // private valueX:axisData = {
+    accel:0, currentSpeed:0, };\r\n    // private valueY:axisData = { accel:0, currentSpeed:0,
+    };\r\n    // private valueForward:axisData = { accel:0, currentSpeed:0, };\r\n   
+    // private rigid:Rigidbody;\r\n    // /* Rotation */\r\n    // private rotX:rotationData
+    = { accel:0, accelator:0, currentEuler:0, };\r\n    // private rotY:rotationData
+    = { accel:0, accelator:0, currentEuler:0, };\r\n    // private rotZ:rotationData
+    = { accel:0, accelator:0, currentEuler:0, };\r\n    // /* Handling */\r\n   
+    // private steer:handlingData = { speed:0, angleToFront:0, currentEuler:0, };\r\n   
+    // /* Fly */\r\n    // private isFly:boolean = false;\r\n    Start() {\r\n       
+    // this.m_tfHelper = this.GetComponentInParent<TransformSyncHelper>();\r\n       
+    // this.multiplay = GameObject.FindObjectOfType<ZepetoWorldMultiplay>();\r\n       
+    // this.multiplay.RoomJoined += (room: Room) => {\r\n        //     this.room
+    = room;\r\n        //     this.room.AddMessageHandler(\"ChairSitDown\", (message:syncChair)
+    => {\r\n        //         if(this.room.SessionId == message.OwnerSessionId)
+    this.ButtonOnOff(false);\r\n        //         if(this.m_tfHelper.Id == message.chairId)
+    this.PlayerSitDown(message.OwnerSessionId)\r\n        //     });\r\n        //    
+    this.room.AddMessageHandler(\"ChairSitUp\", (message:syncChair) => {\r\n       
+    //         if(this.room.SessionId == message.OwnerSessionId) this.ButtonOnOff(true);\r\n       
+    //         if(this.m_tfHelper.Id == message.chairId) this.PlayerSitUp(message.OwnerSessionId);\r\n       
+    //     });\r\n        // }\r\n        // if(!this.boxCol) this.boxCol = this.transform.GetComponent<BoxCollider>();\r\n       
+    // if(!this.sitPos) this.sitPos = this.transform.GetChild(1);\r\n        // if(!this.buttonObject)
+    this.buttonObject = this.transform.GetChild(2).gameObject;\r\n        // if(!this.buttonGetOut)
+    return;\r\n        // this.boxCol.enabled = false;\r\n        // this.rigid =
+    this.GetComponentInParent<Rigidbody>();\r\n    }\r\n    // /* Button on off */\r\n   
+    // ButtonOnOff(onOff:bool) {\r\n    //     // this.boxCol.enabled = onOff;\r\n   
+    //     this.buttonObject.SetActive(onOff);\r\n    // }\r\n    // /* Sit Animation
+    */\r\n    // private SitControl(sessionId:string, sit:boolean) {\r\n    //    
+    ZepetoPlayers.instance.GetPlayer(sessionId).character.ZepetoAnimator.SetBool(\"isSit\",
+    sit);\r\n    // }\r\n    // /* Sit Chair */\r\n    // PlayerSitDown(sessionId:string)
+    {\r\n    //     if(this.IsSit) return;\r\n    //     this.IsSit = true;\r\n   
+    //     this.ButtonOnOff(false);\r\n    //     const player = ZepetoPlayers.instance.GetPlayer(sessionId).character;\r\n   
+    //     player.transform.parent = this.transform;\r\n    //     player.Teleport(this.sitPos.position,
+    this.sitPos.rotation);\r\n    //     if(!ZepetoPlayers.instance.HasPlayer(sessionId)
+    || sessionId != this.room.SessionId) return; // isLocal\r\n    //     this.ControllerSet();\r\n   
+    //     this.StartCoroutine(this.StartContinuousAnimation(sessionId));\r\n   
+    //     this.buttonGetOut.gameObject.SetActive(true);\r\n    //     this.buttonGetOut.onClick.AddListener(
+    () => this.PlayerSendSitUp() );\r\n    // }\r\n    // private * StartContinuousAnimation(sessionId:string)
+    {\r\n    //     const player = ZepetoPlayers.instance.GetPlayer(sessionId).character;\r\n   
+    //     const anim = player.ZepetoAnimator;\r\n    //     while(anim.GetBool(\"isSit\"))
+    {\r\n    //         yield null;\r\n    //     }\r\n    //     this.SitControl(sessionId,
+    true);\r\n    //     console.log(` ${player.name} is Sit!! `);\r\n    //    
+    yield new WaitForSeconds(0.1);\r\n    //     player.characterController.enabled
+    = false;\r\n    //     player.GetComponent<ZepetoCharacter>().enabled = false;\r\n   
+    // }\r\n    // /* Send ChairSitUp */\r\n    // PlayerSendSitUp() {\r\n    //    
+    this.buttonGetOut.gameObject.SetActive(false);\r\n    //     this.buttonGetOut.onClick.RemoveListener(
+    this.PlayerSendSitUp );\r\n    //     const data = new RoomData();\r\n    //    
+    data.Add(\"isSit\", false);\r\n    //     data.Add(\"chairId\", this.m_tfHelper.Id);\r\n   
+    //     this.room.Send(\"ChairSit\", data.GetObject());\r\n    // }\r\n    //
+    /* Recieve ChairSitUp */\r\n    // private PlayerSitUp(sessionId:string) {\r\n   
+    //     if(!this.IsSit) return;\r\n    //     this.IsSit = false;\r\n    //    
+    this.ButtonOnOff(true);\r\n    //     if(!ZepetoPlayers.instance.HasPlayer(sessionId))
+    return;\r\n    //     const player = ZepetoPlayers.instance.GetPlayer(sessionId).character;\r\n   
+    //     player.transform.parent = null;\r\n    //     player.Teleport(this.outPos.position,
+    this.outPos.rotation);\r\n    //     this.SitControl(sessionId, false)\r\n   
+    //     if(sessionId != this.room.SessionId)  return; // isLocal\r\n    //    
+    this.ControllerReset();\r\n    //     player.characterController.enabled = true;\r\n   
+    //     player.GetComponent<ZepetoCharacter>().enabled = true;\r\n    // }\r\n   
+    // private moveStart:boolean = false;\r\n    // private updown:boolean = false;\r\n   
+    // private side:boolean = false;\r\n    // private FixedUpdate() {\r\n    //    
+    if(this.moveStart) {\r\n    //         let movePoint:Vector3;\r\n    //        
+    let rotPoint:Vector3;\r\n    //         let time:number;\r\n    //         /*
+    Main Move */\r\n    //         if(this.vehicleType == VehicleType.Car) {\r\n   
+    //             this.speedToAccel(this.valueForward, Time.deltaTime * this.moveSpeed,
+    this.rigid.mass);\r\n    //             movePoint = this.transform.parent.position
+    + (this.transform.parent.forward * this.valueForward.currentSpeed);\r\n    //            
+    if(this.valueForward.currentSpeed != 0) {\r\n    //                 rotPoint
+    = new Vector3(\r\n    //                     this.transform.parent.eulerAngles.x,\r\n   
+    //                     this.transform.parent.eulerAngles.y + this.steer.angleToFront,\r\n   
+    //                     this.transform.parent.eulerAngles.z);\r\n    //            
+    }\r\n    //         } else if(this.vehicleType == VehicleType.Tank) {\r\n   
+    //             this.speedToAccel(this.valueForward, Time.deltaTime * this.moveSpeed,
+    this.rigid.mass);\r\n    //             movePoint = this.transform.parent.position
+    + (this.transform.parent.forward * this.valueForward.currentSpeed);\r\n    //            
+    this.rotToAccel(this.rotY, Time.deltaTime * this.rotSpeed, this.rigid.mass);\r\n   
+    //             rotPoint = new Vector3(\r\n    //                 this.transform.parent.rotation.eulerAngles.x,\r\n   
+    //                 this.transform.parent.rotation.eulerAngles.y + this.rotY.accelator,\r\n   
+    //                 this.transform.parent.rotation.eulerAngles.z);\r\n    //        
+    }\r\n    //         /* Gravity */\r\n    //         if ((this.vehicleType ==
+    VehicleType.AirPlane) && this.isFly) {\r\n    //             // movePoint.y =
+    this.rigid.velocity.y * 0.6; //gravity with gliding\r\n    //             //
+    this.rigid.velocity = movePoint;\r\n    //         } else {\r\n    //            
+    // movePoint.y = this.rigid.velocity.y; //gravity \r\n    //             // this.rigid.velocity
+    = movePoint;\r\n    //         }\r\n    //         this.transform.parent.position
+    = Vector3.Lerp(this.transform.parent.position, movePoint, Time.deltaTime);\r\n   
+    //         this.transform.parent.eulerAngles = Vector3.Lerp(this.transform.parent.eulerAngles,
+    rotPoint, Time.deltaTime);\r\n    //     }\r\n    // }\r\n    // private speedToAccel(value:axisData,
+    speed:number, mass:number) {\r\n    //     if(value.accel > 0) {\r\n    //        
+    value.currentSpeed = Mathf.Clamp(value.currentSpeed + (speed/mass), -value.accel,
+    value.accel);\r\n    //     } else if(value.accel < 0) {\r\n    //         value.currentSpeed
+    = Mathf.Clamp(value.currentSpeed - (speed/mass), value.accel, -value.accel);\r\n   
+    //     } else {\r\n    //         if(value.currentSpeed > 0) {\r\n    //            
+    value.currentSpeed = Mathf.Clamp(value.currentSpeed - (speed*mass), 0, value.currentSpeed);\r\n   
+    //         } else if(value.currentSpeed < 0) {\r\n    //             value.currentSpeed
+    = Mathf.Clamp(value.currentSpeed + (speed*mass), value.currentSpeed, 0);\r\n   
+    //         }\r\n    //     }\r\n    // }\r\n    // private rotToAccel(value:rotationData,
+    speed:number, mass:number) {\r\n    //     if(value.accel > 0) {\r\n    //        
+    value.accelator = Mathf.Clamp(value.accelator + (speed/mass), -value.accel, value.accel);\r\n   
+    //     } else if(value.accel < 0) {\r\n    //         value.accelator = Mathf.Clamp(value.accelator
+    - (speed/mass), value.accel, -value.accel);\r\n    //     } else {\r\n    //        
+    if(value.accelator > 0) {\r\n    //             value.accelator = Mathf.Clamp(value.accelator
+    - (speed*mass), 0, value.accelator);\r\n    //         } else if(value.accelator
+    < 0) {\r\n    //             value.accelator = Mathf.Clamp(value.accelator +
+    (speed*mass), value.accelator, 0);\r\n    //         }\r\n    //     }\r\n   
+    // }\r\n    /* Up Down */\r\n    *SetTarget() {\r\n        // this.movePoint
+    = this.transform.localPosition;\r\n        // this.moveStart = true;\r\n       
+    // while(true){\r\n        //     this.updown = !this.updown;\r\n        //     
+    if(this.m_tfHelper.isOwner) {\r\n        //         const y = this.updown ? 0
+    : 7 ;\r\n        //         this.movePoint = new Vector3(this.transform.localPosition.x,
+    y, this.transform.localPosition.z);\r\n        //      }\r\n        //      yield
+    new WaitForSeconds(4);\r\n        // }\r\n    }\r\n    /* Side Move */\r\n   
+    *SetTargetBike() {\r\n        // this.movePoint = this.transform.localPosition;\r\n       
+    // this.moveStart = true;\r\n        // while(true){\r\n        //     this.side
+    = !this.side;\r\n        //      if(this.m_tfHelper.isOwner) {\r\n        //        
+    const z = this.side ? -5 : 5 ;\r\n        //         this.movePoint = new Vector3(this.transform.localPosition.x,
+    this.transform.localPosition.y, z);\r\n        //      }\r\n        //      yield
+    new WaitForSeconds(4);\r\n        // }\r\n    }\r\n}\r\nexports.default = RideController;\r\nvar
+    RideType;\r\n(function (RideType) {\r\n    RideType[RideType[\"NONE\"] = -1]
+    = \"NONE\";\r\n    RideType[RideType[\"Horse\"] = 0] = \"Horse\";\r\n    RideType[RideType[\"Wheel\"]
+    = 1] = \"Wheel\";\r\n    RideType[RideType[\"Merry_Go_Round\"] = 2] = \"Merry_Go_Round\";\r\n})(RideType
+    = exports.RideType || (exports.RideType = {}));\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiUmlkZUNvbnRyb2xsZXIuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJSaWRlQ29udHJvbGxlci50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7QUFBQSw2Q0FBOEg7QUFDOUgsbURBQXdDO0FBSXhDLGlEQUFxRDtBQUNyRCwrQ0FBb0Q7QUFFcEQsTUFBcUIsY0FBZSxTQUFRLHFDQUFxQjtJQUFqRTs7UUFzQlcsYUFBUSxHQUFZLFFBQVEsQ0FBQyxJQUFJLENBQUM7UUFvTnhDLG9CQUFvQjtRQUNyQiw2QkFBNkI7UUFDN0IsNEdBQTRHO1FBQzVHLGlEQUFpRDtRQUNqRCxrQkFBa0I7UUFDbEIsdURBQXVEO1FBQ3ZELG1GQUFtRjtRQUNuRixtRkFBbUY7UUFDbkYsc0hBQXNIO1FBQ3RILGtJQUFrSTtRQUNsSSxrSUFBa0k7UUFDbEksNkNBQTZDO1FBQzdDLDZDQUE2QztRQUM3Qyw2Q0FBNkM7UUFHN0Msd0RBQXdEO1FBQ3hELG1GQUFtRjtRQUNuRixtRkFBbUY7UUFDbkYsc0hBQXNIO1FBQ3RILHNIQUFzSDtRQUN0SCw2Q0FBNkM7UUFDN0MsNkNBQTZDO1FBRzdDLGVBQWU7UUFDZixrQkFBa0I7UUFDbEIsUUFBUTtRQUNSLGdGQUFnRjtRQUNoRixnRkFBZ0Y7UUFDaEYsSUFBSTtRQUVKLDhCQUE4QjtRQUM5Qiw0R0FBNEc7UUFDNUcsaURBQWlEO1FBQ2pELGtCQUFrQjtRQUNsQix1REFBdUQ7UUFDdkQsb0ZBQW9GO1FBQ3BGLG9GQUFvRjtRQUNwRixzSEFBc0g7UUFDdEgsa0lBQWtJO1FBQ2xJLGtJQUFrSTtRQUNsSSw2Q0FBNkM7UUFDN0MsNkNBQTZDO1FBQzdDLDZDQUE2QztRQUc3Qyx3REFBd0Q7UUFDeEQsb0ZBQW9GO1FBQ3BGLG9GQUFvRjtRQUNwRixzSEFBc0g7UUFDdEgsc0hBQXNIO1FBQ3RILDZDQUE2QztRQUM3Qyw2Q0FBNkM7UUFHN0MsZUFBZTtRQUNmLGtCQUFrQjtRQUNsQixRQUFRO1FBQ1IsK0VBQStFO1FBQy9FLCtFQUErRTtR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","assetPath":"Assets/Zepeto
+    Multiplay Component/ZepetoScript/SamdasuScript/RideController.ts","manifest":{"properties":[{"assembly":"UnityEngine.CoreModule","name":"sitPos","type":"UnityEngine.Transform","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"","name":"rideType","type":"RideType","isArray":false,"initValue":["NONE"],"enumKeys":["NONE","Horse","Wheel","Merry_Go_Round"],"enumValues":["-1","0","1","2"],"attributes":[]}],"name":"RideController","description":"","hasAnimatorMove":false},"isCompiled":true}'
+  typescriptHash: c74337fcd2c6cb7991bfba1c5d402eed
+  onlyWriteTrigger: 0

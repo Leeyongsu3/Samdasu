@@ -1,0 +1,60 @@
+fileFormatVersion: 2
+guid: 6f495b6ec8a4bbe4c941a012c6190ee9
+importerOverride: ZEPETO.Script.Compiler:ZEPETO.Script:TypescriptAssetImporter
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: -1123457745, guid: 54cf806323ffe4418a4ce4cc63fe6b9d, type: 3}
+  isAssemblyDeclarations: 0
+  assembly: 
+  generateAllTypes: 1
+  types: []
+  generateWrapper: 0
+  overrideWrapperTypes: 0
+  wrapperTypes: []
+  WrapperFilters: []
+  wrapperOutputDirectory: Generated
+  compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
+    { value: true });\r\nconst UnityEngine_1 = require(\"UnityEngine\");\r\nconst
+    UnityEngine_UI_1 = require(\"UnityEngine.UI\");\r\nconst ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst
+    TypeManager_1 = require(\"../Managers/TypeManager\");\r\nconst OXManager_1 =
+    require(\"./OXManager\");\r\nclass OXController extends ZEPETO_Script_1.ZepetoScriptBehaviour
+    {\r\n    Start() {\r\n        /* Set OX Manager */\r\n        this.manager =
+    this.transform.parent.GetComponent($typeof(OXManager_1.default));\r\n       
+    /* Set Properties */\r\n        this.block = this.transform.GetChild(0).GetComponent($typeof(UnityEngine_1.BoxCollider));\r\n       
+    this.o_button = this.targetUI.transform.GetChild(0).GetComponent($typeof(UnityEngine_UI_1.Button));\r\n       
+    this.x_button = this.targetUI.transform.GetChild(1).GetComponent($typeof(UnityEngine_UI_1.Button));\r\n       
+    this.targetFailed.SetActive(false);\r\n        this.targetSuccessed.SetActive(false);\r\n       
+    this.onFailAnim = this.targetFailed.GetComponent($typeof(UnityEngine_1.Animator));\r\n       
+    /* Set ButtonScript */\r\n        if (this.answer) {\r\n            // o_button
+    == answer\r\n            this.o_button.onClick.AddListener(() => this.MissionSuccessed());\r\n           
+    this.x_button.onClick.AddListener(() => this.MissionFailed());\r\n        }\r\n       
+    else {\r\n            // x_button == answer\r\n            this.o_button.onClick.AddListener(()
+    => this.MissionFailed());\r\n            this.x_button.onClick.AddListener(()
+    => this.MissionSuccessed());\r\n        }\r\n    }\r\n    /* Mission Trigger
+    */\r\n    OnTriggerEnter(collider) {\r\n        if (this.block.enabled)\r\n           
+    this.targetUI.SetActive(true);\r\n    }\r\n    /* Mission Failed */\r\n    MissionFailed()
+    {\r\n        this.OnOXPassed();\r\n        this.targetFailed.SetActive(true);\r\n       
+    this.onFailAnim.SetBool(TypeManager_1.Anim.Active, true);\r\n    }\r\n    /*
+    Mission Successed */\r\n    MissionSuccessed() {\r\n        this.OnOXPassed();\r\n       
+    this.targetSuccessed.SetActive(true);\r\n    }\r\n    /** Manager Call **/\r\n   
+    /* All Mission Clear */\r\n    OnMissionClear() {\r\n        this.onFailAnim.SetBool(TypeManager_1.Anim.Active,
+    false);\r\n        this.targetFailed.SetActive(false);\r\n        this.targetSuccessed.SetActive(true);\r\n       
+    this.targetUI.SetActive(false);\r\n        this.block.enabled = false;\r\n       
+    if (this.answer) {\r\n            // o_button == answer\r\n            this.o_button.onClick.RemoveListener(this.MissionSuccessed);\r\n           
+    this.x_button.onClick.RemoveListener(this.MissionFailed);\r\n        }\r\n       
+    else {\r\n            // x_button == answer\r\n            this.o_button.onClick.RemoveListener(this.MissionFailed);\r\n           
+    this.x_button.onClick.RemoveListener(this.MissionSuccessed);\r\n        }\r\n   
+    }\r\n    /* Reset Game */\r\n    Reset() {\r\n        this.onFailAnim.SetBool(TypeManager_1.Anim.Active,
+    false);\r\n        this.targetFailed.SetActive(false);\r\n        this.targetSuccessed.SetActive(false);\r\n       
+    this.targetUI.SetActive(false);\r\n        this.block.enabled = true;\r\n   
+    }\r\n    /* Call Manager */\r\n    OnOXPassed() {\r\n        this.targetUI.SetActive(false);\r\n       
+    this.block.enabled = false;\r\n        this.manager.OnOXPassed(this);\r\n   
+    }\r\n}\r\nexports.default = OXController;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiT1hDb250cm9sbGVyLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiT1hDb250cm9sbGVyLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7O0FBQUEsNkNBQXFGO0FBQ3JGLG1EQUF3QztBQUN4QyxpREFBcUQ7QUFDckQseURBQStDO0FBQy9DLDJDQUFvQztBQUVwQyxNQUFxQixZQUFhLFNBQVEscUNBQXFCO0lBYTNELEtBQUs7UUFDRCxvQkFBb0I7UUFDcEIsSUFBSSxDQUFDLE9BQU8sR0FBRyxJQUFJLENBQUMsU0FBUyxDQUFDLE1BQU0sQ0FBQyxZQUFZLFNBQUMsbUJBQVMsRUFBRyxDQUFDO1FBRS9ELG9CQUFvQjtRQUNwQixJQUFJLENBQUMsS0FBSyxHQUFHLElBQUksQ0FBQyxTQUFTLENBQUMsUUFBUSxDQUFDLENBQUMsQ0FBQyxDQUFDLFlBQVksU0FBQyx5QkFBVyxFQUFHLENBQUM7UUFDcEUsSUFBSSxDQUFDLFFBQVEsR0FBRyxJQUFJLENBQUMsUUFBUSxDQUFDLFNBQVMsQ0FBQyxRQUFRLENBQUMsQ0FBQyxDQUFDLENBQUMsWUFBWSxTQUFDLHVCQUFNLEVBQUcsQ0FBQztRQUMzRSxJQUFJLENBQUMsUUFBUSxHQUFHLElBQUksQ0FBQyxRQUFRLENBQUMsU0FBUyxDQUFDLFFBQVEsQ0FBQyxDQUFDLENBQUMsQ0FBQyxZQUFZLFNBQUMsdUJBQU0sRUFBRyxDQUFDO1FBQzNFLElBQUksQ0FBQyxZQUFZLENBQUMsU0FBUyxDQUFDLEtBQUssQ0FBQyxDQUFDO1FBQ25DLElBQUksQ0FBQyxlQUFlLENBQUMsU0FBUyxDQUFDLEtBQUssQ0FBQyxDQUFDO1FBQ3RDLElBQUksQ0FBQyxVQUFVLEdBQUcsSUFBSSxDQUFDLFlBQVksQ0FBQyxZQUFZLFNBQUMsc0JBQVEsRUFBRyxDQUFDO1FBRTdELHNCQUFzQjtRQUN0QixJQUFHLElBQUksQ0FBQyxNQUFNLEVBQUU7WUFDWixxQkFBcUI7WUFDckIsSUFBSSxDQUFDLFFBQVEsQ0FBQyxPQUFPLENBQUMsV0FB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","assetPath":"Assets/Zepeto
+    Multiplay Component/ZepetoScript/SamdasuScript/OXController.ts","manifest":{"properties":[{"assembly":"mscorlib","name":"answer","type":"System.Boolean","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"targetUI","type":"UnityEngine.GameObject","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"targetFailed","type":"UnityEngine.GameObject","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"targetSuccessed","type":"UnityEngine.GameObject","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]}],"name":"OXController","description":"","hasAnimatorMove":false},"isCompiled":true}'
+  typescriptHash: 131138f895269b7f53e100f8490e97b6
+  onlyWriteTrigger: 0

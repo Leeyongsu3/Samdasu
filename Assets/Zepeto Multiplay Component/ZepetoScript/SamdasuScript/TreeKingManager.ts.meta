@@ -1,0 +1,48 @@
+fileFormatVersion: 2
+guid: 0a77c081dc88d3242a33ebd37c33a1f0
+importerOverride: ZEPETO.Script.Compiler:ZEPETO.Script:TypescriptAssetImporter
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: -1123457745, guid: 54cf806323ffe4418a4ce4cc63fe6b9d, type: 3}
+  isAssemblyDeclarations: 0
+  assembly: 
+  generateAllTypes: 1
+  types: []
+  generateWrapper: 0
+  overrideWrapperTypes: 0
+  wrapperTypes: []
+  WrapperFilters: []
+  wrapperOutputDirectory: Generated
+  compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
+    { value: true });\r\nconst UnityEngine_1 = require(\"UnityEngine\");\r\nconst
+    ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst TypeManager_1 = require(\"../Managers/TypeManager\");\r\nclass
+    TreeKingManager extends ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    constructor()
+    {\r\n        super(...arguments);\r\n        /* Samdasu Field */\r\n        this.changeTargets
+    = [];\r\n        this.transferMaterials = [];\r\n        this.timeCycle = 10;\r\n       
+    this.visibleTime = 10;\r\n        this.changeState = TypeManager_1.OrangeChangeState.Level_1;\r\n       
+    this.timer = 0;\r\n        this.timerM = 0;\r\n    }\r\n    Start() {\r\n       
+    this.visible = UnityEngine_1.Color.white;\r\n        this.invisible = UnityEngine_1.Color.white;\r\n       
+    this.invisible.a = 0;\r\n    }\r\n    FixedUpdate() {\r\n        this.SetObject();\r\n       
+    this.Change();\r\n    }\r\n    SetObject() {\r\n        const state = this.changeState;\r\n       
+    this.currentObject = this.changeTargets[state];\r\n        this.nextObject =
+    this.changeTargets[(state + 1) % this.changeTargets.length];\r\n        this.currentMaterial
+    = this.transferMaterials[state];\r\n        this.nextMaterial = this.transferMaterials[(state
+    + 1) % this.changeTargets.length];\r\n    }\r\n    Change() {\r\n        this.timer
+    += UnityEngine_1.Time.deltaTime;\r\n        if (this.timeCycle < this.timer)
+    {\r\n            this.nextObject.SetActive(true);\r\n            this.timerM
+    += UnityEngine_1.Time.deltaTime / this.visibleTime;\r\n            this.currentMaterial.color
+    = UnityEngine_1.Color.Lerp(this.currentMaterial.color, this.invisible, this.timerM);\r\n           
+    this.nextMaterial.color = UnityEngine_1.Color.Lerp(this.nextMaterial.color, this.visible,
+    this.timerM);\r\n            if (this.currentMaterial.color.a < 0.005) {\r\n               
+    this.timer = 0;\r\n                this.timerM = 0;\r\n                this.currentObject.SetActive(false);\r\n               
+    this.changeState = (this.changeState + 1) % this.changeTargets.length;\r\n           
+    }\r\n        }\r\n    }\r\n}\r\nexports.default = TreeKingManager;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiVHJlZUtpbmdNYW5hZ2VyLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiVHJlZUtpbmdNYW5hZ2VyLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7O0FBQUEsNkNBQXVFO0FBQ3ZFLGlEQUFxRDtBQUNyRCx5REFBNEQ7QUFFNUQsTUFBcUIsZUFBZ0IsU0FBUSxxQ0FBcUI7SUFBbEU7O1FBRUksbUJBQW1CO1FBRU8sa0JBQWEsR0FBaUIsRUFBRSxDQUFDO1FBQ2pDLHNCQUFpQixHQUFlLEVBQUUsQ0FBQztRQUMxQixjQUFTLEdBQVcsRUFBRSxDQUFBO1FBQ3RCLGdCQUFXLEdBQVcsRUFBRSxDQUFBO1FBQ25ELGdCQUFXLEdBQXFCLCtCQUFpQixDQUFDLE9BQU8sQ0FBQztRQUMxRCxVQUFLLEdBQVUsQ0FBQyxDQUFDO1FBQ2pCLFdBQU0sR0FBVSxDQUFDLENBQUM7SUE0QzlCLENBQUM7SUFsQ0csS0FBSztRQUNELElBQUksQ0FBQyxPQUFPLEdBQUcsbUJBQUssQ0FBQyxLQUFLLENBQUM7UUFDM0IsSUFBSSxDQUFDLFNBQVMsR0FBRyxtQkFBSyxDQUFDLEtBQUssQ0FBQztRQUM3QixJQUFJLENBQUMsU0FBUyxDQUFDLENBQUMsR0FBRyxDQUFDLENBQUM7SUFDekIsQ0FBQztJQUVELFdBQVc7UUFDUCxJQUFJLENBQUMsU0FBUyxFQUFFLENBQUM7UUFDakIsSUFBSSxDQUFDLE1BQU0sRUFBRSxDQUFDO0lBQ2xCLENBQUM7SUFFTyxTQUFTO1FBQ2IsTUFBTSxLQUFLLEdBQUcsSUFBSSxDQUFDLFdBQXFCLENBQUM7UUFDekMsSUFBSSxDQUFDLGFBQWEsR0FBRyxJQUFJLENBQUMsYUFBYSxDQUFDLEtBQUssQ0FBQyxDQUFDO1FBQy9DLElBQUksQ0FBQyxVQUFVLEdBQUcsSUFBSSxDQUFDLGFBQWEsQ0FBQyxDQUFDLEtBQUssR0FBQyxDQUFDLENBQUMsR0FBRyxJQUFJLENBQUMsYUFBYSxDQUFDLE1BQU0sQ0FBQyxDQUFDO1FBQzVFLElBQUksQ0FBQyxlQUFlLEdBQUcsSUFBSSxDQUFDLGlCQUFpQixDQUFDLEtBQUssQ0FBQyxDQUFDO1FBQ3JELElBQUksQ0FBQyxZQUFZLEdBQUcsSUFBSSxDQUFDLGlCQUFpQixDQUFDLENBQUMsS0FBSyxHQUFDLENBQUMsQ0FBQyxHQUFHLElBQUksQ0FBQyxhQUFhLENBQUMsTUFBTSxDQUFDLENBQUM7SUFDdEYsQ0FBQztJQUVPLE1BQU07UUFDVixJQUFJLENBQUMsS0FBSyxJQUFJLGtCQUFJLENBQUMsU0FBUyxDQUFDO1FBQzdCLElBQUcsSUFBSSxDQUFDLFNBQVMsR0FBRyxJQUFJLENBQUMsS0FBSyxFQUFFO1lBQzVCLElBQUksQ0FBQyxVQUFVLENBQUMsU0FBUyxDQUFDLElBQUksQ0FBQyxDQUFDO1lBQ2hDLElBQUksQ0FBQyxNQUFNLElBQUksa0JBQUksQ0FBQyxTQUFTLEdBQUcsSUFBSSxDQUFDLFdBQVcsQ0FBQztZQUNqRCxJQUFJLENBQUMsZUFBZSxDQUFDLEtBQUssR0FBRyxtQkFBSyxDQUFDLElBQUksQ0FBQyxJQUFJLENBQUMsZUFBZSxDQUFDLEtBQUssRUFBRSxJQUFJLENBQUMsU0FBUyxFQUFFLElBQUksQ0FBQyxNQUFNLENBQUMsQ0FBQztZQUNqRyxJQUFJLENBQUMsWUFBWSxDQUFDLEtBQUssR0FBRyxtQkFBSyxDQUFDLElBQUksQ0FBQyxJQUFJLENBQUMsWUFBWSxDQUFDLEtBQUssRUFBRSxJQUFJLENBQUMsT0FBTyxFQUFFLElBQUksQ0FBQyxNQUFNLENBQUMsQ0FBQztZQUN6RixJQUFHLElBQUksQ0FBQyxlQUFlLENBQUMsS0FBSyxDQUFDLENBQUMsR0FBRyxLQUFLLEVBQUU7Z0JBQ3JDLElBQUksQ0FBQyxLQUFLLEdBQUcsQ0FBQyxDQUFDO2dCQUNmLElBQUksQ0FBQyxNQUFNLEdBQUcsQ0FBQyxDQUFDO2dCQUNoQixJQUFJLENBQUMsYUFBYSxDQUFDLFNBQVMsQ0FBQyxLQUFLLENBQUMsQ0FBQztnQkFDcEMsSUFBSSxDQUFDLFdBQVcsR0FBRyxDQUFDLElBQUksQ0FBQyxXQUFXLEdBQUMsQ0FBQyxDQUFDLEdBQUcsSUFBSSxDQUFDLGFBQWEsQ0FBQyxNQUFNLENBQUM7YUFDdkU7U0FDSjtJQUNMLENBQUM7Q0FDSjtBQXRERCxrQ0FzREMifQ==","assetPath":"Assets/Zepeto
+    Multiplay Component/ZepetoScript/SamdasuScript/TreeKingManager.ts","manifest":{"properties":[{"assembly":"UnityEngine.CoreModule","name":"changeTargets","type":"UnityEngine.GameObject[]","isArray":true,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"Header","args":["\"Samdasus
+    Field\""]},{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"transferMaterials","type":"UnityEngine.Material[]","isArray":true,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"mscorlib","name":"timeCycle","type":"System.Single","isArray":false,"initValue":["10"],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"mscorlib","name":"visibleTime","type":"System.Single","isArray":false,"initValue":["10"],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]}],"name":"TreeKingManager","description":"","hasAnimatorMove":false},"isCompiled":true}'
+  typescriptHash: 8c344c5b0982b96f97cd1171b32e831f
+  onlyWriteTrigger: 0

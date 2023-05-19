@@ -1,0 +1,61 @@
+fileFormatVersion: 2
+guid: 7f2526c3800c51f49a3a667aedb61b79
+importerOverride: ZEPETO.Script.Compiler:ZEPETO.Script:TypescriptAssetImporter
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: -1123457745, guid: 54cf806323ffe4418a4ce4cc63fe6b9d, type: 3}
+  isAssemblyDeclarations: 0
+  assembly: 
+  generateAllTypes: 1
+  types: []
+  generateWrapper: 0
+  overrideWrapperTypes: 0
+  wrapperTypes: []
+  WrapperFilters: []
+  wrapperOutputDirectory: Generated
+  compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
+    { value: true });\r\nconst UnityEngine_1 = require(\"UnityEngine\");\r\nconst
+    UnityEngine_UI_1 = require(\"UnityEngine.UI\");\r\nconst ZEPETO_Character_Controller_1
+    = require(\"ZEPETO.Character.Controller\");\r\nconst ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst
+    ZEPETO_World_1 = require(\"ZEPETO.World\");\r\nconst TypeManager_1 = require(\"./TypeManager\");\r\nclass
+    EquipManager extends ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    Start() {\r\n       
+    if (!this.multiplay)\r\n            this.multiplay = UnityEngine_1.GameObject.FindObjectOfType($typeof(ZEPETO_World_1.ZepetoWorldMultiplay));\r\n       
+    this.multiplay.add_RoomJoined((room) => {\r\n            this.room = room;\r\n           
+    this.room.AddMessageHandler(TypeManager_1.MESSAGE.Equip, (equipData) => {\r\n               
+    if (equipData.itemName == this.samdasuPetInWorld.name) {\r\n                   
+    this.EquipSamdasu(equipData);\r\n                }\r\n                else {\r\n                   
+    this.EquipItem(equipData);\r\n                }\r\n            });\r\n           
+    this.room.AddMessageHandler(TypeManager_1.MESSAGE.EquipChange, (equipData) =>
+    {\r\n                if (!equipData.prevItemName)\r\n                    return;\r\n               
+    this.UnEquipItem(equipData);\r\n                if (equipData.itemName == this.samdasuPetInWorld.name)
+    {\r\n                    this.EquipSamdasu(equipData);\r\n                }\r\n               
+    else {\r\n                    this.EquipItem(equipData);\r\n                }\r\n           
+    });\r\n            this.room.AddMessageHandler(TypeManager_1.MESSAGE.Unequip,
+    (equipData) => {\r\n                if (!equipData.prevItemName)\r\n                   
+    return;\r\n                this.UnEquipItem(equipData);\r\n            });\r\n       
+    });\r\n    }\r\n    /* Up Equip Item */\r\n    UnEquipItem(equipData) {\r\n       
+    const anim = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.GetPlayer(equipData.sessionId).character.ZepetoAnimator;\r\n       
+    const bone = anim.GetBoneTransform(equipData.bone);\r\n        const prevName
+    = `${equipData.prevItemName}-${equipData.bone.toString()}`;\r\n        for (const
+    trans of bone.GetComponentsInChildren($typeof(UnityEngine_1.Transform))) {\r\n           
+    if (trans.name == prevName) {\r\n                UnityEngine_1.GameObject.Destroy(trans.gameObject);\r\n           
+    }\r\n        }\r\n    }\r\n    /* Equip Item */\r\n    EquipItem(equipData) {\r\n       
+    const anim = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.GetPlayer(equipData.sessionId).character.ZepetoAnimator;\r\n       
+    const bone = anim.GetBoneTransform(equipData.bone);\r\n        const prefab =
+    UnityEngine_1.Resources.Load(equipData.itemName);\r\n        const equip = UnityEngine_1.GameObject.Instantiate(prefab,
+    bone);\r\n        equip.name = `${equipData.itemName}-${equipData.bone.toString()}`;\r\n   
+    }\r\n    /** Samdasu **/\r\n    /* Player Equip Samdasu */\r\n    EquipSamdasu(equipData)
+    {\r\n        const anim = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.GetPlayer(equipData.sessionId).character.ZepetoAnimator;\r\n       
+    const bone = anim.GetBoneTransform(equipData.bone);\r\n        const equip =
+    UnityEngine_1.GameObject.Instantiate(this.samdasuPetInWorld, bone);\r\n       
+    equip.name = `${equipData.itemName}-${equipData.bone.toString()}`;\r\n    }\r\n}\r\nexports.default
+    = EquipManager;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiRXF1aXBNYW5hZ2VyLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiRXF1aXBNYW5hZ2VyLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7O0FBQUEsNkNBQXlGO0FBQ3pGLG1EQUF3QztBQUN4Qyw2RUFBNEQ7QUFHNUQsaURBQXFEO0FBQ3JELCtDQUFvRDtBQUNwRCwrQ0FBd0M7QUFFeEMsTUFBcUIsWUFBYSxTQUFRLHFDQUFxQjtJQVMzRCxLQUFLO1FBQ0QsSUFBRyxDQUFDLElBQUksQ0FBQyxTQUFTO1lBQ2QsSUFBSSxDQUFDLFNBQVMsR0FBRyx3QkFBVSxDQUFDLGdCQUFnQixTQUFDLG1DQUFvQixFQUFHLENBQUM7UUFFekUsSUFBSSxDQUFDLFNBQVMsZ0JBQWUsQ0FBQyxJQUFVLEVBQUUsRUFBRTtZQUN4QyxJQUFJLENBQUMsSUFBSSxHQUFHLElBQUksQ0FBQztZQUNqQixJQUFJLENBQUMsSUFBSSxDQUFDLGlCQUFpQixDQUFDLHFCQUFPLENBQUMsS0FBSyxFQUFFLENBQUMsU0FBbUIsRUFBRSxFQUFFO2dCQUMvRCxJQUFHLFNBQVMsQ0FBQyxRQUFRLElBQUksSUFBSSxDQUFDLGlCQUFpQixDQUFDLElBQUksRUFBRTtvQkFDbEQsSUFBSSxDQUFDLFlBQVksQ0FBQyxTQUFTLENBQUMsQ0FBQztpQkFDaEM7cUJBQU07b0JBQ0gsSUFBSSxDQUFDLFNBQVMsQ0FBQyxTQUFTLENBQUMsQ0FBQztpQkFDN0I7WUFDTCxDQUFDLENBQUMsQ0FBQztZQUVILElBQUksQ0FBQyxJQUFJLENBQUMsaUJBQWlCLENBQUMscUJBQU8sQ0FBQyxXQUFXLEVBQUUsQ0FBQyxTQUFtQixFQUFFLEVBQUU7Z0JBQ3JFLElBQUcsQ0FBQyxTQUFTLENBQUMsWUFBWTtvQkFBRSxPQUFPO2dCQUNuQyxJQUFJLENBQUMsV0FBVyxDQUFDLFNBQVMsQ0FBQyxDQUFDO2dCQUM1QixJQUFHLFNBQVMsQ0FBQyxRQUFRLElBQUksSUFBSSxDQUFDLGlCQUFpQixDQUFDLElBQUksRUFBRTtv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","assetPath":"Assets/Zepeto
+    Multiplay Component/ZepetoScript/Managers/EquipManager.ts","manifest":{"properties":[{"assembly":"ZEPETO.World","name":"multiplay","type":"ZEPETO.World.ZepetoWorldMultiplay","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"","name":"room","type":"ZEPETO.Multiplay.Room","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"UnityEngine.CoreModule","name":"samdasuPetInWorld","type":"UnityEngine.GameObject","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"Header","args":["\"Samdasus
+    Field\""]},{"name":"SerializeField","args":[]}]}],"name":"EquipManager","description":"","hasAnimatorMove":false},"isCompiled":true}'
+  typescriptHash: 93480da47d6dfed1cb56593f683ed5eb
+  onlyWriteTrigger: 0

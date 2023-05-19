@@ -1,0 +1,59 @@
+fileFormatVersion: 2
+guid: 5ee47fb9560ceaf498f8c2fc0bbb152c
+importerOverride: ZEPETO.Script.Compiler:ZEPETO.Script:TypescriptAssetImporter
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: -1123457745, guid: 54cf806323ffe4418a4ce4cc63fe6b9d, type: 3}
+  isAssemblyDeclarations: 0
+  assembly: 
+  generateAllTypes: 1
+  types: []
+  generateWrapper: 0
+  overrideWrapperTypes: 0
+  wrapperTypes: []
+  WrapperFilters: []
+  wrapperOutputDirectory: Generated
+  compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
+    { value: true });\r\nconst __UnityEngine__ = require(\"UnityEngine\");\r\nconst
+    UnityEngine_1 = require(\"UnityEngine\");\r\nconst ZEPETO_Character_Controller_1
+    = require(\"ZEPETO.Character.Controller\");\r\nconst ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst
+    TypeManager_1 = require(\"../Managers/TypeManager\");\r\nclass LookAt extends
+    ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    constructor() {\r\n        super(...arguments);\r\n       
+    this.buttonType = TypeManager_1.ButtonType.NONE;\r\n    }\r\n    Start() {\r\n       
+    this.renderer = this.GetComponent($typeof(UnityEngine_1.SpriteRenderer));\r\n       
+    if (this.renderer)\r\n            this.renderer.enabled = false;\r\n        this.collider
+    = this.GetComponent($typeof(UnityEngine_1.Collider));\r\n        if (this.collider)\r\n           
+    this.collider.enabled = false;\r\n    }\r\n    /* Samdasu NPC UI */\r\n    NPCButtonActivate()
+    {\r\n        this.scriptTarget.gameObject.SetActive(true);\r\n        // if(this.collider)
+    this.collider.enabled = false;\r\n        // if(this.renderer) this.renderer.enabled
+    = false;\r\n    }\r\n    /* Samdasu NPC UI */\r\n    NPCButtonDeactivate() {\r\n       
+    //\r\n        this.scriptTarget.gameObject.SetActive(false);\r\n        if (this.isLooking)
+    {\r\n            if (this.collider)\r\n                this.collider.enabled
+    = true;\r\n            if (this.renderer)\r\n                this.renderer.enabled
+    = true;\r\n        }\r\n    }\r\n    StartLooking(col) {\r\n        if (ZEPETO_Character_Controller_1.ZepetoPlayers.instance.LocalPlayer
+    == null)\r\n            return;\r\n        this.character = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.LocalPlayer.zepetoPlayer.character.gameObject;\r\n       
+    if (__UnityEngine__.Object.op_Inequality(col.gameObject, this.character))\r\n           
+    return;\r\n        if (this.collider)\r\n            this.collider.enabled =
+    true;\r\n        if (this.renderer)\r\n            this.renderer.enabled = true;\r\n       
+    this.StartCoroutine(this.LookAtLocalPlayer());\r\n    }\r\n    StopLooking(col)
+    {\r\n        if (__UnityEngine__.Object.op_Inequality(col.gameObject, this.character))\r\n           
+    return;\r\n        if (this.renderer)\r\n            this.renderer.enabled =
+    false;\r\n        if (this.collider)\r\n            this.collider.enabled = false;\r\n       
+    this.isLooking = false;\r\n        this.StopCoroutine(this.LookAtLocalPlayer());\r\n       
+    /* Samdasu NPC UI */\r\n        // if(this.buttonType == ButtonType.Cage) {\r\n       
+    //     this.scriptTarget.gameObject.SetActive(false);\r\n        // }\r\n   
+    }\r\n    /* Locking Script */\r\n    *LookAtLocalPlayer() {\r\n        /* Set
+    Init */\r\n        if (!this.playerCam)\r\n            this.playerCam = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.LocalPlayer.zepetoCamera.cameraParent.GetChild(0).transform;\r\n       
+    if (!this.wait)\r\n            this.wait = new UnityEngine_1.WaitForSeconds(0.06);\r\n       
+    /* Main Script */\r\n        this.transform.LookAt(this.playerCam.position);\r\n       
+    this.isLooking = true;\r\n        while (this.isLooking) {\r\n            yield
+    this.wait;\r\n            this.transform.LookAt(this.playerCam.position);\r\n       
+    }\r\n    }\r\n}\r\nexports.default = LookAt;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiTG9va0F0LmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiTG9va0F0LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7OztBQUFBLDZDQUE4RjtBQUM5Riw2RUFBNEQ7QUFDNUQsaURBQXFEO0FBQ3JELHlEQUFxRDtBQUVyRCxNQUFxQixNQUFPLFNBQVEscUNBQXFCO0lBQXpEOztRQVlXLGVBQVUsR0FBZSx3QkFBVSxDQUFDLElBQUksQ0FBQztJQXFFcEQsQ0FBQztJQW5FRyxLQUFLO1FBQ0QsSUFBSSxDQUFDLFFBQVEsR0FBRyxJQUFJLENBQUMsWUFBWSxTQUFDLDRCQUFjLEVBQUcsQ0FBQztRQUNwRCxJQUFHLElBQUksQ0FBQyxRQUFRO1lBQUUsSUFBSSxDQUFDLFFBQVEsQ0FBQyxPQUFPLEdBQUcsS0FBSyxDQUFDO1FBRWhELElBQUksQ0FBQyxRQUFRLEdBQUcsSUFBSSxDQUFDLFlBQVksU0FBQyxzQkFBUSxFQUFHLENBQUM7UUFDOUMsSUFBRyxJQUFJLENBQUMsUUFBUTtZQUFFLElBQUksQ0FBQyxRQUFRLENBQUMsT0FBTyxHQUFHLEtBQUssQ0FBQztJQUNwRCxDQUFDO0lBRUQsb0JBQW9CO0lBQ2IsaUJBQWlCO1FBQ3BCLElBQUksQ0FBQyxZQUFZLENBQUMsVUFBVSxDQUFDLFNBQVMsQ0FBQyxJQUFJLENBQUMsQ0FBQztRQUU3QyxtREFBbUQ7UUFDbkQsbURBQW1EO0lBQ3ZELENBQUM7SUFFRCxvQkFBb0I7SUFDYixtQkFBbUI7UUFDdEIsRUFBRTtRQUNGLElBQUksQ0FBQyxZQUFZLENBQUMsVUFBVSxDQUFDLFNBQVMsQ0FBQyxLQUFLLENBQUMsQ0FBQztRQUU5QyxJQUFHLElBQUksQ0FBQyxTQUFTLEVBQUU7WUFDZixJQUFHLElBQUksQ0FBQyxRQUFRO2dCQUFFLElBQUksQ0FBQyxRQUFRLENBQUMsT0FBTyxHQUFHLElBQUksQ0FBQztZQUMvQyxJQUFHLElBQUksQ0FBQyxRQUFRO2dCQUFFLElBQUksQ0FBQyxRQUFRLENBQUMsT0FBTyxHQUFHLElBQUksQ0FBQztTQUNsRDtJQUNMLENBQUM7SUFFTSxZQUFZLENBQUMsR0FBYztRQUM5QixJQUFHLDJDQUFhLENBQUMsUUFBUSxDQUFDLFdBQVcsSUFBSSxJQUFJO1lBQUUsT0FBTztRQUV0RCxJQUFJLENBQUMsU0FBUyxHQUFHLDJDQUFhLENBQUMsUUFBUSxDQUFDLFdBQVcsQ0FBQyxZQUFZLENBQUMsU0FBUyxDQUFDLFVBQVUsQ0FBQztRQUN0RiwyQkFvQ3dyUSxhQUFjLENBcENuc1EsR0FBRyxDQUFDLFVBQVUsRUFBSSxJQUFJLENBQUMsU0FBUztZQUFFLE9BQU87UUFFNUMsSUFBRyxJQUFJLENBQUMsUUFBUTtZQUFFLElBQUksQ0FBQyxRQUFRLENBQUMsT0FBTyxHQUFHLElBQUksQ0FBQztRQUMvQyxJQUFHLElBQUksQ0FBQyxRQUFRO1lBQUUsSUFBSSxDQUFDLFFBQVEsQ0FBQyxPQUFPLEdBQUcsSUFBSSxDQUFDO1FBQy9DLElBQUksQ0FBQyxjQUFjLENBQUMsSUFBSSxDQUFDLGlCQUFpQixFQUFFLENBQUMsQ0FBQztJQUNsRCxDQUFDO0lBRU0sV0FBVyxDQUFDLEdBQWM7UUFDN0IsMkJBNEJ3clEsYUFBYyxDQTVCbnNRLEdBQUcsQ0FBQyxVQUFVLEVBQUksSUFBSSxDQUFDLFNBQVM7WUFBRSxPQUFPO1FBRTVDLElBQUcsSUFBSSxDQUFDLFFBQVE7WUFBRSxJQUFJLENBQUMsUUFBUSxDQUFDLE9BQU8sR0FBRyxLQUFLLENBQUM7UUFDaEQsSUFBRyxJQUFJLENBQUMsUUFBUTtZQUFFLElBQUksQ0FBQyxRQUFRLENBQUMsT0FBTyxHQUFHLEtBQUssQ0FBQztRQUNoRCxJQUFJLENBQUMsU0FBUyxHQUFHLEtBQUssQ0FBQztRQUN2QixJQUFJLENBQUMsYUFBYSxDQUFDLElBQUksQ0FBQyxpQkFBaUIsRUFBRSxDQUFDLENBQUM7UUFFN0Msb0JBQW9CO1FBQ3BCLDJDQUEyQztRQUMzQyxxREFBcUQ7UUFDckQsSUFBSTtJQUNSLENBQUM7SUFFRCxvQkFBb0I7SUFDWixDQUFFLGlCQUFpQjtRQUN2QixjQUFjO1FBQ2QsSUFBRyxDQUFDLElBQUksQ0FBQyxTQUFTO1lBQUUsSUFBSSxDQUFDLFNBQVMsR0FBRywyQ0FBYSxDQUFDLFFBQVEsQ0FBQyxXQUFXLENBQUMsWUFBWSxDQUFDLFlBQVksQ0FBQyxRQUFRLENBQUMsQ0FBQyxDQUFDLENBQUMsU0FBUyxDQUFDO1FBQ3hILElBQUcsQ0FBQyxJQUFJLENBQUMsSUFBSTtZQUFFLElBQUksQ0FBQyxJQUFJLEdBQUcsSUFBSSw0QkFBYyxDQUFDLElBQUksQ0FBQyxDQUFDO1FBRXBELGlCQUFpQjtRQUNqQixJQUFJLENBQUMsU0FBUyxDQUFDLE1BQU0sQ0FBQyxJQUFJLENBQUMsU0FBUyxDQUFDLFFBQVEsQ0FBQyxDQUFDO1FBQy9DLElBQUksQ0FBQyxTQUFTLEdBQUcsSUFBSSxDQUFDO1FBQ3RCLE9BQU0sSUFBSSxDQUFDLFNBQVMsRUFBRTtZQUNsQixNQUFNLElBQUksQ0FBQyxJQUFJLENBQUM7WUFDaEIsSUFBSSxDQUFDLFNBQVMsQ0FBQyxNQUFNLENBQUMsSUFBSSxDQUFDLFNBQVMsQ0FBQyxRQUFRLENBQUMsQ0FBQztTQUNsRDtJQUNMLENBQUM7Q0FFSjtBQWpGRCx5QkFpRkMifQ==","assetPath":"Assets/Zepeto
+    Multiplay Component/ZepetoScript/Sample Code/LookAt.ts","manifest":{"properties":[{"assembly":"UnityEngine.CoreModule","name":"scriptTarget","type":"UnityEngine.Transform","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"","name":"buttonType","type":"ButtonType","isArray":false,"initValue":["NONE"],"enumKeys":["NONE","Trash","Ride_Horse","Ride_Wheel","Ride_MGR","Samdasu_Pick","Samdasu_Drink","NPC_Trader","NPC_Creater","NPC_B","NPC_C","Chair","EquipHead","EquipRightHand","EquipLeftHand","EquipBody"],"enumValues":["-1","20","21","22","23","24","25","30","31","32","33","34","35","36","37","38"],"attributes":[]}],"name":"LookAt","description":"","hasAnimatorMove":false},"isCompiled":true}'
+  typescriptHash: 746b25cd5583e108712cb49927ebc991
+  onlyWriteTrigger: 0

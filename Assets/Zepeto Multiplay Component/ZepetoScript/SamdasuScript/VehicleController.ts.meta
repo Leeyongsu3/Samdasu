@@ -1,0 +1,201 @@
+fileFormatVersion: 2
+guid: 41ce7836e8c928d41b48f86f5fbfba7d
+importerOverride: ZEPETO.Script.Compiler:ZEPETO.Script:TypescriptAssetImporter
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: -1123457745, guid: 54cf806323ffe4418a4ce4cc63fe6b9d, type: 3}
+  isAssemblyDeclarations: 0
+  assembly: 
+  generateAllTypes: 1
+  types: []
+  generateWrapper: 0
+  overrideWrapperTypes: 0
+  wrapperTypes: []
+  WrapperFilters: []
+  wrapperOutputDirectory: Generated
+  compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
+    { value: true });\r\nexports.VehicleType = void 0;\r\nconst UnityEngine_1 = require(\"UnityEngine\");\r\nconst
+    UnityEngine_UI_1 = require(\"UnityEngine.UI\");\r\nconst ZEPETO_Character_Controller_1
+    = require(\"ZEPETO.Character.Controller\");\r\nconst ZEPETO_Multiplay_1 = require(\"ZEPETO.Multiplay\");\r\nconst
+    ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst ZEPETO_World_1 = require(\"ZEPETO.World\");\r\nconst
+    TransformSyncHelper_1 = require(\"../Transform/TransformSyncHelper\");\r\nconst
+    JoystickController_1 = require(\"./JoystickController\");\r\nclass VehicleController
+    extends ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    constructor() {\r\n       
+    super(...arguments);\r\n        this.moveSpeed = 1;\r\n        this.rotSpeed
+    = 1;\r\n        this._isSit = false;\r\n        this.vehicleType = VehicleType.Horse;\r\n       
+    /* Position */\r\n        this.valueX = { accel: 0, currentSpeed: 0, };\r\n       
+    this.valueY = { accel: 0, currentSpeed: 0, };\r\n        this.valueForward =
+    { accel: 0, currentSpeed: 0, };\r\n        /* Rotation */\r\n        this.rotX
+    = { accel: 0, accelator: 0, currentEuler: 0, };\r\n        this.rotY = { accel:
+    0, accelator: 0, currentEuler: 0, };\r\n        this.rotZ = { accel: 0, accelator:
+    0, currentEuler: 0, };\r\n        /* Handling */\r\n        // private steer:handlingData
+    = { speed:0, angleToFront:0, currentEuler:0, };\r\n        /* Fly */\r\n       
+    this.isFly = false;\r\n        this.moveStart = false;\r\n        this.updown
+    = false;\r\n        this.side = false;\r\n    }\r\n    get Id() {\r\n       
+    return this.m_tfHelper.Id;\r\n    }\r\n    get IsSit() {\r\n        return this._isSit;\r\n   
+    }\r\n    set IsSit(isSit) {\r\n        this._isSit = isSit;\r\n    }\r\n    Start()
+    {\r\n        this.m_tfHelper = this.GetComponentInParent($typeof(TransformSyncHelper_1.default));\r\n       
+    this.multiplay = UnityEngine_1.GameObject.FindObjectOfType($typeof(ZEPETO_World_1.ZepetoWorldMultiplay));\r\n       
+    this.multiplay.add_RoomJoined((room) => {\r\n            this.room = room;\r\n           
+    // this.room.AddMessageHandler(\"ChairSitDown\", (message:syncChair) => {\r\n           
+    //     if(this.room.SessionId == message.OwnerSessionId) this.ButtonOnOff(false);\r\n           
+    //     if(this.m_tfHelper.Id == message.chairId) this.PlayerSitDown(message.OwnerSessionId)\r\n           
+    // });\r\n            // this.room.AddMessageHandler(\"ChairSitUp\", (message:syncChair)
+    => {\r\n            //     if(this.room.SessionId == message.OwnerSessionId)
+    this.ButtonOnOff(true);\r\n            //     if(this.m_tfHelper.Id == message.chairId)
+    this.PlayerSitUp(message.OwnerSessionId);\r\n            // });\r\n        });\r\n       
+    if (!this.boxCol)\r\n            this.boxCol = this.transform.GetComponent($typeof(UnityEngine_1.BoxCollider));\r\n       
+    if (!this.sitPos)\r\n            this.sitPos = this.transform.GetChild(1);\r\n       
+    if (!this.buttonObject)\r\n            this.buttonObject = this.transform.GetChild(2).gameObject;\r\n       
+    if (!this.buttonGetOut)\r\n            return;\r\n        this.boxCol.enabled
+    = false;\r\n        this.rigid = this.GetComponentInParent($typeof(UnityEngine_1.Rigidbody));\r\n   
+    }\r\n    /* Button on off */\r\n    ButtonOnOff(onOff) {\r\n        // this.boxCol.enabled
+    = onOff;\r\n        this.buttonObject.SetActive(onOff);\r\n    }\r\n    /* Sit
+    Animation */\r\n    SitControl(sessionId, sit) {\r\n        ZEPETO_Character_Controller_1.ZepetoPlayers.instance.GetPlayer(sessionId).character.ZepetoAnimator.SetBool(\"isSit\",
+    sit);\r\n    }\r\n    /* Sit Chair */\r\n    PlayerSitDown(sessionId) {\r\n       
+    if (this.IsSit)\r\n            return;\r\n        this.IsSit = true;\r\n       
+    this.ButtonOnOff(false);\r\n        const player = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.GetPlayer(sessionId).character;\r\n       
+    player.transform.parent = this.transform;\r\n        player.Teleport(this.sitPos.position,
+    this.sitPos.rotation);\r\n        if (!ZEPETO_Character_Controller_1.ZepetoPlayers.instance.HasPlayer(sessionId)
+    || sessionId != this.room.SessionId)\r\n            return; // isLocal\r\n       
+    this.ControllerSet();\r\n        this.StartCoroutine(this.StartContinuousAnimation(sessionId));\r\n       
+    this.buttonGetOut.gameObject.SetActive(true);\r\n        this.buttonGetOut.onClick.AddListener(()
+    => this.PlayerSendSitUp());\r\n    }\r\n    *StartContinuousAnimation(sessionId)
+    {\r\n        const player = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.GetPlayer(sessionId).character;\r\n       
+    const anim = player.ZepetoAnimator;\r\n        while (anim.GetBool(\"isSit\"))
+    {\r\n            yield null;\r\n        }\r\n        this.SitControl(sessionId,
+    true);\r\n        console.log(` ${player.name} is Sit!! `);\r\n        yield
+    new UnityEngine_1.WaitForSeconds(0.1);\r\n        player.characterController.enabled
+    = false;\r\n        player.GetComponent($typeof(ZEPETO_Character_Controller_1.ZepetoCharacter)).enabled
+    = false;\r\n    }\r\n    /* Send ChairSitUp */\r\n    PlayerSendSitUp() {\r\n       
+    this.buttonGetOut.gameObject.SetActive(false);\r\n        this.buttonGetOut.onClick.RemoveListener(this.PlayerSendSitUp);\r\n       
+    const data = new ZEPETO_Multiplay_1.RoomData();\r\n        data.Add(\"isSit\",
+    false);\r\n        data.Add(\"chairId\", this.m_tfHelper.Id);\r\n        this.room.Send(\"ChairSit\",
+    data.GetObject());\r\n    }\r\n    /* Recieve ChairSitUp */\r\n    PlayerSitUp(sessionId)
+    {\r\n        if (!this.IsSit)\r\n            return;\r\n        this.IsSit =
+    false;\r\n        this.ButtonOnOff(true);\r\n        if (!ZEPETO_Character_Controller_1.ZepetoPlayers.instance.HasPlayer(sessionId))\r\n           
+    return;\r\n        const player = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.GetPlayer(sessionId).character;\r\n       
+    player.transform.parent = null;\r\n        player.Teleport(this.outPos.position,
+    this.outPos.rotation);\r\n        this.SitControl(sessionId, false);\r\n       
+    if (sessionId != this.room.SessionId)\r\n            return; // isLocal\r\n       
+    this.ControllerReset();\r\n        player.characterController.enabled = true;\r\n       
+    player.GetComponent($typeof(ZEPETO_Character_Controller_1.ZepetoCharacter)).enabled
+    = true;\r\n    }\r\n    FixedUpdate() {\r\n        // if(this.moveStart) {\r\n       
+    //     let movePoint:Vector3;\r\n        //     let rotPoint:Vector3;\r\n       
+    //     let time:number;\r\n        //     /* Main Move */\r\n        //     if(this.vehicleType
+    == VehicleType.Car) {\r\n        //         this.speedToAccel(this.valueForward,
+    Time.deltaTime * this.moveSpeed, this.rigid.mass);\r\n        //         movePoint
+    = this.transform.parent.position + (this.transform.parent.forward * this.valueForward.currentSpeed);\r\n       
+    //         if(this.valueForward.currentSpeed != 0) {\r\n        //            
+    rotPoint = new Vector3(\r\n        //                 this.transform.parent.eulerAngles.x,\r\n       
+    //                 this.transform.parent.eulerAngles.y + this.steer.angleToFront,\r\n       
+    //                 this.transform.parent.eulerAngles.z);\r\n        //        
+    }\r\n        //     } else if(this.vehicleType == VehicleType.Tank) {\r\n       
+    //         this.speedToAccel(this.valueForward, Time.deltaTime * this.moveSpeed,
+    this.rigid.mass);\r\n        //         movePoint = this.transform.parent.position
+    + (this.transform.parent.forward * this.valueForward.currentSpeed);\r\n       
+    //         this.rotToAccel(this.rotY, Time.deltaTime * this.rotSpeed, this.rigid.mass);\r\n       
+    //         rotPoint = new Vector3(\r\n        //             this.transform.parent.rotation.eulerAngles.x,\r\n       
+    //             this.transform.parent.rotation.eulerAngles.y + this.rotY.accelator,\r\n       
+    //             this.transform.parent.rotation.eulerAngles.z);\r\n        //    
+    }\r\n        //     /* Gravity */\r\n        //     if ((this.vehicleType ==
+    VehicleType.AirPlane) && this.isFly) {\r\n        //         // movePoint.y =
+    this.rigid.velocity.y * 0.6; //gravity with gliding\r\n        //         //
+    this.rigid.velocity = movePoint;\r\n        //     } else {\r\n        //        
+    // movePoint.y = this.rigid.velocity.y; //gravity \r\n        //         // this.rigid.velocity
+    = movePoint;\r\n        //     }\r\n        //     this.transform.parent.position
+    = Vector3.Lerp(this.transform.parent.position, movePoint, Time.deltaTime);\r\n       
+    //     this.transform.parent.eulerAngles = Vector3.Lerp(this.transform.parent.eulerAngles,
+    rotPoint, Time.deltaTime);\r\n        // }\r\n    }\r\n    speedToAccel(value,
+    speed, mass) {\r\n        if (value.accel > 0) {\r\n            value.currentSpeed
+    = UnityEngine_1.Mathf.Clamp(value.currentSpeed + (speed / mass), -value.accel,
+    value.accel);\r\n        }\r\n        else if (value.accel < 0) {\r\n           
+    value.currentSpeed = UnityEngine_1.Mathf.Clamp(value.currentSpeed - (speed /
+    mass), value.accel, -value.accel);\r\n        }\r\n        else {\r\n           
+    if (value.currentSpeed > 0) {\r\n                value.currentSpeed = UnityEngine_1.Mathf.Clamp(value.currentSpeed
+    - (speed * mass), 0, value.currentSpeed);\r\n            }\r\n            else
+    if (value.currentSpeed < 0) {\r\n                value.currentSpeed = UnityEngine_1.Mathf.Clamp(value.currentSpeed
+    + (speed * mass), value.currentSpeed, 0);\r\n            }\r\n        }\r\n   
+    }\r\n    rotToAccel(value, speed, mass) {\r\n        if (value.accel > 0) {\r\n           
+    value.accelator = UnityEngine_1.Mathf.Clamp(value.accelator + (speed / mass),
+    -value.accel, value.accel);\r\n        }\r\n        else if (value.accel < 0)
+    {\r\n            value.accelator = UnityEngine_1.Mathf.Clamp(value.accelator
+    - (speed / mass), value.accel, -value.accel);\r\n        }\r\n        else {\r\n           
+    if (value.accelator > 0) {\r\n                value.accelator = UnityEngine_1.Mathf.Clamp(value.accelator
+    - (speed * mass), 0, value.accelator);\r\n            }\r\n            else if
+    (value.accelator < 0) {\r\n                value.accelator = UnityEngine_1.Mathf.Clamp(value.accelator
+    + (speed * mass), value.accelator, 0);\r\n            }\r\n        }\r\n    }\r\n   
+    /* Controller Set */\r\n    ControllerSet() {\r\n        const controller = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.gameObject.GetComponentInChildren($typeof(ZEPETO_Character_Controller_1.UIZepetoPlayerControl));\r\n       
+    if (this.vehicleType == VehicleType.Horse) {\r\n            controller.transform.GetChild(0).GetChild(3).gameObject.SetActive(true);\r\n           
+    controller.transform.GetChild(0).GetChild(4).gameObject.SetActive(true);\r\n           
+    const joyConD = controller.transform.GetChild(0).GetChild(3).GetChild(2).gameObject.GetComponent($typeof(JoystickController_1.default));\r\n           
+    const joyConJ = controller.transform.GetChild(0).GetChild(4).gameObject.GetComponent($typeof(JoystickController_1.default));\r\n           
+    if (joyConD)\r\n                joyConD.target = this;\r\n            if (joyConJ)\r\n               
+    joyConJ.target = this;\r\n        }\r\n        else if (this.vehicleType == VehicleType.Wheel)
+    {\r\n            // controller.transform.GetChild(0).GetChild(5).gameObject.SetActive(true);\r\n           
+    // controller.transform.GetChild(0).GetChild(6).gameObject.SetActive(true);\r\n           
+    // const joyConL = controller.transform.GetChild(0).GetChild(5).gameObject.GetComponent<JoystickController>();\r\n           
+    // const joyConU = controller.transform.GetChild(0).GetChild(6).GetChild(0).gameObject.GetComponent<JoystickController>();\r\n           
+    // const joyConD = controller.transform.GetChild(0).GetChild(6).GetChild(1).gameObject.GetComponent<JoystickController>();\r\n           
+    // if(joyConL) joyConL.target = this;\r\n            // if(joyConU) joyConU.target
+    = this;\r\n            // if(joyConD) joyConD.target = this;\r\n        }\r\n       
+    else if (this.vehicleType == VehicleType.Merry_Go_Round) {\r\n            //
+    controller.transform.GetChild(0).GetChild(3).gameObject.SetActive(true);\r\n           
+    // controller.transform.GetChild(0).GetChild(4).gameObject.SetActive(true);\r\n           
+    // const joyConL = controller.transform.GetChild(0).GetChild(3).gameObject.GetComponent<JoystickController>();\r\n           
+    // const joyConR = controller.transform.GetChild(0).GetChild(4).gameObject.GetComponent<JoystickController>();\r\n           
+    // if(joyConL) joyConL.target = this;\r\n            // if(joyConR) joyConR.target
+    = this;\r\n        }\r\n        controller.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);\r\n       
+    controller.transform.GetChild(0).GetChild(2).gameObject.SetActive(false);\r\n   
+    }\r\n    ControllerReset() {\r\n        const controller = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.gameObject.GetComponentInChildren($typeof(ZEPETO_Character_Controller_1.UIZepetoPlayerControl));\r\n       
+    if (this.vehicleType == VehicleType.Horse) {\r\n            controller.transform.GetChild(0).GetChild(3).gameObject.SetActive(false);\r\n           
+    controller.transform.GetChild(0).GetChild(4).gameObject.SetActive(false);\r\n           
+    const joyConL = controller.transform.GetChild(0).GetChild(5).gameObject.GetComponent($typeof(JoystickController_1.default));\r\n           
+    const joyConU = controller.transform.GetChild(0).GetChild(6).GetChild(0).gameObject.GetComponent($typeof(JoystickController_1.default));\r\n           
+    const joyConD = controller.transform.GetChild(0).GetChild(6).GetChild(1).gameObject.GetComponent($typeof(JoystickController_1.default));\r\n           
+    if (joyConL)\r\n                joyConL.target = null;\r\n            if (joyConU)\r\n               
+    joyConU.target = null;\r\n            if (joyConD)\r\n                joyConD.target
+    = null;\r\n        }\r\n        else if (this.vehicleType == VehicleType.Wheel)
+    {\r\n            controller.transform.GetChild(0).GetChild(5).gameObject.SetActive(false);\r\n           
+    controller.transform.GetChild(0).GetChild(6).gameObject.SetActive(false);\r\n           
+    const joyConL = controller.transform.GetChild(0).GetChild(5).gameObject.GetComponent($typeof(JoystickController_1.default));\r\n           
+    const joyConU = controller.transform.GetChild(0).GetChild(6).GetChild(0).gameObject.GetComponent($typeof(JoystickController_1.default));\r\n           
+    const joyConD = controller.transform.GetChild(0).GetChild(6).GetChild(1).gameObject.GetComponent($typeof(JoystickController_1.default));\r\n           
+    if (joyConL)\r\n                joyConL.target = null;\r\n            if (joyConU)\r\n               
+    joyConU.target = null;\r\n            if (joyConD)\r\n                joyConD.target
+    = null;\r\n        }\r\n        else if (this.vehicleType == VehicleType.Merry_Go_Round)
+    {\r\n            controller.transform.GetChild(0).GetChild(3).gameObject.SetActive(false);\r\n           
+    controller.transform.GetChild(0).GetChild(4).gameObject.SetActive(false);\r\n           
+    const joyConL = controller.transform.GetChild(0).GetChild(3).gameObject.GetComponent($typeof(JoystickController_1.default));\r\n           
+    const joyConR = controller.transform.GetChild(0).GetChild(4).gameObject.GetComponent($typeof(JoystickController_1.default));\r\n           
+    if (joyConL)\r\n                joyConL.target = null;\r\n            if (joyConR)\r\n               
+    joyConR.target = null;\r\n        }\r\n        else {\r\n            return;\r\n       
+    }\r\n        controller.transform.GetChild(0).GetChild(1).gameObject.SetActive(true);\r\n       
+    controller.transform.GetChild(0).GetChild(2).gameObject.SetActive(true);\r\n   
+    }\r\n    SetHandleValue(joyConType, speed = 0, angle = 0) {\r\n        // this.moveStart
+    = true;\r\n        // if(this.vehicleType == VehicleType.Bike) {\r\n        //
+    } else if(this.vehicleType == VehicleType.Car) {\r\n        //     if(joyConType
+    == JoystickType.Handling) {\r\n        //         this.steer.angleToFront = angle
+    *2;\r\n        //     } else if(joyConType == JoystickType.ToFront) {\r\n       
+    //         this.valueForward.accel = speed * this.moveSpeed;\r\n        //    
+    } else if(joyConType == JoystickType.ToBack) {\r\n        //         this.valueForward.accel
+    = speed * this.moveSpeed;\r\n        //     }\r\n        // } else if(this.vehicleType
+    == VehicleType.Tank) {\r\n        //     if(joyConType == JoystickType.UDSide)
+    {\r\n        //         this.valueForward.accel = speed * this.moveSpeed;\r\n       
+    //     } else if(joyConType == JoystickType.RLSide) {\r\n        //         this.rotY.accel
+    = speed * this.rotSpeed;\r\n        //     }\r\n        // } else {\r\n       
+    // }\r\n        // if(joyConType == JoystickType.UDSide) {\r\n        // } else
+    if(joyConType == JoystickType.RLSide) {\r\n        // } else if(joyConType ==
+    JoystickType.Circle) {\r\n        // }\r\n    }\r\n}\r\nexports.default = VehicleController;\r\nvar
+    VehicleType;\r\n(function (VehicleType) {\r\n    VehicleType[VehicleType[\"Horse\"]
+    = 0] = \"Horse\";\r\n    VehicleType[VehicleType[\"Wheel\"] = 1] = \"Wheel\";\r\n   
+    VehicleType[VehicleType[\"Merry_Go_Round\"] = 2] = \"Merry_Go_Round\";\r\n})(VehicleType
+    = exports.VehicleType || (exports.VehicleType = {}));\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiVmVoaWNsZUNvbnRyb2xsZXIuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJWZWhpY2xlQ29udHJvbGxlci50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7QUFBQSw2Q0FBOEg7QUFDOUgsbURBQXdDO0FBRXhDLDZFQUFvRztBQUNwRyx1REFBa0Q7QUFDbEQsaURBQXFEO0FBQ3JELCtDQUFvRDtBQUNwRCwwRUFBbUU7QUFDbkUsNkRBQXdFO0FBRXhFLE1BQXFCLGlCQUFrQixTQUFRLHFDQUFxQjtJQUFwRTs7UUFJVyxjQUFTLEdBQVUsQ0FBQyxDQUFDO1FBQ3JCLGFBQVEsR0FBVSxDQUFDLENBQUM7UUFPbkIsV0FBTSxHQUFRLEtBQUssQ0FBQztRQVVyQixnQkFBVyxHQUFlLFdBQVcsQ0FBQyxLQUFLLENBQUM7UUFFbkQsY0FBYztRQUNOLFdBQU0sR0FBWSxFQUFFLEtBQUssRUFBQyxDQUFDLEVBQUUsWUFBWSxFQUFDLENBQUMsR0FBRyxDQUFDO1FBQy9DLFdBQU0sR0FBWSxFQUFFLEtBQUssRUFBQyxDQUFDLEVBQUUsWUFBWSxFQUFDLENBQUMsR0FBRyxDQUFDO1FBQy9DLGlCQUFZLEdBQVksRUFBRSxLQUFLLEVBQUMsQ0FBQyxFQUFFLFlBQVksRUFBQyxDQUFDLEdBQUcsQ0FBQztRQUc3RCxjQUFjO1FBQ04sU0FBSSxHQUFnQixFQUFFLEtBQUssRUFBQyxDQUFDLEVBQUUsU0FBUyxFQUFDLENBQUMsRUFBRSxZQUFZLEVBQUMsQ0FBQyxHQUFHLENBQUM7UUFDOUQsU0FBSSxHQUFnQixFQUFFLEtBQUssRUFBQyxDQUFDLEVBQUUsU0FBUyxFQUFDLENBQUMsRUFBRSxZQUFZLEVBQUMsQ0FBQyxHQUFHLENBQUM7UUFDOUQsU0FBSSxHQUFnQixFQUFFLEtBQUssRUFBQyxDQUFDLEVBQUUsU0FBUyxFQUFDLENBQUMsRUFBRSxZQUFZLEVBQUMsQ0FBQyxHQUFHLENBQUM7UUFFdEUsY0FBYztRQUNkLDZFQUE2RTtRQUU3RSxTQUFTO1FBQ0QsVUFBSyxH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","assetPath":"Assets/Zepeto
+    Multiplay Component/ZepetoScript/SamdasuScript/VehicleController.ts","manifest":{"properties":[{"assembly":"UnityEngine.UI","name":"buttonGetOut","type":"UnityEngine.UI.Button","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"UnityEngine.CoreModule","name":"outPos","type":"UnityEngine.Transform","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"mscorlib","name":"moveSpeed","type":"System.Single","isArray":false,"initValue":["1"],"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"mscorlib","name":"rotSpeed","type":"System.Single","isArray":false,"initValue":["1"],"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"UnityEngine.CoreModule","name":"buttonObject","type":"UnityEngine.GameObject","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.PhysicsModule","name":"boxCol","type":"UnityEngine.BoxCollider","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"sitPos","type":"UnityEngine.Transform","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"","name":"vehicleType","type":"VehicleType","isArray":false,"initValue":["Horse"],"enumKeys":["Horse","Wheel","Merry_Go_Round"],"enumValues":["0","1","2"],"attributes":[]}],"name":"VehicleController","description":"","hasAnimatorMove":false},"isCompiled":true}'
+  typescriptHash: 52fc78ed6345a60f29d351fe74718b80
+  onlyWriteTrigger: 0

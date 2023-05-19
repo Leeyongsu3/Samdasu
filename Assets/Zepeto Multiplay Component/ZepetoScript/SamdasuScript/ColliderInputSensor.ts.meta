@@ -1,0 +1,34 @@
+fileFormatVersion: 2
+guid: bcce3e3dc3c7f194fb2994353b1d36a6
+importerOverride: ZEPETO.Script.Compiler:ZEPETO.Script:TypescriptAssetImporter
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: -1123457745, guid: 54cf806323ffe4418a4ce4cc63fe6b9d, type: 3}
+  isAssemblyDeclarations: 0
+  assembly: 
+  generateAllTypes: 1
+  types: []
+  generateWrapper: 0
+  overrideWrapperTypes: 0
+  wrapperTypes: []
+  WrapperFilters: []
+  wrapperOutputDirectory: Generated
+  compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
+    { value: true });\r\nconst ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst
+    TypeManager_1 = require(\"../Managers/TypeManager\");\r\nconst LookAtTrigger_1
+    = require(\"../Sample Code/LookAtTrigger\");\r\nclass ColliderInputSensor extends
+    ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    get reviceObject() {\r\n       
+    return this._reviceObject;\r\n    }\r\n    set reviceObject(value) {\r\n       
+    if (this._reviceObject)\r\n            return;\r\n        this._reviceObject
+    = value;\r\n    }\r\n    OnTriggerEnter(collider) {\r\n        if (!this.reviceObject)\r\n           
+    return;\r\n        if (!collider.gameObject.CompareTag(TypeManager_1.Datas.TeleportPoint))\r\n           
+    return;\r\n        this.reviceObject.OnSensorTriggerEnter(collider);\r\n    }\r\n}\r\nexports.default
+    = ColliderInputSensor;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiQ29sbGlkZXJJbnB1dFNlbnNvci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIkNvbGxpZGVySW5wdXRTZW5zb3IudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFDQSxpREFBcUQ7QUFDckQseURBQWdEO0FBQ2hELGdFQUF5RDtBQUV6RCxNQUFxQixtQkFBb0IsU0FBUSxxQ0FBcUI7SUFJbEUsSUFBVyxZQUFZO1FBQ25CLE9BQU8sSUFBSSxDQUFDLGFBQWEsQ0FBQztJQUM5QixDQUFDO0lBQ0QsSUFBVyxZQUFZLENBQUMsS0FBb0I7UUFDeEMsSUFBRyxJQUFJLENBQUMsYUFBYTtZQUFFLE9BQU87UUFDOUIsSUFBSSxDQUFDLGFBQWEsR0FBRyxLQUFLLENBQUM7SUFDL0IsQ0FBQztJQUVELGNBQWMsQ0FBQyxRQUFtQjtRQUM5QixJQUFHLENBQUMsSUFBSSxDQUFDLFlBQVk7WUFBRSxPQUFPO1FBQzlCLElBQUcsQ0FBQyxRQUFRLENBQUMsVUFBVSxDQUFDLFVBQVUsQ0FBQyxtQkFBSyxDQUFDLGFBQWEsQ0FBQztZQUFFLE9BQU87UUFDaEUsSUFBSSxDQUFDLFlBQVksQ0FBQyxvQkFBb0IsQ0FBQyxRQUFRLENBQUMsQ0FBQztJQUNyRCxDQUFDO0NBQ0o7QUFqQkQsc0NBaUJDIn0=","assetPath":"Assets/Zepeto
+    Multiplay Component/ZepetoScript/SamdasuScript/ColliderInputSensor.ts","manifest":{"properties":[],"name":"ColliderInputSensor","description":"","hasAnimatorMove":false},"isCompiled":true}'
+  typescriptHash: 8789fe6f9e0bf9d583f0cfdab68edeb5
+  onlyWriteTrigger: 0

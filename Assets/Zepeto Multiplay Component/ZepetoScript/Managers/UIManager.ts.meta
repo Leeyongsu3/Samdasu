@@ -1,0 +1,272 @@
+fileFormatVersion: 2
+guid: 7ee59b4164e045046a5ebb42330dfb05
+importerOverride: ZEPETO.Script.Compiler:ZEPETO.Script:TypescriptAssetImporter
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: -1123457745, guid: 54cf806323ffe4418a4ce4cc63fe6b9d, type: 3}
+  isAssemblyDeclarations: 0
+  assembly: 
+  generateAllTypes: 1
+  types: []
+  generateWrapper: 0
+  overrideWrapperTypes: 0
+  wrapperTypes: []
+  WrapperFilters: []
+  wrapperOutputDirectory: Generated
+  compiledResult: '{"source":"\"use strict\";\r\nvar __decorate = (this && this.__decorate)
+    || function (decorators, target, key, desc) {\r\n    var c = arguments.length,
+    r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target,
+    key) : desc, d;\r\n    if (typeof Reflect === \"object\" && typeof Reflect.decorate
+    === \"function\") r = Reflect.decorate(decorators, target, key, desc);\r\n   
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i])
+    r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;\r\n   
+    return c > 3 && r && Object.defineProperty(target, key, r), r;\r\n};\r\nObject.defineProperty(exports,
+    \"__esModule\", { value: true });\r\nconst UnityEngine_1 = require(\"UnityEngine\");\r\nconst
+    UnityEngine_UI_1 = require(\"UnityEngine.UI\");\r\nconst ZEPETO_Multiplay_1 =
+    require(\"ZEPETO.Multiplay\");\r\nconst ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst
+    ZEPETO_World_1 = require(\"ZEPETO.World\");\r\nconst SyncIndexManager_1 = require(\"../Common/SyncIndexManager\");\r\nconst
+    GameManager_1 = require(\"./GameManager\");\r\nconst TypeManager_1 = require(\"./TypeManager\");\r\nclass
+    UIManager extends ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    constructor()
+    {\r\n        super(...arguments);\r\n        this.isHorseRide = false;\r\n   
+    }\r\n    static get instance() {\r\n        if (this._instance === null) {\r\n           
+    this._instance = UnityEngine_1.GameObject.FindObjectOfType($typeof(UIManager));\r\n           
+    if (this._instance === null) {\r\n                this._instance = new UnityEngine_1.GameObject(UIManager.name).AddComponent($typeof(UIManager));\r\n           
+    }\r\n        }\r\n        return this._instance;\r\n    }\r\n    get currentSamdasuState()
+    { return this._currentSamdasuState; }\r\n    set currentSamdasuState(value) {\r\n       
+    if (!this._currentSamdasuState) {\r\n            this._currentSamdasuState =
+    value;\r\n        }\r\n        const check = value != null && value != undefined;\r\n       
+    this.buttonPanel.GetChild(0).gameObject.SetActive(check);\r\n    }\r\n    Awake()
+    {\r\n        if (UIManager._instance !== null && UIManager._instance !== this)
+    {\r\n            UnityEngine_1.GameObject.Destroy(this.gameObject);\r\n       
+    }\r\n        else {\r\n            UIManager._instance = this;\r\n           
+    UnityEngine_1.GameObject.DontDestroyOnLoad(this.gameObject);\r\n        }\r\n   
+    }\r\n    Start() {\r\n        if (!this.multiplay)\r\n            this.multiplay
+    = UnityEngine_1.GameObject.FindObjectOfType($typeof(ZEPETO_World_1.ZepetoWorldMultiplay));\r\n       
+    this.multiplay.add_RoomJoined((room) => {\r\n            this.room = room;\r\n           
+    /* Clear One Stemp Mission */\r\n            this.room.AddMessageHandler(TypeManager_1.MESSAGE.Clear_Stamp,
+    (message) => {\r\n                console.log(` <<<<< AddMessageHandler MESSAGE.Clear_Stamp
+    >>>>> `);\r\n                if (this.room.SessionId != message.sessionId)\r\n                   
+    return;\r\n                this.UpdateStampUI(message.sessionId, message.stamp);\r\n           
+    });\r\n            /* Player Get Sticker */\r\n            this.room.AddMessageHandler(TypeManager_1.MESSAGE.Add_Sticker,
+    (message) => {\r\n                if (!message)\r\n                    console.error(TypeManager_1.ERROR.NOT_ADDED_STIKERS);\r\n               
+    if (this.room.SessionId != message.OwnerSessionId)\r\n                    return;\r\n               
+    this.UpdateStickerUI(message.OwnerSessionId, message.Selected_A);\r\n               
+    this.UpdateStickerUI(message.OwnerSessionId, message.Selected_B);\r\n           
+    });\r\n        });\r\n    }\r\n    RemoteStart() {\r\n        /* Samdasu */\r\n       
+    this.SetHorseNPCUI();\r\n        this.SetTraderNPCUI();\r\n        this.SetCreaterNPCUI();\r\n       
+    this.SetDrinkerNPCUI();\r\n        this.SetBuyPanel();\r\n        this.SetButtonPanel();\r\n       
+    this.UpdatePlayerUI();\r\n    }\r\n    /* Get Loading Image Object */\r\n   
+    GetLoadingImage(type) {\r\n        switch (type.toString()) {\r\n           
+    case TypeManager_1.LoadingType.Start:\r\n                const start_loading
+    = this.canvas.transform.GetChild(0).gameObject;\r\n                return start_loading;\r\n           
+    case TypeManager_1.LoadingType.Teleport:\r\n                const teleport_loading
+    = this.canvas.transform.GetChild(1).gameObject;\r\n                return teleport_loading;\r\n           
+    default:\r\n                return null;\r\n        }\r\n    }\r\n    /* Samdasu
+    Trash Count */\r\n    UpdatePlayerUI() {\r\n        this.trashCountText.text
+    = `${SyncIndexManager_1.default.TrashCount}`;\r\n        this.trashScoreText.text
+    = `${SyncIndexManager_1.default.Score}`;\r\n        // SyncIndexManager.Rank
+    = this.player.samdasu.Rank;\r\n        // SyncIndexManager.Stamps = this.player.samdasu.Stamps
+    as Array<Stamp>;\r\n        // SyncIndexManager.Stickers = this.player.samdasu.Stickers
+    as Array<Sticker>;\r\n    }\r\n    /* Samdasu NPC Horse Rental UI */\r\n    SetHorseNPCUI()
+    {\r\n        const horseButton = this.npcHorseUI.GetChild(1).GetComponent($typeof(UnityEngine_UI_1.Button));\r\n       
+    horseButton.onClick.AddListener(() => {\r\n            this.npcHorseUI.gameObject.SetActive(false);\r\n           
+    this.buttonPanel.GetChild(1).gameObject.SetActive(true);\r\n        });\r\n   
+    }\r\n    /* Samdasu NPC Trader UI */\r\n    SetTraderNPCUI() {\r\n        const
+    closeButton = this.npcTraderUI.GetChild(1).GetComponent($typeof(UnityEngine_UI_1.Button));\r\n       
+    const pointButton = this.npcTraderUI.GetChild(2).GetComponent($typeof(UnityEngine_UI_1.Button));\r\n       
+    const stickButton = this.npcTraderUI.GetChild(3).GetComponent($typeof(UnityEngine_UI_1.Button));\r\n       
+    closeButton.onClick.AddListener(() => {\r\n            // close UI\r\n           
+    this.npcTraderUI.gameObject.SetActive(false);\r\n        });\r\n        stickButton.onClick.AddListener(()
+    => {\r\n            // get sticker\r\n            if (SyncIndexManager_1.default.TrashCount
+    >= 10) {\r\n                this.npcTraderUI.gameObject.SetActive(false);\r\n               
+    this.buyStickerUI.gameObject.SetActive(true);\r\n            }\r\n        });\r\n       
+    pointButton.onClick.AddListener(() => {\r\n            // get point\r\n           
+    if (SyncIndexManager_1.default.TrashCount >= 10) {\r\n                const data
+    = new ZEPETO_Multiplay_1.RoomData();\r\n                data.Add(TypeManager_1.SendName.trashCount,
+    10);\r\n                this.room.Send(TypeManager_1.MESSAGE.Add_Point, data.GetObject());\r\n               
+    GameManager_1.default.instance.ClearStampMission(TypeManager_1.StampType.STAMP_TRASH);\r\n           
+    }\r\n            else {\r\n            }\r\n        });\r\n    }\r\n    /* Samdasu
+    NPC Creater UI */\r\n    SetCreaterNPCUI() {\r\n        const closeButton = this.npcCreaterUI.GetChild(1).GetComponent($typeof(UnityEngine_UI_1.Button));\r\n       
+    const noButton = this.npcCreaterUI.GetChild(2).GetComponent($typeof(UnityEngine_UI_1.Button));\r\n       
+    const yesButton = this.npcCreaterUI.GetChild(3).GetComponent($typeof(UnityEngine_UI_1.Button));\r\n       
+    const count_text = this.npcCreaterUI.GetChild(5).GetComponent($typeof(UnityEngine_UI_1.Text));\r\n       
+    console.log(` ********** SetCreaterNPCUI ${closeButton.onClick}`);\r\n       
+    closeButton.onClick.AddListener(() => {\r\n            // close UI\r\n           
+    console.log(` ********** closeButcloseButton.onClickton`);\r\n            this.npcCreaterUI.gameObject.SetActive(false);\r\n       
+    });\r\n        console.log(` ********** closeButton.onClick ${closeButton.onClick.GetPersistentMethodName}`);\r\n       
+    console.log(` ********** noButton ${noButton}`);\r\n        noButton.onClick.AddListener(()
+    => {\r\n            console.log(` ********** noButton.onClick`);\r\n           
+    this.npcCreaterUI.gameObject.SetActive(false);\r\n        });\r\n        console.log(`
+    ********** yesButton ${yesButton}`);\r\n        yesButton.onClick.AddListener(()
+    => {\r\n            // trash Visible\r\n            console.log(` **********
+    yesButton.onClick`);\r\n            this.npcCreaterUI.gameObject.SetActive(false);\r\n           
+    GameManager_1.default.instance.onTrashGamePlay();\r\n        });\r\n        yesButton.gameObject.SetActive(false);\r\n       
+    count_text.text = `30`;\r\n        this.trashCreater = {\r\n            yesButton:
+    yesButton.gameObject,\r\n            count_text: count_text,\r\n        };\r\n   
+    }\r\n    /* Samdasu NPC Drinker UI */\r\n    SetDrinkerNPCUI() {\r\n        const
+    closeButton = this.npcDrinkerUI.GetChild(1).GetComponent($typeof(UnityEngine_UI_1.Button));\r\n       
+    const noButton = this.npcDrinkerUI.GetChild(2).GetComponent($typeof(UnityEngine_UI_1.Button));\r\n       
+    const yesButton = this.npcDrinkerUI.GetChild(3).GetComponent($typeof(UnityEngine_UI_1.Button));\r\n       
+    closeButton.onClick.AddListener(() => {\r\n            // close UI\r\n           
+    this.npcDrinkerUI.gameObject.SetActive(false);\r\n        });\r\n        noButton.onClick.AddListener(()
+    => {\r\n            this.npcDrinkerUI.gameObject.SetActive(false);\r\n       
+    });\r\n        yesButton.onClick.AddListener(() => {\r\n            // trash
+    Visible\r\n            this.npcDrinkerUI.gameObject.SetActive(false);\r\n           
+    GameManager_1.default.instance.onPlayerDrink();\r\n        });\r\n    }\r\n   
+    /* Samdasu Update NPC Creater UI */\r\n    UpdateCreaterNPCUI(visibleCount) {\r\n       
+    this.trashCreater.count_text.text = `${visibleCount}`;\r\n        const visible
+    = !(visibleCount > 0);\r\n        this.trashCreater.yesButton.gameObject.SetActive(visible);\r\n   
+    }\r\n    /* Samdasu Buy Panel */\r\n    SetBuyPanel() {\r\n        /* Main Buy
+    Panel */\r\n        const closeButton = this.buyStickerUI.GetChild(1).GetComponent($typeof(UnityEngine_UI_1.Button));\r\n       
+    const stickerBuyPanel = this.buyStickerUI.GetChild(2);\r\n        const stickerSelectedPanel
+    = this.buyStickerUI.GetChild(3);\r\n        if (!this.stickerBuyPanel)\r\n           
+    this.stickerBuyPanel = stickerBuyPanel;\r\n        closeButton.onClick.AddListener(()
+    => {\r\n            // close UI\r\n            this.buyStickerUI.gameObject.SetActive(false);\r\n           
+    this.selectedSticker = null;\r\n        });\r\n        /* Buy Sticker */\r\n       
+    for (let i = 0; i < 10; i++) {\r\n            const button = stickerBuyPanel.GetChild(i).GetComponent($typeof(UnityEngine_UI_1.Button));\r\n           
+    const targetImage = button.transform.GetComponent($typeof(UnityEngine_UI_1.Image));\r\n           
+    button.onClick.AddListener(() => {\r\n                // Buy Button\r\n               
+    const key = i + 1 < 10 ? `_0${(i + 1)}` : `_${(i + 1)}`;\r\n                const
+    selected = TypeManager_1.StickerType[key];\r\n                if (!this.selectedSticker)
+    {\r\n                    this.selectedSticker = {\r\n                       
+    Selected_A_Type: selected,\r\n                        Selected_B_Type: null,\r\n                   
+    };\r\n                    image_A.sprite = targetImage.sprite;\r\n               
+    }\r\n                else {\r\n                    if (!this.selectedSticker.Selected_A_Type)
+    {\r\n                        this.selectedSticker.Selected_A_Type = selected;\r\n                       
+    image_A.sprite = targetImage.sprite;\r\n                    }\r\n                   
+    else {\r\n                        this.selectedSticker.Selected_B_Type = selected;\r\n                       
+    image_B.sprite = targetImage.sprite;\r\n                    }\r\n               
+    }\r\n            });\r\n        }\r\n        /* Buy Control Panel */\r\n       
+    const okButton = stickerSelectedPanel.GetChild(0).GetComponent($typeof(UnityEngine_UI_1.Button));\r\n       
+    const clearButton = stickerSelectedPanel.GetChild(1).GetComponent($typeof(UnityEngine_UI_1.Button));\r\n       
+    const Selected_A = stickerSelectedPanel.GetChild(2).GetComponent($typeof(UnityEngine_UI_1.Button));\r\n       
+    const Selected_B = stickerSelectedPanel.GetChild(3).GetComponent($typeof(UnityEngine_UI_1.Button));\r\n       
+    okButton.onClick.AddListener(() => {\r\n            if (!this.selectedSticker
+    ||\r\n                !this.selectedSticker.Selected_A_Type ||\r\n               
+    !this.selectedSticker.Selected_B_Type)\r\n                return console.error(TypeManager_1.ERROR.NOT_SELECTED_STICKERS);\r\n           
+    // send DATA\r\n            const data = new ZEPETO_Multiplay_1.RoomData();\r\n           
+    data.Add(TypeManager_1.SendName.trashCount, 10);\r\n            data.Add(TypeManager_1.SendName.Selected_A,
+    this.selectedSticker.Selected_A_Type);\r\n            data.Add(TypeManager_1.SendName.Selected_B,
+    this.selectedSticker.Selected_B_Type);\r\n            this.room.Send(TypeManager_1.MESSAGE.Add_Sticker,
+    data.GetObject());\r\n            // close UI\r\n            this.buyStickerUI.gameObject.SetActive(false);\r\n           
+    this.selectedSticker = null;\r\n            image_A.sprite = null;\r\n           
+    image_B.sprite = null;\r\n            GameManager_1.default.instance.ClearStampMission(TypeManager_1.StampType.STAMP_TRASH);\r\n       
+    });\r\n        clearButton.onClick.AddListener(() => {\r\n            this.selectedSticker
+    = null;\r\n            image_A.sprite = null;\r\n            image_B.sprite =
+    null;\r\n        });\r\n        Selected_A.onClick.AddListener(() => {\r\n           
+    this.selectedSticker.Selected_A_Type = null;\r\n            image_A.sprite =
+    null;\r\n        });\r\n        Selected_B.onClick.AddListener(() => {\r\n           
+    this.selectedSticker.Selected_B_Type = null;\r\n            image_B.sprite =
+    null;\r\n        });\r\n        /* Change Image */\r\n        const image_A =
+    Selected_A.transform.GetChild(0).GetComponent($typeof(UnityEngine_UI_1.Image));\r\n       
+    const image_B = Selected_B.transform.GetChild(0).GetComponent($typeof(UnityEngine_UI_1.Image));\r\n   
+    }\r\n    /* Samdasu Button Panel */\r\n    SetButtonPanel() {\r\n        const
+    returnButton = this.buttonPanel.GetChild(0).GetComponent($typeof(UnityEngine_UI_1.Button));\r\n       
+    const horseButton = this.buttonPanel.GetChild(1).GetComponent($typeof(UnityEngine_UI_1.Button));\r\n       
+    const stampButton = this.buttonPanel.GetChild(2).GetComponent($typeof(UnityEngine_UI_1.Button));\r\n       
+    const invenButton = this.buttonPanel.GetChild(3).GetComponent($typeof(UnityEngine_UI_1.Button));\r\n       
+    const mapButton = this.buttonPanel.GetChild(4).GetComponent($typeof(UnityEngine_UI_1.Button));\r\n       
+    returnButton.onClick.AddListener(() => {\r\n            console.log(`this.currentSamdasuState
+    ${this.currentSamdasuState}`);\r\n            if (this.currentSamdasuState) {\r\n               
+    const data = new ZEPETO_Multiplay_1.RoomData();\r\n                data.Add(TypeManager_1.SendName.SamdasuState,
+    this.currentSamdasuState);\r\n                data.Add(TypeManager_1.SendName.isComplete,
+    false);\r\n                this.room.Send(TypeManager_1.MESSAGE.Ride_OFF, data.GetObject());\r\n           
+    }\r\n            this.currentSamdasuState = null;\r\n        });\r\n        horseButton.onClick.AddListener(()
+    => {\r\n            if (!this.isHorseRide) {\r\n                // Ride ON\r\n               
+    this.room.Send(TypeManager_1.MESSAGE.Ride_Horse, null);\r\n            }\r\n           
+    else {\r\n                // Ride OFF\r\n                const data = new ZEPETO_Multiplay_1.RoomData();\r\n               
+    data.Add(TypeManager_1.SendName.SamdasuState, TypeManager_1.MESSAGE.Ride_Horse);\r\n               
+    data.Add(TypeManager_1.SendName.isComplete, true);\r\n                this.room.Send(TypeManager_1.MESSAGE.Ride_OFF,
+    data.GetObject());\r\n            }\r\n        });\r\n        stampButton.onClick.AddListener(()
+    => {\r\n            this.stampUI.gameObject.SetActive(!this.stampUI.gameObject.activeSelf);\r\n       
+    });\r\n        invenButton.onClick.AddListener(() => {\r\n            this.stickerInventoryPanel.gameObject.SetActive(!this.stickerInventoryPanel.gameObject.activeSelf);\r\n       
+    });\r\n        mapButton.onClick.AddListener(() => {\r\n            console.log(`mapButton
+    touched`);\r\n        });\r\n    }\r\n    /* Samdasu Stamp UI */\r\n    SetStampUI(player_stamp)
+    {\r\n        const closeButton = this.stampUI.GetChild(1).GetComponent($typeof(UnityEngine_UI_1.Button));\r\n       
+    const stampPanel = this.stampUI.GetChild(2);\r\n        closeButton.onClick.AddListener(()
+    => {\r\n            // close UI\r\n            this.stampUI.gameObject.SetActive(false);\r\n       
+    });\r\n        /* Stamps */\r\n        const values = Object.keys(TypeManager_1.StampType);\r\n       
+    const keys = values.map(key => TypeManager_1.StampType[key]);\r\n        if (player_stamp.Count
+    != keys.length - 1)\r\n            return console.error(`SetStampUI NOT Matched
+    length ${player_stamp.Count} != ${keys.length}`);\r\n        this.stamps = new
+    Map();\r\n        for (let i = 0; i < player_stamp.Count; i++) {\r\n           
+    for (const key of keys) {\r\n                if (key == player_stamp.get_Item(i).name)
+    {\r\n                    stampPanel.GetChild(i).name = key;\r\n                   
+    this.stamps.set(key, this.ProcessingStamp(stampPanel.GetChild(i), key, player_stamp.get_Item(i).isClear));\r\n                   
+    this.UpdateStampUI(this.room.SessionId, player_stamp.get_Item(i));\r\n               
+    }\r\n            }\r\n        }\r\n    }\r\n    /* Samdasu Sticker UI */\r\n   
+    SetStickerUI(player_sticker) {\r\n        /* Stickers */\r\n        const values
+    = Object.keys(TypeManager_1.StickerType);\r\n        const keys = values.map(key
+    => TypeManager_1.StickerType[key]);\r\n        if (player_sticker.Count != keys.length
+    - 1)\r\n            return console.error(`SetStickerUI NOT Matched length ${player_sticker.Count}
+    != ${keys.length}`);\r\n        this.stickers = new Map();\r\n        for (let
+    i = 0; i < player_sticker.Count; i++) {\r\n            for (const key of keys)
+    {\r\n                if (key == player_sticker.get_Item(i).name) {\r\n                   
+    this.stickerBuyPanel.GetChild(i).name = key;\r\n                    this.stickerRenderPanel.GetChild(i).name
+    = key;\r\n                    this.stickerInventoryPanel.GetChild(2).GetChild(i).name
+    = key;\r\n                    this.stickers.set(key, this.ProcessingSticker(this.stickerBuyPanel.GetChild(i),
+    this.stickerRenderPanel.GetChild(i), this.stickerInventoryPanel.GetChild(2).GetChild(i),
+    key, player_sticker.get_Item(i).count));\r\n                    this.UpdateStickerUI(this.room.SessionId,
+    player_sticker.get_Item(i));\r\n                }\r\n            }\r\n       
+    }\r\n    }\r\n    /* Samdasu Update Stamp UI */\r\n    UpdateStampUI(sessionId,
+    new_stamp) {\r\n        if (this.room.SessionId != sessionId)\r\n           
+    return;\r\n        if (this.stamps.has(new_stamp.name)) {\r\n            const
+    stampUI = this.stamps.get(new_stamp.name);\r\n            stampUI.stamp.isClear
+    = new_stamp.isClear;\r\n            stampUI.transform.GetChild(0).gameObject.SetActive(new_stamp.isClear);\r\n       
+    }\r\n        SyncIndexManager_1.default.STAMPS.set(new_stamp.name, new_stamp);\r\n   
+    }\r\n    /* Samdasu Update Sticker UI */\r\n    UpdateStickerUI(sessionId, new_sticker)
+    {\r\n        if (this.room.SessionId != sessionId)\r\n            return;\r\n       
+    if (this.stickers.has(new_sticker.name)) {\r\n            const stickerUI = this.stickers.get(new_sticker.name);\r\n           
+    stickerUI.buy.countText.text = `${new_sticker.count}`;\r\n            stickerUI.button.countText.text
+    = `${new_sticker.count}`;\r\n            stickerUI.inventory.countText.text =
+    `${new_sticker.count}`;\r\n            if (new_sticker.count > 0) {\r\n               
+    stickerUI.buy.countImage.color = this.enabledColor;\r\n                stickerUI.button.countImage.color
+    = this.enabledColor;\r\n                stickerUI.inventory.countImage.color
+    = this.enabledColor;\r\n            }\r\n            else {\r\n               
+    stickerUI.buy.countImage.color = this.disabledColor;\r\n                stickerUI.button.countImage.color
+    = this.disabledColor;\r\n                stickerUI.inventory.countImage.color
+    = this.disabledColor;\r\n            }\r\n        }\r\n        SyncIndexManager_1.default.STICKERS.set(new_sticker.name,
+    new_sticker);\r\n    }\r\n    /* Samdasu Processing Stamp UI */\r\n    ProcessingStamp(UI,
+    key, clear = false) {\r\n        UI.name = key.toString();\r\n        const stampUI
+    = {\r\n            gameObject: UI.gameObject,\r\n            transform: UI,\r\n           
+    stamp: {\r\n                name: key.toString(),\r\n                isClear:
+    clear,\r\n            },\r\n        };\r\n        return stampUI;\r\n    }\r\n   
+    /* Samdasu Processing Sticker UI */\r\n    ProcessingSticker(Buy, Button, Inventory,
+    key, cnt = 0) {\r\n        Buy.name = key.toString();\r\n        Button.name
+    = key.toString();\r\n        Inventory.name = key.toString();\r\n        const
+    stickerUI = {\r\n            buy: {\r\n                gameObject: Buy.gameObject,\r\n               
+    transform: Buy,\r\n                countText: Buy.GetComponentInChildren($typeof(UnityEngine_UI_1.Text)),\r\n               
+    countImage: Buy.GetChild(0).GetComponent($typeof(UnityEngine_UI_1.Image)),\r\n           
+    },\r\n            button: {\r\n                gameObject: Button.gameObject,\r\n               
+    transform: Button,\r\n                countText: Button.GetComponentInChildren($typeof(UnityEngine_UI_1.Text)),\r\n               
+    countImage: Button.GetChild(0).GetComponent($typeof(UnityEngine_UI_1.Image)),\r\n           
+    },\r\n            inventory: {\r\n                gameObject: Inventory.gameObject,\r\n               
+    transform: Inventory,\r\n                countText: Inventory.GetComponentInChildren($typeof(UnityEngine_UI_1.Text)),\r\n               
+    countImage: Inventory.GetChild(0).GetComponent($typeof(UnityEngine_UI_1.Image)),\r\n           
+    },\r\n            sticker: {\r\n                name: key.toString(),\r\n               
+    count: cnt,\r\n            },\r\n        };\r\n        return stickerUI;\r\n   
+    }\r\n}\r\n/* Singleton */\r\nUIManager._instance = null;\r\n__decorate([], UIManager.prototype,
+    \"canvas\", void 0);\r\n__decorate([], UIManager.prototype, \"trashCountText\",
+    void 0);\r\n__decorate([], UIManager.prototype, \"trashScoreText\", void 0);\r\n__decorate([],
+    UIManager.prototype, \"buttonPanel\", void 0);\r\n__decorate([], UIManager.prototype,
+    \"stampUI\", void 0);\r\n__decorate([], UIManager.prototype, \"stickerBuyPanel\",
+    void 0);\r\n__decorate([], UIManager.prototype, \"stickerRenderPanel\", void
+    0);\r\n__decorate([], UIManager.prototype, \"stickerInventoryPanel\", void 0);\r\n__decorate([],
+    UIManager.prototype, \"buyStickerUI\", void 0);\r\n__decorate([], UIManager.prototype,
+    \"npcHorseUI\", void 0);\r\n__decorate([], UIManager.prototype, \"npcTraderUI\",
+    void 0);\r\n__decorate([], UIManager.prototype, \"npcCreaterUI\", void 0);\r\n__decorate([],
+    UIManager.prototype, \"npcDrinkerUI\", void 0);\r\n__decorate([], UIManager.prototype,
+    \"isHorseRide\", void 0);\r\nexports.default = UIManager;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiVUlNYW5hZ2VyLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiVUlNYW5hZ2VyLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7O0FBQ0EsNkNBQTBFO0FBQzFFLG1EQUFxRDtBQUNyRCx1REFBa0Q7QUFDbEQsaURBQXFEO0FBQ3JELCtDQUFvRDtBQUNwRCxpRUFBMEQ7QUFDMUQsK0NBQXdDO0FBQ3hDLCtDQUF3SztBQUV4SyxNQUFxQixTQUFVLFNBQVEscUNBQXFCO0lBQTVEOztRQW9ENEIsZ0JBQVcsR0FBWSxLQUFLLENBQUM7SUFxY3pELENBQUM7SUFyZlUsTUFBTSxLQUFLLFFBQVE7UUFDdEIsSUFBSSxJQUFJLENBQUMsU0FBUyxLQUFLLElBQUksRUFBRTtZQUN6QixJQUFJLENBQUMsU0FBUyxHQUFHLHdCQUFVLENBQUMsZ0JBQWdCLFNBQUMsU0FBUyxFQUFHLENBQUM7WUFDMUQsSUFBSSxJQUFJLENBQUMsU0FBUyxLQUFLLElBQUksRUFBRTtnQkFDekIsSUFBSSxDQUFDLFNBQVMsR0FBRyxJQUFJLHdCQUFVLENBQUMsU0FBUyxDQUFDLElBQUksQ0FBQyxDQUFDLFlBQVksU0FBQyxTQUFTLEVBQUcsQ0FBQzthQUM3RTtTQUNKO1FBQ0QsT0FBTyxJQUFJLENBQUMsU0FBUyxDQUFDO0lBQzFCLENBQUM7SUE0Q0QsSUFBVyxtQkFBbUIsS0FBYSxPQUFPLElBQUksQ0FBQyxvQkFBb0IsQ0FBQyxDQUFDLENBQUM7SUFDOUUsSUFBVyxtQkFBbUIsQ0FBQyxLQUFhO1FBQ3hDLElBQUcsQ0FBQyxJQUFJLENBQUMsb0JBQW9CLEVBQUU7WUFDM0IsSUFBSSxDQUFDLG9CQUFvQixHQUFHLEtBQUssQ0FBQztTQUNyQztRQUNELE1BQU0sS0FBSyxHQUFHLEtBQUssSUFBSSxJQUFJLElBQUksS0FBSyxJQUFJLFNBQVMsQ0FBQztRQUNsRCxJQUFJLENBQUMsV0FBVyxDQUFDLFFBQVEsQ0FBQyxDQUFDLENBQUMsQ0FBQyxVQUFVLENBQUMsU0FBUyxDQUFD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","assetPath":"Assets/Zepeto
+    Multiplay Component/ZepetoScript/Managers/UIManager.ts","manifest":{"properties":[{"assembly":"UnityEngine.CoreModule","name":"canvas","type":"UnityEngine.GameObject","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"Header","args":["\"UI
+    Manager Field\""]},{"name":"SerializeField","args":[]}]},{"assembly":"ZEPETO.World","name":"multiplay","type":"ZEPETO.World.ZepetoWorldMultiplay","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"","name":"room","type":"ZEPETO.Multiplay.Room","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"UnityEngine.UI","name":"trashCountText","type":"UnityEngine.UI.Text","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"Header","args":["\"*
+    Samdasu Field\""]},{"name":"Header","args":["\"All range\""]},{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.UI","name":"trashScoreText","type":"UnityEngine.UI.Text","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"buttonPanel","type":"UnityEngine.Transform","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"enabledColor","type":"UnityEngine.Color","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"UnityEngine.CoreModule","name":"disabledColor","type":"UnityEngine.Color","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"UnityEngine.CoreModule","name":"stampUI","type":"UnityEngine.Transform","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"Header","args":["\"Stamps
+    UIs\""]},{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"stickerBuyPanel","type":"UnityEngine.Transform","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"Header","args":["\"Stickers
+    UIs\""]},{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"stickerRenderPanel","type":"UnityEngine.Transform","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"stickerInventoryPanel","type":"UnityEngine.Transform","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"buyStickerUI","type":"UnityEngine.Transform","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"npcHorseUI","type":"UnityEngine.Transform","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"Header","args":["\"NPCs
+    UIs\""]},{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"npcTraderUI","type":"UnityEngine.Transform","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"npcCreaterUI","type":"UnityEngine.Transform","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"npcDrinkerUI","type":"UnityEngine.Transform","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]}],"name":"UIManager","description":"","hasAnimatorMove":false},"isCompiled":true}'
+  typescriptHash: 990b5d952a1bafa8219a0b5361700a70
+  onlyWriteTrigger: 0

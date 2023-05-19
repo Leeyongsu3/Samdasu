@@ -1,0 +1,47 @@
+fileFormatVersion: 2
+guid: 3289486375614b740af3fd8d1f1201c3
+importerOverride: ZEPETO.Script.Compiler:ZEPETO.Script:TypescriptAssetImporter
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: -1123457745, guid: 54cf806323ffe4418a4ce4cc63fe6b9d, type: 3}
+  isAssemblyDeclarations: 0
+  assembly: 
+  generateAllTypes: 1
+  types: []
+  generateWrapper: 0
+  overrideWrapperTypes: 0
+  wrapperTypes: []
+  WrapperFilters: []
+  wrapperOutputDirectory: Generated
+  compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
+    { value: true });\r\nconst __UnityEngine__ = require(\"UnityEngine\");\r\nconst
+    UnityEngine_1 = require(\"UnityEngine\");\r\nconst ZEPETO_Character_Controller_1
+    = require(\"ZEPETO.Character.Controller\");\r\nconst ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst
+    GameManager_1 = require(\"../Managers/GameManager\");\r\nconst ColliderInputSensor_1
+    = require(\"../SamdasuScript/ColliderInputSensor\");\r\nconst LookAt_1 = require(\"./LookAt\");\r\nclass
+    LookAtTrigger extends ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    constructor()
+    {\r\n        super(...arguments);\r\n        this.teleportPoint = \"TeleportPoint\";\r\n   
+    }\r\n    Start() {\r\n        this.lookAt = this.transform.parent.GetComponentInChildren($typeof(LookAt_1.default));\r\n       
+    if (this.colliderInputSensor) {\r\n            const in_sensor = this.colliderInputSensor.gameObject.GetComponent($typeof(ColliderInputSensor_1.default));\r\n           
+    in_sensor.reviceObject = this;\r\n        }\r\n    }\r\n    OnTriggerEnter(collider)
+    {\r\n        const character = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.LocalPlayer.zepetoPlayer.character.gameObject;\r\n       
+    if (__UnityEngine__.Object.op_Equality(collider.gameObject, character)) {\r\n           
+    this.lookAt.StartLooking(collider);\r\n        }\r\n    }\r\n    OnTriggerExit(collider)
+    {\r\n        const character = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.LocalPlayer.zepetoPlayer.character.gameObject;\r\n       
+    if (__UnityEngine__.Object.op_Equality(collider.gameObject, character)) {\r\n           
+    this.lookAt.StopLooking(collider);\r\n        }\r\n    }\r\n    /* Recive Sensor
+    */\r\n    OnSensorTriggerEnter(collider) {\r\n        /* Connect Cabin */\r\n       
+    if (!collider.gameObject.CompareTag(this.teleportPoint))\r\n            return;\r\n       
+    this.lookAt.scriptTarget = collider.transform;\r\n        /* Find Player */\r\n       
+    if (collider.transform.childCount > 0) {\r\n            const collider_character
+    = collider.transform.GetChild(0).GetComponent($typeof(ZEPETO_Character_Controller_1.ZepetoCharacter));\r\n           
+    GameManager_1.default.instance.RemoteRideOffWheel(collider_character);\r\n       
+    }\r\n    }\r\n}\r\nexports.default = LookAtTrigger;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiTG9va0F0VHJpZ2dlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIkxvb2tBdFRyaWdnZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7O0FBQUEsNkNBQTBFO0FBQzFFLDZFQUE2RTtBQUM3RSxpREFBcUQ7QUFDckQseURBQWtEO0FBRWxELDhFQUF1RTtBQUN2RSxxQ0FBOEI7QUFFOUIsTUFBcUIsYUFBYyxTQUFRLHFDQUFxQjtJQUFoRTs7UUFRcUIsa0JBQWEsR0FBVSxlQUFlLENBQUM7SUFxQzVELENBQUM7SUFuQ0csS0FBSztRQUNELElBQUksQ0FBQyxNQUFNLEdBQUcsSUFBSSxDQUFDLFNBQVMsQ0FBQyxNQUFNLENBQUMsc0JBQXNCLFNBQUMsZ0JBQU0sRUFBRyxDQUFDO1FBRXJFLElBQUcsSUFBSSxDQUFDLG1CQUFtQixFQUFFO1lBQ3pCLE1BQU0sU0FBUyxHQUFHLElBQUksQ0FBQyxtQkFBbUIsQ0FBQyxVQUFVLENBQUMsWUFBWSxTQUFDLDZCQUFtQixFQUFHLENBQUM7WUFDMUYsU0FBUyxDQUFDLFlBQVksR0FBRyxJQUFJLENBQUM7U0FDakM7SUFDTCxDQUFDO0lBRUQsY0FBYyxDQUFDLFFBQW1CO1FBQzlCLE1BQU0sU0FBUyxHQUFHLDJDQUFhLENBQUMsUUFBUSxDQUFDLFdBQVcsQ0FBQyxZQUFZLENBQUMsU0FBUyxDQUFDLFVBQVUsQ0FBQztRQUN2RiwyQkF3QjhnUyxXQUFZLENBeEJ2aFMsUUFBUSxDQUFDLFVBQVUsRUFBSSxTQUFTLEdBQUU7WUFDakMsSUFBSSxDQUFDLE1BQU0sQ0FBQyxZQUFZLENBQUMsUUFBUSxDQUFDLENBQUM7U0FDdEM7SUFDTCxDQUFDO0lBRUQsYUFBYSxDQUFDLFFBQW1CO1FBQzdCLE1BQU0sU0FBUyxHQUFHLDJDQUFhLENBQUMsUUFBUSxDQUFDLFdBQVcsQ0FBQyxZQUFZLENBQUMsU0FBUyxDQUFDLFVBQVUsQ0FBQztRQUN2RiwyQkFpQjhnUyxXQUFZLENBakJ2aFMsUUFBUSxDQUFDLFVBQVUsRUFBSSxTQUFTLEdBQUU7WUFDakMsSUFBSSxDQUFDLE1BQU0sQ0FBQyxXQUFXLENBQUMsUUFBUSxDQUFDLENBQUM7U0FDckM7SUFDTCxDQUFDO0lBRUQsbUJBQW1CO0lBQ1osb0JBQW9CLENBQUMsUUFBbUI7UUFDM0MsbUJBQW1CO1FBQ25CLElBQUcsQ0FBQyxRQUFRLENBQUMsVUFBVSxDQUFDLFVBQVUsQ0FBQyxJQUFJLENBQUMsYUFBYSxDQUFDO1lBQUUsT0FBTztRQUMvRCxJQUFJLENBQUMsTUFBTSxDQUFDLFlBQVksR0FBRyxRQUFRLENBQUMsU0FBUyxDQUFDO1FBRTlDLGlCQUFpQjtRQUNqQixJQUFHLFFBQVEsQ0FBQyxTQUFTLENBQUMsVUFBVSxHQUFHLENBQUMsRUFBRTtZQUNsQyxNQUFNLGtCQUFrQixHQUFHLFFBQVEsQ0FBQyxTQUFTLENBQUMsUUFBUSxDQUFDLENBQUMsQ0FBQyxDQUFDLFlBQVksU0FBQyw2Q0FBZSxFQUFHLENBQUM7WUFDMUYscUJBQVcsQ0FBQyxRQUFRLENBQUMsa0JBQWtCLENBQUMsa0JBQWtCLENBQUMsQ0FBQztTQUMvRDtJQUNMLENBQUM7Q0FDSjtBQTdDRCxnQ0E2Q0MifQ==","assetPath":"Assets/Zepeto
+    Multiplay Component/ZepetoScript/Sample Code/LookAtTrigger.ts","manifest":{"properties":[{"assembly":"UnityEngine.CoreModule","name":"colliderInputSensor","type":"UnityEngine.GameObject","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]}],"name":"LookAtTrigger","description":"","hasAnimatorMove":false},"isCompiled":true}'
+  typescriptHash: 8a6ea9d962f5d24ba4458f9a97e892df
+  onlyWriteTrigger: 0

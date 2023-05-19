@@ -1,0 +1,83 @@
+fileFormatVersion: 2
+guid: 3be1c2c1aae678e448df397858364ca9
+importerOverride: ZEPETO.Script.Compiler:ZEPETO.Script:TypescriptAssetImporter
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: -1123457745, guid: 54cf806323ffe4418a4ce4cc63fe6b9d, type: 3}
+  isAssemblyDeclarations: 0
+  assembly: 
+  generateAllTypes: 1
+  types: []
+  generateWrapper: 0
+  overrideWrapperTypes: 0
+  wrapperTypes: []
+  WrapperFilters: []
+  wrapperOutputDirectory: Generated
+  compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
+    { value: true });\r\nconst UnityEngine_1 = require(\"UnityEngine\");\r\nconst
+    ZEPETO_Character_Controller_1 = require(\"ZEPETO.Character.Controller\");\r\nconst
+    ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst GameManager_1 = require(\"../Managers/GameManager\");\r\nconst
+    TypeManager_1 = require(\"../Managers/TypeManager\");\r\nclass HorseRideManager
+    extends ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    constructor() {\r\n       
+    super(...arguments);\r\n        this.horseRiders = [];\r\n    }\r\n    /* Async
+    Player and Horse Animation */\r\n    FixedUpdate() {\r\n        if (!this.horseRiders)\r\n           
+    return;\r\n        for (const rider of this.horseRiders) {\r\n            if
+    (rider) {\r\n                if (rider.ownerAnimator.GetInteger(TypeManager_1.Anim.SamdasuState)
+    == TypeManager_1.SamdasuState.Ride_Horse) {\r\n                    rider.horseAnimator.SetInteger(TypeManager_1.Anim.State,
+    rider.ownerAnimator.GetInteger(TypeManager_1.Anim.State));\r\n               
+    }\r\n                else {\r\n                    rider.horseAnimator.SetInteger(TypeManager_1.Anim.State,
+    1);\r\n                    GameManager_1.default.instance.RideOFFHorse(rider.sessionId);\r\n               
+    }\r\n            }\r\n        }\r\n    }\r\n    /* Ride ON Horse */\r\n    RideHorse(sessionId)
+    {\r\n        /* Init */\r\n        if (!this.horseRiders)\r\n            this.horseRiders
+    = [];\r\n        /* Player Setting */\r\n        const character = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.GetPlayer(sessionId).character;\r\n       
+    const playerSoket = character.transform.GetChild(0).GetChild(3);\r\n        GameManager_1.default.instance.Ride(true);\r\n       
+    character.additionalRunSpeed = 1;\r\n        character.additionalWalkSpeed =
+    0.5;\r\n        /* Get Horse */\r\n        const horse = this.GetHorse(playerSoket);\r\n       
+    /* Horse Setting */\r\n        // const controller = horse.GetComponent<HorseRideController>();\r\n       
+    // controller.ownerPlayer = character;\r\n        const horseRider = {\r\n           
+    sessionId: sessionId,\r\n            horse: horse,\r\n            horseAnimator:
+    horse.transform.GetChild(0).GetComponent($typeof(UnityEngine_1.Animator)),\r\n           
+    ownerAnimator: character.ZepetoAnimator,\r\n        };\r\n        this.horseRiders.push(horseRider);\r\n   
+    }\r\n    /* Ride OFF Horse */\r\n    RideOFFHorse(sessionId) {\r\n        /*
+    Player Setting */\r\n        const character = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.GetPlayer(sessionId).character;\r\n       
+    GameManager_1.default.instance.Ride(false);\r\n        character.additionalRunSpeed
+    = 0;\r\n        character.additionalWalkSpeed = 0;\r\n        /* Return Horse
+    */\r\n        this.ReturnHorse(sessionId);\r\n    }\r\n    /* Get Horse */\r\n   
+    GetHorse(setParent) {\r\n        /* Find or Create Usable Horse */\r\n       
+    let horse = this.FindUsableHorse();\r\n        if (!horse)\r\n            horse
+    = this.InstantiateHorse();\r\n        /* Set Data */\r\n        horse.SetActive(true);\r\n       
+    horse.transform.SetParent(setParent);\r\n        horse.transform.localPosition
+    = UnityEngine_1.Vector3.op_Multiply(UnityEngine_1.Vector3.forward, 0.3);\r\n       
+    horse.transform.localRotation = UnityEngine_1.Quaternion.identity;\r\n       
+    return horse;\r\n    }\r\n    /* Return Horse */\r\n    ReturnHorse(sessionId)
+    {\r\n        /* Find Horse */\r\n        const horse = this.OutputHorseInHorseRider(sessionId);\r\n       
+    if (!horse)\r\n            return console.error(TypeManager_1.ERROR.NOT_FOUND_HORSE);\r\n       
+    /* Input Horse Group */\r\n        horse.transform.SetParent(this.horsePoolGroup);\r\n       
+    horse.transform.position = this.horsePoolGroup.position;\r\n        horse.transform.rotation
+    = this.horsePoolGroup.rotation;\r\n        horse.SetActive(false);\r\n    }\r\n   
+    /* Find Usable Horse */\r\n    FindUsableHorse() {\r\n        if (this.horsePool
+    && this.horsePool.length > 0) {\r\n            for (const horse of this.horsePool)
+    {\r\n                if (!horse.activeSelf && horse.transform.parent == this.horsePoolGroup)
+    {\r\n                    return horse;\r\n                }\r\n            }\r\n       
+    }\r\n        return null;\r\n    }\r\n    /* Find Horse in HorseRider */\r\n   
+    FindHorseInHorseRider(sessionId) {\r\n        for (const horseRider of this.horseRiders)
+    {\r\n            if (horseRider.sessionId == sessionId) {\r\n               
+    return horseRider.horse;\r\n            }\r\n        }\r\n        return null;\r\n   
+    }\r\n    /* Find and Remove Horse in HorseRider */\r\n    OutputHorseInHorseRider(sessionId)
+    {\r\n        for (let i = 0; i < this.horseRiders.length; i++) {\r\n           
+    if (this.horseRiders[i].sessionId == sessionId) {\r\n                const horseRider
+    = this.horseRiders[i];\r\n                this.horseRiders.splice(i, 1);\r\n               
+    return horseRider.horse;\r\n            }\r\n        }\r\n        return null;\r\n   
+    }\r\n    /* Instantiate Horse */\r\n    InstantiateHorse() {\r\n        if (!this.horsePool)\r\n           
+    this.horsePool = [];\r\n        const horseClone = UnityEngine_1.GameObject.Instantiate(this.horsePrefab);\r\n       
+    this.horsePool.push(horseClone);\r\n        return horseClone;\r\n    }\r\n}\r\nexports.default
+    = HorseRideManager;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiSG9yc2VSaWRlTWFuYWdlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIkhvcnNlUmlkZU1hbmFnZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQSw2Q0FBbUY7QUFDbkYsNkVBQTREO0FBQzVELGlEQUFxRDtBQUNyRCx5REFBa0Q7QUFDbEQseURBQWdGO0FBRWhGLE1BQXFCLGdCQUFpQixTQUFRLHFDQUFxQjtJQUFuRTs7UUFPWSxnQkFBVyxHQUFpQixFQUFFLENBQUM7SUE2SDNDLENBQUM7SUEzSEcsc0NBQXNDO0lBQ3RDLFdBQVc7UUFDUCxJQUFHLENBQUMsSUFBSSxDQUFDLFdBQVc7WUFBRSxPQUFPO1FBQzdCLEtBQUksTUFBTSxLQUFLLElBQUksSUFBSSxDQUFDLFdBQVcsRUFBRTtZQUNqQyxJQUFHLEtBQUssRUFBRTtnQkFDTixJQUFHLEtBQUssQ0FBQyxhQUFhLENBQUMsVUFBVSxDQUFDLGtCQUFJLENBQUMsWUFBWSxDQUFDLElBQUksMEJBQVksQ0FBQyxVQUFVLEVBQUU7b0JBQzdFLEtBQUssQ0FBQyxhQUFhLENBQUMsVUFBVSxDQUFDLGtCQUFJLENBQUMsS0FBSyxFQUFFLEtBQUssQ0FBQyxhQUFhLENBQUMsVUFBVSxDQUFDLGtCQUFJLENBQUMsS0FBSyxDQUFDLENBQUMsQ0FBQztpQkFDMUY7cUJBQU07b0JBQ0gsS0FBSyxDQUFDLGFBQWEsQ0FBQyxVQUFVLENBQUMsa0JBQUksQ0FBQyxLQUFLLEVBQUUsQ0FBQyxDQUFDLENBQUM7b0JBQzlDLHFCQUFXLENBQUMsUUFBUSxDQUFDLFlBQVksQ0FBQyxLQUFLLENBQUMsU0FBUyxDQUFDLENBQUM7aUJBQ3REO2FBQ0o7U0FDSjtJQUNMLENBQUM7SUFFRCxtQkFBbUI7SUFDWixTQUFTLENBQUMsU0FBZ0I7UUFDN0IsVUFBVTtRQUNWLElBQUcsQ0FBQyxJQUFJLENBQUMsV0FBVztZQUFFLElBQUksQ0FBQyxXQUFXLEdBQUcsRUFBRSxDQUFDO1FBRTVDLG9CQUFvQjtRQUNwQixNQUFNLFNBQVMsR0FBRywyQ0FBYSxDQUFDLFFBQVEsQ0FBQyxTQUFTLENBQUMsU0FBUyxDQUFDLENBQUMsU0FBUyxDQUFDO1FBQ3hFLE1BQU0sV0FBVyxHQUFHLFNBQVMsQ0FBQyxTQUFTLENBQUMsUUFBUSxDQUFDLENBQUMsQ0FBQyxDQUFDLFFBQVEsQ0FBQyxDQUFDLENBQUMsQ0FBQztRQUNoRSxxQkFBVyxDQUFDLFFBQVEsQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLENBQUM7UUFDaEMsU0FBUyxDQUFDLGtCQUFrQixHQUFHLENBQUMsQ0FBQztRQUNqQyxTQUFTLENBQUMsbUJBQW1CLEdBQUcsR0FBRyxDQUFDO1FBRXBDLGVBQWU7UUFDZixNQUFNLEtBQUssR0FBRyxJQUFJLENBQUMsUUFBUSxDQUFDLFdBQVcsQ0FBQyxDQUFDO1FBRXpDLG1CQUFtQjtRQUNuQixnRUFBZ0U7UUFDaEUsc0NBQXNDO1FBQ3RDLE1BQU0sVUFBVSxHQUFjO1lBQzFCLFNBQVMsRUFBQyxTQUFTO1lBQ25CLEtBQUssRUFBQyxLQUFLO1lBQ1gsYUFBYSxFQUFDLEtBQUssQ0FBQyxTQUFTLENBQUMsUUFBUSxDQUFDLENBQUMsQ0FBQyxDQUFDLFlBQVksU0FBQyxzQkFBUSxFQUFHO1lBQ2xFLGFBQWEsRUFBQyxTQUFTLENBQUMsY0FBYztTQUN6QyxDQUFDO1FBQ0YsSUFBSSxDQUFDLFdBQVcsQ0FBQyxJQUFJLENBQUMsVUFBVSxDQUFDLENBQUM7SUFDdEMsQ0FBQztJQUVELG9CQUFvQjtJQUNiLFlBQVksQ0FBQyxTQUFnQjtRQUNoQyxvQkFBb0I7UUFDcEIsTUFBTSxTQUFTLEdBQUcsMkNBQWEsQ0FBQyxRQUFRLENBQUMsU0FBUyxDQUFDLFNBQVMsQ0FBQyxDQUFDLFNBQVMsQ0FBQztRQUN4RSxxQkFBVyxDQUFDLFFBQVEsQ0FBQyxJQUFJLENBQUMsS0FBSyxDQUFDLENBQUM7UUFDakMsU0FBUyxDQUFDLGtCQUFrQixHQUFHLENBQUMsQ0FBQztRQUNqQyxTQUFTLENBQUMsbUJBQW1CLEdBQUcsQ0FBQyxDQUFDO1FBRWxDLGtCQUFrQjtRQUNsQixJQUFJLENBQUMsV0FBVyxDQUFDLFNBQVMsQ0FBQyxDQUFDO0lBQ2hDLENBQUM7SUFFRCxlQUFlO0lBQ1AsUUFBUSxDQUFDLFNBQW1CO1FBQ2hDLGlDQUFpQztRQUNqQyxJQUFJLEtBQUssR0FBRyxJQUFJLENBQUMsZUFBZSxFQUFFLENBQUM7UUFDbkMsSUFBRyxDQUFDLEtBQUs7WUFBRSxLQUFLLEdBQUcsSUFBSSxDQUFDLGdCQUFnQixFQUFFLENBQUM7UUFFM0MsY0FBYztRQUNkLEtBQUssQ0FBQyxTQUFTLENBQUMsSUFBSSxDQUFDLENBQUM7UUFDdEIsS0FBSyxDQUFDLFNBQVMsQ0FBQyxTQUFTLENBQUMsU0FBUyxDQUFDLENBQUM7UUFDckMsS0FBSyxDQUFDLFNBQVMsQ0FBQyxhQUFhLEdBOUVpQixxQkFBTyxDQTBJdWtpQixXQUFZLENBNUR4bWlCLHFCQUFPLENBQUMsT0FBTyxFQUFHLEdBQUcsQ0FBQSxDQUFDO1FBQ3RELEtBQUssQ0FBQyxTQUFTLENBQUMsYUFBYSxHQUFHLHdCQUFVLENBQUMsUUFBUSxDQUFDO1FBQ3BELE9BQU8sS0FBSyxDQUFDO0lBQ2pCLENBQUM7SUFFRCxrQkFBa0I7SUFDVixXQUFXLENBQUMsU0FBZ0I7UUFDaEMsZ0JBQWdCO1FBQ2hCLE1BQU0sS0FBSyxHQUFHLElBQUksQ0FBQyx1QkFBdUIsQ0FBQyxTQUFTLENBQUMsQ0FBQztRQUN0RCxJQUFHLENBQUMsS0FBSztZQUFFLE9BQU8sT0FBTyxDQUFDLEtBQUssQ0FBQyxtQkFBSyxDQUFDLGVBQWUsQ0FBQyxDQUFDO1FBRXZELHVCQUF1QjtRQUN2QixLQUFLLENBQUMsU0FBUyxDQUFDLFNBQVMsQ0FBQyxJQUFJLENBQUMsY0FBYyxDQUFDLENBQUM7UUFDL0MsS0FBSyxDQUFDLFNBQVMsQ0FBQyxRQUFRLEdBQUcsSUFBSSxDQUFDLGNBQWMsQ0FBQyxRQUFRLENBQUM7UUFDeEQsS0FBSyxDQUFDLFNBQVMsQ0FBQyxRQUFRLEdBQUcsSUFBSSxDQUFDLGNBQWMsQ0FBQyxRQUFRLENBQUM7UUFDeEQsS0FBSyxDQUFDLFNBQVMsQ0FBQyxLQUFLLENBQUMsQ0FBQztJQUMzQixDQUFDO0lBRUQsdUJBQXVCO0lBQ2YsZUFBZTtRQUNuQixJQUFHLElBQUksQ0FBQyxTQUFTLElBQUksSUFBSSxDQUFDLFNBQVMsQ0FBQyxNQUFNLEdBQUcsQ0FBQyxFQUFFO1lBQzVDLEtBQUksTUFBTSxLQUFLLElBQUksSUFBSSxDQUFDLFNBQVMsRUFBRTtnQkFDL0IsSUFBRyxDQUFDLEtBQUssQ0FBQyxVQUFVLElBQUksS0FBSyxDQUFDLFNBQVMsQ0FBQyxNQUFNLElBQUksSUFBSSxDQUFDLGNBQWMsRUFBRTtvQkFDbkUsT0FBTyxLQUFLLENBQUM7aUJBQ2hCO2FBQ0o7U0FDSjtRQUNELE9BQU8sSUFBSSxDQUFDO0lBQ2hCLENBQUM7SUFFRCw4QkFBOEI7SUFDdEIscUJBQXFCLENBQUMsU0FBZ0I7UUFDMUMsS0FBSSxNQUFNLFVBQVUsSUFBSSxJQUFJLENBQUMsV0FBVyxFQUFFO1lBQ3RDLElBQUcsVUFBVSxDQUFDLFNBQVMsSUFBSSxTQUFTLEVBQUU7Z0JBQ2xDLE9BQU8sVUFBVSxDQUFDLEtBQUssQ0FBQzthQUMzQjtTQUNKO1FBQ0QsT0FBTyxJQUFJLENBQUM7SUFDaEIsQ0FBQztJQUVELHlDQUF5QztJQUNqQyx1QkFBdUIsQ0FBQyxTQUFnQjtRQUM1QyxLQUFJLElBQUksQ0FBQyxHQUFDLENBQUMsRUFBRSxDQUFDLEdBQUMsSUFBSSxDQUFDLFdBQVcsQ0FBQyxNQUFNLEVBQUUsQ0FBQyxFQUFFLEVBQUU7WUFDekMsSUFBRyxJQUFJLENBQUMsV0FBVyxDQUFDLENBQUMsQ0FBQyxDQUFDLFNBQVMsSUFBSSxTQUFTLEVBQUU7Z0JBQzNDLE1BQU0sVUFBVSxHQUFHLElBQUksQ0FBQyxXQUFXLENBQUMsQ0FBQyxDQUFDLENBQUM7Z0JBQ3ZDLElBQUksQ0FBQyxXQUFXLENBQUMsTUFBTSxDQUFDLENBQUMsRUFBRSxDQUFDLENBQUMsQ0FBQztnQkFDOUIsT0FBTyxVQUFVLENBQUMsS0FBSyxDQUFDO2FBQzNCO1NBQ0o7UUFDRCxPQUFPLElBQUksQ0FBQztJQUNoQixDQUFDO0lBRUQsdUJBQXVCO0lBQ2YsZ0JBQWdCO1FBQ3BCLElBQUcsQ0FBQyxJQUFJLENBQUMsU0FBUztZQUFFLElBQUksQ0FBQyxTQUFTLEdBQUcsRUFBRSxDQUFDO1FBRXhDLE1BQU0sVUFBVSxHQUFHLHdCQUFVLENBQUMsV0FBVyxDQUFhLElBQUksQ0FBQyxXQUFXLENBQUMsQ0FBQztRQUN4RSxJQUFJLENBQUMsU0FBUyxDQUFDLElBQUksQ0FBQyxVQUFVLENBQUMsQ0FBQztRQUNoQyxPQUFPLFVBQVUsQ0FBQztJQUN0QixDQUFDO0NBQ0o7QUFwSUQsbUNBb0lDIn0=","assetPath":"Assets/Zepeto
+    Multiplay Component/ZepetoScript/SamdasuScript/HorseRideManager.ts","manifest":{"properties":[{"assembly":"UnityEngine.CoreModule","name":"horsePrefab","type":"UnityEngine.GameObject","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"Header","args":["\"Samdasus
+    Field\""]},{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"horsePoolGroup","type":"UnityEngine.Transform","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]}],"name":"HorseRideManager","description":"","hasAnimatorMove":false},"isCompiled":true}'
+  typescriptHash: ce64615e935b5c8bb0f9a7953236c9db
+  onlyWriteTrigger: 0
