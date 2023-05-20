@@ -20,10 +20,11 @@ export default class FerrisWheelManager extends ZepetoScriptBehaviour {
         this.m_tfHelper.rotateSpeed = this.rotateSpeed;
 
         /* Ferris Wheel Init */
-        for(const trans of this.GetComponentsInChildren<Transform>()) {
-            if(trans.name == Datas.Cabin) {
-                trans.name = `${Datas.Cabin}_${SyncIndexManager.Carbin_Id++}`;
-                this.cages.push(trans);
+        for(let i=0; i<this.transform.childCount; i++) {
+            const cabin = this.transform.GetChild(i).GetChild(0);
+            if(cabin.name == Datas.Cabin) {
+                cabin.name = `${Datas.Cabin}_${SyncIndexManager.Carbin_Id++}`;
+                this.cages.push(cabin);
                 this.isCageSet = true;
             }
         }
@@ -39,10 +40,10 @@ export default class FerrisWheelManager extends ZepetoScriptBehaviour {
 
         /* Ferris Wheel Body Rotate */
         if(!this.m_tfHelper.isOwner) return;
-        const z = (this.rotateSpeed * Time.deltaTime) % 360;
+        const x = (this.rotateSpeed * Time.deltaTime) % 360;
         this.transform.eulerAngles = new Vector3(
-            this.transform.rotation.eulerAngles.x,
+            this.transform.rotation.eulerAngles.x + x,
             this.transform.rotation.eulerAngles.y,
-            this.transform.rotation.eulerAngles.z + z);
+            this.transform.rotation.eulerAngles.z);
     }
 }

@@ -1,22 +1,32 @@
 import { ZepetoScriptBehaviour } from 'ZEPETO.Script';
 import { SpawnInfo, ZepetoCharacter, ZepetoCharacterCreator } from 'ZEPETO.Character.Controller';
+import { Transform } from 'UnityEngine';
+import { Anim, Datas } from '../Managers/TypeManager';
   
 export default class NPCManager extends ZepetoScriptBehaviour {
   
-    // ZEPETO ID of the NPC
-    public zepetoId: string;
-    // NPC character object
-    private _npc: ZepetoCharacter;
-  
-    Start() {
-        // Create a new instance of SpawnInfo and set its position and rotation based on the object's transform
-        const spawnInfo = new SpawnInfo();
-        spawnInfo.position = this.transform.position;
-        spawnInfo.rotation = this.transform.rotation;
-  
-        // Use ZepetoCharacterCreator to create a new character by Zepeto ID and assign it to _npc variable
-        ZepetoCharacterCreator.CreateByZepetoId(this.zepetoId, spawnInfo, (character: ZepetoCharacter) => {
-            this._npc = character;
-        })
+    /* Properties */
+    @SerializeField() private npcPosisions: Transform[] = [];
+    private npcs: ZepetoCharacter[] = [];
+
+    /* GameManager */
+    public RemoteStart() {
+        this.SpanwNPC();
+    }
+
+    /* Create NPC */
+    private SpanwNPC() {
+        for(const pos of this.npcPosisions) {
+            const spawnInfo = new SpawnInfo();
+            spawnInfo.position = pos.position;
+            spawnInfo.rotation = pos.rotation;
+            
+            /* Create and Init NPC */
+            ZepetoCharacterCreator.CreateByZepetoId(Datas.kuaId, spawnInfo, (character: ZepetoCharacter) => {
+                this.npcs.push(character);
+                const animator = character.ZepetoAnimator;
+                animator.SetBool(Anim.isNPC, true);
+            })
+        }
     }
 }

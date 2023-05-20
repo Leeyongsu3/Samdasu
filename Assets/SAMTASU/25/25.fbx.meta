@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 26eefe42ed55c0d418f19b1ced31a75e
+guid: b359edea42d945742b791d563e7ee37a
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable: []
@@ -35,7 +35,7 @@ ModelImporter:
   meshes:
     lODScreenPercentages: []
     globalScale: 1
-    meshCompression: 2
+    meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
     sortHierarchyByName: 1

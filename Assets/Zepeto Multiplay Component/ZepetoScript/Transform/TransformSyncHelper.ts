@@ -68,8 +68,6 @@ export default class TransformSyncHelper extends ZepetoScriptBehaviour {
     public RemoteStart(id:string) {
         if(this.syncIndexType == SyncIndexType.Instantiate) return;
         this._Id = id;
-        SyncIndexManager.SyncIndex++;
-        this._Id = SyncIndexManager.SyncIndex.toString();
         this._positionCache = this.transform.position;
 
         this.SyncTransform();

@@ -12,14 +12,28 @@ export default class HorseRideManager extends ZepetoScriptBehaviour {
     @SerializeField() private horsePoolGroup: Transform;
     private horsePool: GameObject[];
     private horseRiders: HorseRider[] = [];
+    private _localSessionId: string;
+    public get localSessionId(): string { return this._localSessionId; }
+    public set localSessionId(value: string) {
+        if(this._localSessionId == null && value) {
+            this._localSessionId = value;
+        }
+    }
 
     /* Async Player and Horse Animation */
     FixedUpdate() {
         if(!this.horseRiders) return;
         for(const rider of this.horseRiders) {
-            if(rider) {
+            if(!rider) continue;
+
+            /* Riding Start */
+            if(rider.ownerAnimator.GetInteger(Anim.SamdasuState) == SamdasuState.Ride_Horse) rider.startRiding = true;
+            
+            /* isRiding */
+            if(rider.startRiding) {
                 if(rider.ownerAnimator.GetInteger(Anim.SamdasuState) == SamdasuState.Ride_Horse) {
                     rider.horseAnimator.SetInteger(Anim.State, rider.ownerAnimator.GetInteger(Anim.State));
+                    
                 } else {
                     rider.horseAnimator.SetInteger(Anim.State, 1);
                     GameManager.instance.RideOFFHorse(rider.sessionId);
@@ -29,28 +43,31 @@ export default class HorseRideManager extends ZepetoScriptBehaviour {
     }
 
     /* Ride ON Horse */
-    public RideHorse(sessionId:string) {
+    public RideHorse(sessionId:string, localSessionId:string) {
+        
         /* Init */
         if(!this.horseRiders) this.horseRiders = [];
 
         /* Player Setting */
         const character = ZepetoPlayers.instance.GetPlayer(sessionId).character;
         const playerSoket = character.transform.GetChild(0).GetChild(3);
-        GameManager.instance.Ride(true);
         character.additionalRunSpeed = 1;
         character.additionalWalkSpeed = 0.5;
+
+        /* Player State Set */
+        this.localSessionId = localSessionId;
+        if(this.localSessionId == sessionId) GameManager.instance.SetSamdasuState(SamdasuState.Ride_Horse, true);
 
         /* Get Horse */
         const horse = this.GetHorse(playerSoket);
 
         /* Horse Setting */
-        // const controller = horse.GetComponent<HorseRideController>();
-        // controller.ownerPlayer = character;
         const horseRider:HorseRider = {
             sessionId:sessionId,
             horse:horse,
             horseAnimator:horse.transform.GetChild(0).GetComponent<Animator>(),
             ownerAnimator:character.ZepetoAnimator,
+            startRiding:false,
         };
         this.horseRiders.push(horseRider);
     }
@@ -59,9 +76,11 @@ export default class HorseRideManager extends ZepetoScriptBehaviour {
     public RideOFFHorse(sessionId:string) {
         /* Player Setting */
         const character = ZepetoPlayers.instance.GetPlayer(sessionId).character;
-        GameManager.instance.Ride(false);
         character.additionalRunSpeed = 0;
         character.additionalWalkSpeed = 0;
+
+        /* Player State Set */
+        if(this.localSessionId == sessionId) GameManager.instance.SetSamdasuState(SamdasuState.Ride_Horse, false);
         
         /* Return Horse */
         this.ReturnHorse(sessionId);
@@ -76,8 +95,9 @@ export default class HorseRideManager extends ZepetoScriptBehaviour {
         /* Set Data */
         horse.SetActive(true);
         horse.transform.SetParent(setParent);
-        horse.transform.localPosition = Vector3.forward * 0.3;
+        horse.transform.localScale = Vector3.one;
         horse.transform.localRotation = Quaternion.identity;
+        horse.transform.localPosition = Vector3.forward * 0.3;
         return horse;
     }
 
@@ -101,16 +121,6 @@ export default class HorseRideManager extends ZepetoScriptBehaviour {
                 if(!horse.activeSelf && horse.transform.parent == this.horsePoolGroup) {
                     return horse;
                 }
-            }
-        }
-        return null;
-    }
-
-    /* Find Horse in HorseRider */
-    private FindHorseInHorseRider(sessionId:string) {
-        for(const horseRider of this.horseRiders) {
-            if(horseRider.sessionId == sessionId) {
-                return horseRider.horse;
             }
         }
         return null;

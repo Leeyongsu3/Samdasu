@@ -1,7 +1,8 @@
 import { Animator, BoxCollider, Collider, GameObject, Transform } from 'UnityEngine';
 import { Button } from 'UnityEngine.UI';
 import { ZepetoScriptBehaviour } from 'ZEPETO.Script'
-import { Anim } from '../Managers/TypeManager';
+import SyncIndexManager from '../Common/SyncIndexManager';
+import { Anim, Language } from '../Managers/TypeManager';
 import OXManager from './OXManager';
 
 export default class OXController extends ZepetoScriptBehaviour {
@@ -23,11 +24,18 @@ export default class OXController extends ZepetoScriptBehaviour {
         
         /* Set Properties */
         this.block = this.transform.GetChild(0).GetComponent<BoxCollider>();
-        this.o_button = this.targetUI.transform.GetChild(0).GetComponent<Button>();
-        this.x_button = this.targetUI.transform.GetChild(1).GetComponent<Button>();
+        const slide_Images = this.targetUI.transform.GetChild(0);
+        this.o_button = this.targetUI.transform.GetChild(1).GetComponent<Button>();
+        this.x_button = this.targetUI.transform.GetChild(2).GetComponent<Button>();
         this.targetFailed.SetActive(false);
         this.targetSuccessed.SetActive(false);
         this.onFailAnim = this.targetFailed.GetComponent<Animator>();
+        
+        /* Set Localizing */
+        const kr = slide_Images.GetChild(0);
+        const en = slide_Images.GetChild(1);
+        kr.gameObject.SetActive(true);
+        en.gameObject.SetActive(false);
         
         /* Set ButtonScript */
         if(this.answer) {
@@ -43,7 +51,10 @@ export default class OXController extends ZepetoScriptBehaviour {
 
     /* Mission Trigger */
     private OnTriggerEnter(collider : Collider) {
-        if(this.block.enabled) this.targetUI.SetActive(true);
+        if(this.block.enabled) {
+            this.Localizing();
+            this.targetUI.SetActive(true);
+        }
     }
 
     /* Mission Failed */
@@ -94,4 +105,19 @@ export default class OXController extends ZepetoScriptBehaviour {
         this.manager.OnOXPassed(this);
     }
 
+    /* Change Language */
+    private Localizing() {
+        const slide_Images = this.targetUI.transform.GetChild(0);
+        const kr = slide_Images.GetChild(0);
+        const en = slide_Images.GetChild(1);
+
+        if(SyncIndexManager.language == Language.KR) {
+            kr.gameObject.SetActive(true);
+            en.gameObject.SetActive(false);
+
+        } else if(SyncIndexManager.language == Language.EN) {
+            kr.gameObject.SetActive(false);
+            en.gameObject.SetActive(true);
+        }
+    }
 }

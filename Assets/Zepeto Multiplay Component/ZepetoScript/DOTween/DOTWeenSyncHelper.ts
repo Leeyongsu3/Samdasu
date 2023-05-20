@@ -20,7 +20,7 @@ export default class DOTWeenSyncHelper extends ZepetoScriptBehaviour {
     @Tooltip("At least 2 positions are required.") @SerializeField() private TweenPosition: Vector3[];
     @SerializeField() private moveSpeed: number = 1;
     @Tooltip("Receives the location again every certain time (default : false)")@SerializeField() private forceReTarget: boolean = false;
-        @SerializeField() private forceReTargetBySeconds: number = 60;
+    @SerializeField() private forceReTargetBySeconds: number = 60;
         
     /** multiplay **/
     private _multiplay: ZepetoWorldMultiplay;

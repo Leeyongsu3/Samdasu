@@ -22,13 +22,13 @@ ScriptedImporter:
     { value: true });\r\nconst ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst
     TypeManager_1 = require(\"../Managers/TypeManager\");\r\nconst LookAtTrigger_1
     = require(\"../Sample Code/LookAtTrigger\");\r\nclass ColliderInputSensor extends
-    ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    get reviceObject() {\r\n       
-    return this._reviceObject;\r\n    }\r\n    set reviceObject(value) {\r\n       
-    if (this._reviceObject)\r\n            return;\r\n        this._reviceObject
-    = value;\r\n    }\r\n    OnTriggerEnter(collider) {\r\n        if (!this.reviceObject)\r\n           
+    ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    get receiveObject() {\r\n       
+    return this._receiveObject;\r\n    }\r\n    set receiveObject(value) {\r\n       
+    if (this._receiveObject)\r\n            return;\r\n        this._receiveObject
+    = value;\r\n    }\r\n    OnTriggerEnter(collider) {\r\n        if (!this.receiveObject)\r\n           
     return;\r\n        if (!collider.gameObject.CompareTag(TypeManager_1.Datas.TeleportPoint))\r\n           
-    return;\r\n        this.reviceObject.OnSensorTriggerEnter(collider);\r\n    }\r\n}\r\nexports.default
-    = ColliderInputSensor;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiQ29sbGlkZXJJbnB1dFNlbnNvci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIkNvbGxpZGVySW5wdXRTZW5zb3IudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFDQSxpREFBcUQ7QUFDckQseURBQWdEO0FBQ2hELGdFQUF5RDtBQUV6RCxNQUFxQixtQkFBb0IsU0FBUSxxQ0FBcUI7SUFJbEUsSUFBVyxZQUFZO1FBQ25CLE9BQU8sSUFBSSxDQUFDLGFBQWEsQ0FBQztJQUM5QixDQUFDO0lBQ0QsSUFBVyxZQUFZLENBQUMsS0FBb0I7UUFDeEMsSUFBRyxJQUFJLENBQUMsYUFBYTtZQUFFLE9BQU87UUFDOUIsSUFBSSxDQUFDLGFBQWEsR0FBRyxLQUFLLENBQUM7SUFDL0IsQ0FBQztJQUVELGNBQWMsQ0FBQyxRQUFtQjtRQUM5QixJQUFHLENBQUMsSUFBSSxDQUFDLFlBQVk7WUFBRSxPQUFPO1FBQzlCLElBQUcsQ0FBQyxRQUFRLENBQUMsVUFBVSxDQUFDLFVBQVUsQ0FBQyxtQkFBSyxDQUFDLGFBQWEsQ0FBQztZQUFFLE9BQU87UUFDaEUsSUFBSSxDQUFDLFlBQVksQ0FBQyxvQkFBb0IsQ0FBQyxRQUFRLENBQUMsQ0FBQztJQUNyRCxDQUFDO0NBQ0o7QUFqQkQsc0NBaUJDIn0=","assetPath":"Assets/Zepeto
+    return;\r\n        this.receiveObject.OnSensorTriggerEnter(collider);\r\n   
+    }\r\n}\r\nexports.default = ColliderInputSensor;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiQ29sbGlkZXJJbnB1dFNlbnNvci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIkNvbGxpZGVySW5wdXRTZW5zb3IudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFDQSxpREFBcUQ7QUFDckQseURBQWdEO0FBQ2hELGdFQUF5RDtBQUV6RCxNQUFxQixtQkFBb0IsU0FBUSxxQ0FBcUI7SUFJbEUsSUFBVyxhQUFhO1FBQ3BCLE9BQU8sSUFBSSxDQUFDLGNBQWMsQ0FBQztJQUMvQixDQUFDO0lBQ0QsSUFBVyxhQUFhLENBQUMsS0FBb0I7UUFDekMsSUFBRyxJQUFJLENBQUMsY0FBYztZQUFFLE9BQU87UUFDL0IsSUFBSSxDQUFDLGNBQWMsR0FBRyxLQUFLLENBQUM7SUFDaEMsQ0FBQztJQUVELGNBQWMsQ0FBQyxRQUFtQjtRQUM5QixJQUFHLENBQUMsSUFBSSxDQUFDLGFBQWE7WUFBRSxPQUFPO1FBQy9CLElBQUcsQ0FBQyxRQUFRLENBQUMsVUFBVSxDQUFDLFVBQVUsQ0FBQyxtQkFBSyxDQUFDLGFBQWEsQ0FBQztZQUFFLE9BQU87UUFDaEUsSUFBSSxDQUFDLGFBQWEsQ0FBQyxvQkFBb0IsQ0FBQyxRQUFRLENBQUMsQ0FBQztJQUN0RCxDQUFDO0NBQ0o7QUFqQkQsc0NBaUJDIn0=","assetPath":"Assets/Zepeto
     Multiplay Component/ZepetoScript/SamdasuScript/ColliderInputSensor.ts","manifest":{"properties":[],"name":"ColliderInputSensor","description":"","hasAnimatorMove":false},"isCompiled":true}'
-  typescriptHash: 8789fe6f9e0bf9d583f0cfdab68edeb5
+  typescriptHash: af81eeaa3548e1c1b161321629337d38
   onlyWriteTrigger: 0

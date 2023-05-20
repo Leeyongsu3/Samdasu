@@ -110,10 +110,10 @@ Material:
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _ShadowStrength: 1
-    - _ShakeBending: 0.058
+    - _ShakeBending: 0.037
     - _ShakeDisplacement: 1
-    - _ShakeTime: 1
-    - _ShakeWindspeed: 1
+    - _ShakeTime: 0.05
+    - _ShakeWindspeed: 0.029
     - _Shininess: 0.115
     - _Smoothness: 0
     - _SmoothnessTextureChannel: 0
@@ -129,7 +129,7 @@ Material:
     - _WorldYPosition: 1.5
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0.754717, g: 0.754717, b: 0.754717, a: 1}
+    - _Color: {r: 0.990566, g: 0.990566, b: 0.990566, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _HueVariation: {r: 1, g: 0.5, b: 0, a: 0.1}

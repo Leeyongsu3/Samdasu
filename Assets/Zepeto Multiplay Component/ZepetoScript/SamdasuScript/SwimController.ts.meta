@@ -21,17 +21,19 @@ ScriptedImporter:
   compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
     { value: true });\r\nconst __UnityEngine__ = require(\"UnityEngine\");\r\nconst
     ZEPETO_Character_Controller_1 = require(\"ZEPETO.Character.Controller\");\r\nconst
-    ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst GameManager_1 = require(\"../Managers/GameManager\");\r\nclass
-    SwimController extends ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    OnTriggerEnter(collider)
+    ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst GameManager_1 = require(\"../Managers/GameManager\");\r\nconst
+    TypeManager_1 = require(\"../Managers/TypeManager\");\r\nclass SwimController
+    extends ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    OnTriggerEnter(collider)
     {\r\n        if (!ZEPETO_Character_Controller_1.ZepetoPlayers.instance.LocalPlayer)\r\n           
     return;\r\n        const character = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.LocalPlayer.zepetoPlayer.character.gameObject;\r\n       
     if (__UnityEngine__.Object.op_Equality(collider.gameObject, character)) {\r\n           
-    GameManager_1.default.instance.Swim(true);\r\n        }\r\n    }\r\n    OnTriggerExit(collider)
-    {\r\n        if (!ZEPETO_Character_Controller_1.ZepetoPlayers.instance.LocalPlayer)\r\n           
+    GameManager_1.default.instance.SetSamdasuState(TypeManager_1.SamdasuState.Swim,
+    true);\r\n        }\r\n    }\r\n    OnTriggerExit(collider) {\r\n        if (!ZEPETO_Character_Controller_1.ZepetoPlayers.instance.LocalPlayer)\r\n           
     return;\r\n        const character = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.LocalPlayer.zepetoPlayer.character.gameObject;\r\n       
     if (__UnityEngine__.Object.op_Equality(collider.gameObject, character)) {\r\n           
-    GameManager_1.default.instance.Swim(false);\r\n        }\r\n    }\r\n}\r\nexports.default
-    = SwimController;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiU3dpbUNvbnRyb2xsZXIuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJTd2ltQ29udHJvbGxlci50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7QUFDQSw2RUFBNEQ7QUFDNUQsaURBQXFEO0FBQ3JELHlEQUFvRTtBQUVwRSxNQUFxQixjQUFlLFNBQVEscUNBQXFCO0lBRTdELGNBQWMsQ0FBQyxRQUFtQjtRQUM5QixJQUFHLENBQUMsMkNBQWEsQ0FBQyxRQUFRLENBQUMsV0FBVztZQUFFLE9BQU87UUFDL0MsTUFBTSxTQUFTLEdBQUcsMkNBQWEsQ0FBQyxRQUFRLENBQUMsV0FBVyxDQUFDLFlBQVksQ0FBQyxTQUFTLENBQUMsVUFBVSxDQUFDO1FBQ3ZGLDJCQWF3b1UsV0FBWSxDQWJqcFUsUUFBUSxDQUFDLFVBQVUsRUFBSSxTQUFTLEdBQUU7WUFDakMscUJBQVcsQ0FBQyxRQUFRLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQyxDQUFDO1NBQ25DO0lBQ0wsQ0FBQztJQUVELGFBQWEsQ0FBQyxRQUFtQjtRQUM3QixJQUFHLENBQUMsMkNBQWEsQ0FBQyxRQUFRLENBQUMsV0FBVztZQUFFLE9BQU87UUFDL0MsTUFBTSxTQUFTLEdBQUcsMkNBQWEsQ0FBQyxRQUFRLENBQUMsV0FBVyxDQUFDLFlBQVksQ0FBQyxTQUFTLENBQUMsVUFBVSxDQUFDO1FBQ3ZGLDJCQUt3b1UsV0FBWSxDQUxqcFUsUUFBUSxDQUFDLFVBQVUsRUFBSSxTQUFTLEdBQUU7WUFDakMscUJBQVcsQ0FBQyxRQUFRLENBQUMsSUFBSSxDQUFDLEtBQUssQ0FBQyxDQUFDO1NBQ3BDO0lBQ0wsQ0FBQztDQUVKO0FBbEJELGlDQWtCQyJ9","assetPath":"Assets/Zepeto
+    GameManager_1.default.instance.SetSamdasuState(TypeManager_1.SamdasuState.Swim,
+    false);\r\n        }\r\n    }\r\n}\r\nexports.default = SwimController;\r\n//#
+    sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiU3dpbUNvbnRyb2xsZXIuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJTd2ltQ29udHJvbGxlci50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7QUFDQSw2RUFBNEQ7QUFDNUQsaURBQXFEO0FBQ3JELHlEQUFrRDtBQUNsRCx5REFBdUQ7QUFFdkQsTUFBcUIsY0FBZSxTQUFRLHFDQUFxQjtJQUU3RCxjQUFjLENBQUMsUUFBbUI7UUFDOUIsSUFBRyxDQUFDLDJDQUFhLENBQUMsUUFBUSxDQUFDLFdBQVc7WUFBRSxPQUFPO1FBQy9DLE1BQU0sU0FBUyxHQUFHLDJDQUFhLENBQUMsUUFBUSxDQUFDLFdBQVcsQ0FBQyxZQUFZLENBQUMsU0FBUyxDQUFDLFVBQVUsQ0FBQztRQUN2RiwyQkFhc2lVLFdBQVksQ0FiL2lVLFFBQVEsQ0FBQyxVQUFVLEVBQUksU0FBUyxHQUFFO1lBQ2pDLHFCQUFXLENBQUMsUUFBUSxDQUFDLGVBQWUsQ0FBQywwQkFBWSxDQUFDLElBQUksRUFBRSxJQUFJLENBQUMsQ0FBQztTQUNqRTtJQUNMLENBQUM7SUFFRCxhQUFhLENBQUMsUUFBbUI7UUFDN0IsSUFBRyxDQUFDLDJDQUFhLENBQUMsUUFBUSxDQUFDLFdBQVc7WUFBRSxPQUFPO1FBQy9DLE1BQU0sU0FBUyxHQUFHLDJDQUFhLENBQUMsUUFBUSxDQUFDLFdBQVcsQ0FBQyxZQUFZLENBQUMsU0FBUyxDQUFDLFVBQVUsQ0FBQztRQUN2RiwyQkFLc2lVLFdBQVksQ0FML2lVLFFBQVEsQ0FBQyxVQUFVLEVBQUksU0FBUyxHQUFFO1lBQ2pDLHFCQUFXLENBQUMsUUFBUSxDQUFDLGVBQWUsQ0FBQywwQkFBWSxDQUFDLElBQUksRUFBRSxLQUFLLENBQUMsQ0FBQztTQUNsRTtJQUNMLENBQUM7Q0FFSjtBQWxCRCxpQ0FrQkMifQ==","assetPath":"Assets/Zepeto
     Multiplay Component/ZepetoScript/SamdasuScript/SwimController.ts","manifest":{"properties":[],"name":"SwimController","description":"","hasAnimatorMove":false},"isCompiled":true}'
-  typescriptHash: a330b816eae6c33fa7c3084663c5aa1b
+  typescriptHash: 54aa245353362561daa003b26d8a44dd
   onlyWriteTrigger: 0

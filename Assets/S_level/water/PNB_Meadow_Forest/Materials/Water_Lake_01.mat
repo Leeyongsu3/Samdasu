@@ -140,9 +140,9 @@ Material:
     - _Cutoff: 0.5
     - _Depth: 5
     - _DetailNormalMapScale: 1
-    - _Distortion: 0.478
+    - _Distortion: 0.421
     - _Distortion1: 0.292
-    - _DistortionSpeed: 0.21
+    - _DistortionSpeed: 0.398
     - _DistortionTiling: 0.33
     - _DstBlend: 0
     - _Float4: 0.37
@@ -246,13 +246,13 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Color3: {r: 0.2924528, g: 0.2924528, b: 0.2924528, a: 0}
     - _Color4: {r: 0.2924528, g: 0.2924528, b: 0.2924528, a: 0}
-    - _DeepColour: {r: 0.098039225, g: 0.29340336, b: 0.40392157, a: 1}
+    - _DeepColour: {r: 0.22432362, g: 0.5098926, b: 0.6698113, a: 1}
     - _DepthGlowColour: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _FoamColor: {r: 1, g: 1, b: 1, a: 1}
     - _FoamColor1: {r: 0.5215687, g: 0.8980392, b: 0.8470588, a: 0}
     - _FoamEmitColour: {r: 0, g: 0, b: 0, a: 0}
-    - _ShallowColour: {r: 0.09411764, g: 0.34366906, b: 0.39607844, a: 0}
+    - _ShallowColour: {r: 0.12246352, g: 0.5225135, b: 0.6037736, a: 0}
     - _VeryDeepColour: {r: 0.08627451, g: 0.28972197, b: 0.34901962, a: 1}
     - _WaterDeepColor: {r: 0.1254902, g: 0.34117648, b: 0.15583292, a: 0}
     - _WaterDeepColor1: {r: 0.04705882, g: 0.3098039, b: 0.1960784, a: 0}

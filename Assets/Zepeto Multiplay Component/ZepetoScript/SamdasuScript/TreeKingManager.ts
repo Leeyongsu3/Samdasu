@@ -1,6 +1,5 @@
 import { Color, GameObject, Material, Mathf, Time } from 'UnityEngine';
 import { ZepetoScriptBehaviour } from 'ZEPETO.Script'
-import { OrangeChangeState } from '../Managers/TypeManager';
 
 export default class TreeKingManager extends ZepetoScriptBehaviour {
 
@@ -10,9 +9,11 @@ export default class TreeKingManager extends ZepetoScriptBehaviour {
     @SerializeField() private transferMaterials: Material[] = [];
     @SerializeField() private readonly timeCycle: number = 10
     @SerializeField() private readonly visibleTime: number = 10
-    private changeState:OrangeChangeState = OrangeChangeState.Level_1;
+    private changeState:number = 0;
     private timer:number = 0;
     private timerM:number = 0;
+    private changeStart: boolean = false;
+
 
     /* Change Properties */
     private currentObject:GameObject;
@@ -22,25 +23,34 @@ export default class TreeKingManager extends ZepetoScriptBehaviour {
     private visible:Color;
     private invisible:Color;
 
-    Start() {
+    /* GameManager */
+    public RemoteStart() {
         this.visible = Color.white;
         this.invisible = Color.white;
         this.invisible.a = 0;
+        for(const mat of this.transferMaterials) {
+            mat.color = this.invisible;
+        }
+        this.transferMaterials[this.changeState].color = this.visible;
+        this.changeStart = true;
     }
     
     FixedUpdate() {
+        if(!this.changeStart) return;
         this.SetObject();
         this.Change();
     }
 
+    /* State Changer */
     private SetObject() {
-        const state = this.changeState as number;
+        const state = this.changeState;
         this.currentObject = this.changeTargets[state];
         this.nextObject = this.changeTargets[(state+1) % this.changeTargets.length];
         this.currentMaterial = this.transferMaterials[state];
         this.nextMaterial = this.transferMaterials[(state+1) % this.changeTargets.length];
     }
 
+    /* Color Changer */
     private Change() {
         this.timer += Time.deltaTime;
         if(this.timeCycle < this.timer) {

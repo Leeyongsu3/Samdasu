@@ -188,7 +188,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 936db04b8ea42eb49b05d375cd630fa8, type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: 6dc8fa91faf0dc8428153828e52e85dd, type: 2}
+      objectReference: {fileID: 2100000, guid: ebd08f36ba639114693e84adf1159fac, type: 2}
     - target: {fileID: 919132149155446097, guid: 936db04b8ea42eb49b05d375cd630fa8, type: 3}
       propertyPath: m_Name
       value: S_cake

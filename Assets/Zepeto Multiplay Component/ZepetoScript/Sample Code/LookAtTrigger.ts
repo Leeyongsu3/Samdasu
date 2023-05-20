@@ -1,4 +1,4 @@
-import { Collider, GameObject, Quaternion, Transform } from 'UnityEngine';
+import { Collider, GameObject, Quaternion, SphereCollider, Transform, Vector3 } from 'UnityEngine';
 import { ZepetoCharacter, ZepetoPlayers } from 'ZEPETO.Character.Controller';
 import { ZepetoScriptBehaviour } from 'ZEPETO.Script'
 import GameManager from '../Managers/GameManager';
@@ -9,7 +9,8 @@ import LookAt from './LookAt';
 export default class LookAtTrigger extends ZepetoScriptBehaviour {
 
     /* Default Properties */
-    private lookAt : LookAt;
+    private lookAt: LookAt;
+    private col: SphereCollider;
 
     /* Samdasu Properties */
     @SerializeField() private colliderInputSensor: GameObject;
@@ -19,8 +20,10 @@ export default class LookAtTrigger extends ZepetoScriptBehaviour {
 
         if(this.colliderInputSensor) {
             const in_sensor = this.colliderInputSensor.gameObject.GetComponent<ColliderInputSensor>();
-            in_sensor.reviceObject = this;
+            in_sensor.receiveObject = this;
         }
+        
+        this.col = this.gameObject.GetComponent<SphereCollider>();
     }
 
     OnTriggerEnter(collider : Collider) {
@@ -50,5 +53,17 @@ export default class LookAtTrigger extends ZepetoScriptBehaviour {
             const collider_character = collider.transform.GetChild(0).GetComponent<ZepetoCharacter>();
             GameManager.instance.RemoteRideOffWheel(collider_character);
         }
+    }
+
+    /* Player is In Trigger? */
+    public get isInTrigger(): boolean {
+        if(this.GetDistanceToLocalPlayer() < this.col.radius) return true;
+        return false;
+    }
+
+    /* Get Distance to Local Player */
+    public GetDistanceToLocalPlayer() {
+        if(!ZepetoPlayers.instance.LocalPlayer) return 1000;
+        return Vector3.Distance(ZepetoPlayers.instance.LocalPlayer.zepetoPlayer.character.transform.position, this.transform.position);
     }
 }

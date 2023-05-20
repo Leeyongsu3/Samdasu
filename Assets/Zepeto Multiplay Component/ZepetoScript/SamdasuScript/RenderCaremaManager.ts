@@ -2,7 +2,8 @@ import { Camera, GameObject, Input, LayerMask, Mathf, Physics, RaycastHit, Trans
 import { ZepetoPlayers } from 'ZEPETO.Character.Controller';
 import { ZepetoScriptBehaviour } from 'ZEPETO.Script'
 import { ZepetoWorldMultiplay } from 'ZEPETO.World';
-import { Datas } from '../Managers/TypeManager';
+import { Datas, RenderData } from '../Managers/TypeManager';
+import RenderCameraController from './RenderCameraController';
 
 export default class RenderCaremaManager extends ZepetoScriptBehaviour {
 
@@ -15,8 +16,17 @@ export default class RenderCaremaManager extends ZepetoScriptBehaviour {
     private renderCamera:Camera;
     private isHold:boolean = false;
     private wait:WaitForSeconds;
-    private touchItem:Transform;
+    private _touchItem: Transform;
+    public get touchItem(): Transform { return this._touchItem; }
+    private set touchItem(value: Transform) {
+        this._touchItem = value;
+        console.log(` touchItem Update : ${value} `);
+        this.renderCameraController.SetTouchItem(value?.gameObject);
+    }
     private touchPoint:Vector3;
+
+    @SerializeField() private _renderCameraController: Transform;
+    private renderCameraController: RenderCameraController;
 
     Start() {
         if(!this.multiplay)
@@ -25,6 +35,12 @@ export default class RenderCaremaManager extends ZepetoScriptBehaviour {
         this.layer_Frame = 1 << LayerMask.NameToLayer(Datas.Render_Frame); // Layer 8
         this.layer_rnd = 1 << LayerMask.NameToLayer(Datas.Render_Item); // Layer 7
         this.wait = new WaitForSeconds(0.04);
+
+        /* Set Manager */
+        const renderCameraController = this._renderCameraController.GetComponent<RenderCameraController>();
+        if(renderCameraController) this.renderCameraController = renderCameraController;
+        else this.renderCameraController = this.GetComponentInChildren<RenderCameraController>();
+        this._renderCameraController = null;
     }
 
     /* Raycasting */
@@ -42,25 +58,15 @@ export default class RenderCaremaManager extends ZepetoScriptBehaviour {
             this.renderCamera = this.GetComponent<Camera>();
         }
         if(this.renderCamera && this.renderCamera.gameObject.activeSelf) {
-            // if(Input.GetMouseButton(0)) {
-            //     const ray = this.renderCamera.ScreenPointToRay(Input.mousePosition);
-            //     const hitInfo = $ref<RaycastHit>();
-            //     if(Physics.SphereCast(ray, 0.5, hitInfo, Mathf.Infinity, this.layer_rnd)) {
-            //         console.log(`${hitInfo.value.transform.name} ${hitInfo.value.transform.gameObject.layer} ${this.layer_rnd}`);
-            //         const renderItem = hitInfo.value.transform;
-            //         renderItem.position = new Vector3(hitInfo.value.point.x, hitInfo.value.point.y, renderItem.position.z);
-            //     }
-            // }
 
             /* Touch Start */
             if(Input.GetMouseButtonDown(0) && this.isHold == false) {
                 const ray = this.renderCamera.ScreenPointToRay(Input.mousePosition);
                 const hitInfo = $ref<RaycastHit>();
                 if(Physics.SphereCast(ray, 0.5, hitInfo, Mathf.Infinity, this.layer_rnd)) {
-                    // console.log(`${hitInfo.value.transform.name} ${hitInfo.value.transform.gameObject.layer} ${this.layer_rnd}`);
                     this.touchItem = hitInfo.value.transform;
-                    this.touchPoint = new Vector3(hitInfo.value.point.x, hitInfo.value.point.y, this.touchItem.position.z);
-                    this.StartCoroutine(this.ChasingYourTouch());
+                    this.touchPoint = new Vector3(hitInfo.value.point.x, hitInfo.value.point.y, RenderData.z);
+                    this.isHold = true;
                 }
 
             /* Touch Drag */
@@ -68,26 +74,22 @@ export default class RenderCaremaManager extends ZepetoScriptBehaviour {
                 const ray = this.renderCamera.ScreenPointToRay(Input.mousePosition);
                 const hitInfo = $ref<RaycastHit>();
                 if(Physics.SphereCast(ray, 0.5, hitInfo, Mathf.Infinity, this.layer_Frame)) {
-                    this.touchPoint = new Vector3(hitInfo.value.point.x, hitInfo.value.point.y, this.touchItem.position.z);
+                    this.touchPoint = new Vector3(hitInfo.value.point.x, hitInfo.value.point.y, RenderData.z);
+                    this.touchItem.position = this.touchPoint;
                 }
                 
             /* Touch End */
             } else if(Input.GetMouseButtonUp(0) && this.isHold == true) {
-                // console.log(`this.isHold = false`);
+
+                /* TEST */
+                const ray = this.renderCamera.ScreenPointToRay(Input.mousePosition);
+                const hitInfo = $ref<RaycastHit>();
+                if(Physics.SphereCast(ray, 0.5, hitInfo, Mathf.Infinity, this.layer_Frame)) {
+                    this.touchPoint = new Vector3(hitInfo.value.point.x, hitInfo.value.point.y, RenderData.z);
+                    this.touchItem.position = this.touchPoint;
+                }
                 this.isHold = false;
             }
         }
     }
-
-    private * ChasingYourTouch() {
-        if(this.isHold == true) return;
-        this.isHold = true;
-
-        while(this.isHold) {
-            yield this.wait;
-            this.touchItem.position = this.touchPoint;
-        }
-        this.StopCoroutine(this.ChasingYourTouch());
-    }
-
 }

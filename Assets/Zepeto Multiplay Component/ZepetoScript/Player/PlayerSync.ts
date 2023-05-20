@@ -10,9 +10,12 @@ import ZepetoPlayersManager from './ZepetoPlayersManager';
 import CameraManager from '../Managers/CameraManager';
 import SyncIndexManager from '../Common/SyncIndexManager';
 import UIManager from '../Managers/UIManager';
-import { Anim, MESSAGE, PlayerMove, SendName } from '../Managers/TypeManager';
+import { Anim, MESSAGE, PlayerMove, SamdasuState, SendName } from '../Managers/TypeManager';
+import GameManager from '../Managers/GameManager';
 
 export default class PlayerSync extends ZepetoScriptBehaviour {
+
+    /* Player Sync Properties */
     @HideInInspector() public isLocal: boolean = false;
     @HideInInspector() public player: Player;
     @HideInInspector() public zepetoPlayer: ZepetoPlayer;
@@ -26,6 +29,10 @@ export default class PlayerSync extends ZepetoScriptBehaviour {
     private _multiplay: ZepetoWorldMultiplay;
     private _room: RoomBase;
 
+    /* Samdasu Properties */
+    private prevSamdasuState: number;
+    private mgrIsPlay: boolean;
+
     private Start() {
         this._animator = this.transform.GetComponentInChildren<Animator>();
         this._multiplay = Object.FindObjectOfType<ZepetoWorldMultiplay>();
@@ -36,7 +43,12 @@ export default class PlayerSync extends ZepetoScriptBehaviour {
             this.player.OnChange += (ChangeValue) => this.OnChangedPlayer();
             //If this is not a local character, do not use State Machine.
             this.zepetoPlayer.character.StateMachine.Stop();
-        } 
+        }
+        
+        /* Samdasu */
+        this._room.AddMessageHandler(MESSAGE.MGR_Play, (message:any) => {
+            this.mgrIsPlay = message.isPlay;
+        });
     }
 
     // !isLocal(other player)
@@ -53,7 +65,13 @@ export default class PlayerSync extends ZepetoScriptBehaviour {
         animator.SetFloat(Anim.Acceleration, animationParam.Acceleration);
         animator.SetFloat(Anim.MoveProgress, animationParam.MoveProgress);
         animator.SetBool(Anim.isSit, animationParam.IsSit);
-        animator.SetFloat(Anim.SamdasuState, animationParam.SamdasuState);
+        animator.SetBool(Anim.inHandLeft, animationParam.inHandLeft);
+        animator.SetBool(Anim.inHandRight, animationParam.inHandRight);
+        animator.SetInteger(Anim.SamdasuState, animationParam.SamdasuState);
+
+        /* When Player Ride MGR */
+        const mgrChecker = animationParam.SamdasuState == SamdasuState.Ride_MGR && this.mgrIsPlay;
+        this.tfHelper.SyncRotation = !mgrChecker;
 
         //sync gesture
         if (animationParam.State == CharacterState.Gesture && ( this.UseZepetoGestureAPI || this.GetAnimationClipFromResources )) { 
@@ -130,14 +148,15 @@ export default class PlayerSync extends ZepetoScriptBehaviour {
         
         while(true) {
             /* Update Player Data */
-            SyncIndexManager.Rank = this.player.samdasu.Rank;
-            SyncIndexManager.Score = this.player.samdasu.Score;
-            SyncIndexManager.TrashCount = this.player.samdasu.TrashCount;
-            UIManager.instance.UpdatePlayerUI();
+            GameManager.instance.PlayerDataUpdate();
 
             const state = this._animator.GetInteger(Anim.State);
             // Idle status is sent only once.
-            if(state != CharacterState.Idle || pastIdleCount < pastIdleCountMax) {
+            const idleChecker = state != CharacterState.Idle || pastIdleCount < pastIdleCountMax;
+            const onSamdasuStateChange = this.onSamdasuStateChange();
+
+            /* Animation Data Processing */
+            if(idleChecker || onSamdasuStateChange) {
                 const data = new RoomData();
                 const animationParam = new RoomData();
                 animationParam.Add(Anim.State, state);
@@ -149,6 +168,8 @@ export default class PlayerSync extends ZepetoScriptBehaviour {
                 animationParam.Add(Anim.Acceleration, this._animator.GetFloat(Anim.Acceleration));
                 animationParam.Add(Anim.MoveProgress, this._animator.GetFloat(Anim.MoveProgress));
                 animationParam.Add(Anim.isSit, this._animator.GetBool(Anim.isSit));
+                animationParam.Add(Anim.inHandLeft, this._animator.GetBool(Anim.inHandLeft));
+                animationParam.Add(Anim.inHandRight, this._animator.GetBool(Anim.inHandRight));
                 animationParam.Add(Anim.SamdasuState, this._animator.GetInteger(Anim.SamdasuState));
                 data.Add(SendName.animationParam, animationParam.GetObject());
 
@@ -162,12 +183,21 @@ export default class PlayerSync extends ZepetoScriptBehaviour {
 
                 this._room?.Send(MESSAGE.SyncPlayer, data.GetObject());
             }
+
+            this.prevSamdasuState = this._animator.GetInteger(Anim.SamdasuState);
+
             if(state == CharacterState.Idle)             //Send 10 more frames even if stopped
                 pastIdleCount++;
             else
                 pastIdleCount = 0;
-            
+                
             yield new WaitForSeconds(tick);
         }
+    }
+
+    /* On SamdasuState Change  */
+    private onSamdasuStateChange() {
+        if(this._animator) return this.prevSamdasuState != this._animator.GetInteger(Anim.SamdasuState);
+        else return false;
     }
 }

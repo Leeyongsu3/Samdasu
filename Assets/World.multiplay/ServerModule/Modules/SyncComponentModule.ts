@@ -16,6 +16,7 @@ export default class SyncComponentModule extends IModule {
                 const animationParam = new ZepetoAnimationParam();
                 player.animationParam = Object.assign(animationParam, message.animationParam);
                 player.gestureName = message.gestureName ?? null;
+                player.samdasu.SamdasuState = message.animationParam.SamdasuState;
 
                 if (message.playerAdditionalValue) {
                     const pAdditionalValue = new PlayerAdditionalValue();
@@ -203,12 +204,9 @@ export default class SyncComponentModule extends IModule {
         
         this.server.onMessage(MESSAGE.Add_Point, (client, message) => {
             const player = this.server.state.players.get(client.sessionId);
-            if(player.samdasu.TrashCount < message.trashCount) {
-                client.send(MESSAGE.Add_Point, false);
-            } else {
+            if(player.samdasu.TrashCount >= message.trashCount) {
                 player.samdasu.TrashCount -= message.trashCount;
-                player.samdasu.Score += message.trashCount * 100;
-                client.send(MESSAGE.Add_Point, true);
+                player.samdasu.Score += message.trashCount * 10;
             }
         });
         
@@ -252,8 +250,15 @@ export default class SyncComponentModule extends IModule {
             };
             this.server.broadcast(message.SamdasuState, syncRide);
         });
+        
+        this.server.onMessage(MESSAGE.MGR_Play, (client, message) => {
+            this.server.broadcast(MESSAGE.MGR_Play, message);
+        });
         /** Samdasu END **/
 
+        this.server.onMessage(MESSAGE.Play_Effect, (client: SandboxPlayer, message) => {
+            this.server.broadcast(MESSAGE.Play_Effect, message.effectType);
+        });
         
         this.server.onMessage(MESSAGE.ChairSit, (client: SandboxPlayer, message) => {
             const chairMsg :syncChair = {
@@ -273,32 +278,46 @@ export default class SyncComponentModule extends IModule {
             equipData.sessionId = client.sessionId;
             equipData.itemName = message.name;
             equipData.bone = message.attach;
-            equipData.key = client.sessionId +"_"+ message.attach;
+            equipData.key = `${client.sessionId}_${equipData.bone}`;
+            console.log(equipData.key);
+
             if(this.server.state.equipDatas.has(equipData.key)) {
                 const prevData = this.server.state.equipDatas.get(equipData.key);
                 if(prevData.sessionId == client.sessionId) {
+                    // if(equipData.prevItemName == "Balloon" && equipData.itemName == "Balloon") {
+
+                    // }
                     equipData.prevItemName = prevData.itemName;
+                    equipData.prevBone = prevData.bone;
                     msg = MESSAGE.EquipChange;
                 }
             }
             this.server.state.equipDatas.set(equipData.key, equipData);
-            client.send(msg, equipData);
+            this.server.broadcast(msg, equipData);
         });
         
         this.server.onMessage(MESSAGE.Unequip, (client: SandboxPlayer, message) => {
             const equipData:EquipData = new EquipData();
             equipData.sessionId = client.sessionId;
-            equipData.itemName = null;
+            equipData.itemName = message.name;
             equipData.bone = message.attach;
-            equipData.key = client.sessionId +"_"+ message.attach;
+            equipData.key = `${client.sessionId}_${equipData.bone}`;
+            console.log(equipData.key);
+            
             if(this.server.state.equipDatas.has(equipData.key)) {
                 const prevData = this.server.state.equipDatas.get(equipData.key);
                 if(prevData.sessionId == client.sessionId) {
                     equipData.prevItemName = prevData.itemName;
+                    equipData.prevBone = prevData.bone;
                 }
+                this.server.state.equipDatas.delete(equipData.key);
             }
-            this.server.state.equipDatas.delete(equipData.key);
-            client.send(MESSAGE.Unequip, equipData);
+            this.server.broadcast(MESSAGE.Unequip, equipData);
+        });
+        
+        this.server.onMessage(MESSAGE.Visible, (client, message) => {
+            this.server.broadcast(MESSAGE.Visible, message);
+            // this.server.state.visibleZones
         });
 
         /** Racing Game **/
@@ -447,16 +466,20 @@ export default class SyncComponentModule extends IModule {
         const player = players.get(sessionId);
 
         /* Set Array Data */
-        player.samdasu.Stickers.push(this.ProcessingSticker(StickerType._01));
-        player.samdasu.Stickers.push(this.ProcessingSticker(StickerType._02));
-        player.samdasu.Stickers.push(this.ProcessingSticker(StickerType._03));
-        player.samdasu.Stickers.push(this.ProcessingSticker(StickerType._04));
-        player.samdasu.Stickers.push(this.ProcessingSticker(StickerType._05));
-        player.samdasu.Stickers.push(this.ProcessingSticker(StickerType._06));
-        player.samdasu.Stickers.push(this.ProcessingSticker(StickerType._07));
-        player.samdasu.Stickers.push(this.ProcessingSticker(StickerType._08));
-        player.samdasu.Stickers.push(this.ProcessingSticker(StickerType._09));
-        player.samdasu.Stickers.push(this.ProcessingSticker(StickerType._10));
+        player.samdasu.Stickers.push(this.ProcessingSticker(StickerType.airplane));
+        player.samdasu.Stickers.push(this.ProcessingSticker(StickerType.backrockdam));
+        player.samdasu.Stickers.push(this.ProcessingSticker(StickerType.candle25));
+        player.samdasu.Stickers.push(this.ProcessingSticker(StickerType.congraturation));
+        player.samdasu.Stickers.push(this.ProcessingSticker(StickerType.flower_red));
+        player.samdasu.Stickers.push(this.ProcessingSticker(StickerType.flower_yellow));
+        player.samdasu.Stickers.push(this.ProcessingSticker(StickerType.haenyeo));
+        player.samdasu.Stickers.push(this.ProcessingSticker(StickerType.halbang));
+        player.samdasu.Stickers.push(this.ProcessingSticker(StickerType.hanrabong));
+        player.samdasu.Stickers.push(this.ProcessingSticker(StickerType.horse));
+        player.samdasu.Stickers.push(this.ProcessingSticker(StickerType.mulbangul));
+        player.samdasu.Stickers.push(this.ProcessingSticker(StickerType.samdasu));
+        player.samdasu.Stickers.push(this.ProcessingSticker(StickerType.songee));
+        player.samdasu.Stickers.push(this.ProcessingSticker(StickerType.volcano));
     }
 
     /* Trash Stamp Load */
@@ -503,7 +526,7 @@ export default class SyncComponentModule extends IModule {
     private ProcessingSticker(key:StickerType) {
         const sticker = new Sticker();
         sticker.name = key.toString();
-        sticker.count = 0;
+        sticker.count = 3;
         return sticker;
     }
 
@@ -567,6 +590,7 @@ enum MESSAGE {
     SendBlockEnterCache = "SendBlockEnterCache",
     CoinAcquired = "CoinAcquired",
 
+    Play_Effect = "Play_Effect",
     ChairSit = "ChairSit",
     ChairSitDown = "ChairSitDown",
     ChairSitUp = "ChairSitUp",
@@ -574,6 +598,7 @@ enum MESSAGE {
     Equip = "Equip",
     EquipChange = "EquipChange",
     Unequip = "Unequip",
+    Visible = "Visible",
 
     /** Racing Game **/
     StartRunningRequest = "StartRunningRequest",
@@ -591,6 +616,7 @@ enum MESSAGE {
     Ride_Wheel = "Ride_Wheel",
     Ride_MGR = "Ride_MGR",
     Ride_OFF = "Ride_OFF",
+    MGR_Play = "MGR_Play",
 }
 
 /** Samdasu **/
@@ -599,7 +625,7 @@ enum SamdasuState {
     Ride_Horse = 10,
     Ride_Wheel = 20,
     Ride_MGR = 30,
-    Samdasu_Drink = 40,
+    Pick_Item = 40, Samdasu_Drink = 41,
     Swim = 50,
 }
 
@@ -613,16 +639,20 @@ enum StampType {
 }
 
 enum StickerType {
-    _01 = "01",
-    _02 = "02",
-    _03 = "03",
-    _04 = "04",
-    _05 = "05",
-    _06 = "06",
-    _07 = "07",
-    _08 = "08",
-    _09 = "09",
-    _10 = "10",
+    candle25 = "candle25",
+    flower_red = "flower_red",
+    mulbangul = "mulbangul",
+    backrockdam = "backrockdam",
+    airplane = "airplane",
+    samdasu = "samdasu",
+    songee = "songee",
+    flower_yellow = "flower_yellow",
+    horse = "horse",
+    congraturation = "congraturation",
+    halbang = "halbang",
+    hanrabong = "hanrabong",
+    haenyeo = "haenyeo",
+    volcano = "volcano",
 }
 
 interface Add_Sticker {

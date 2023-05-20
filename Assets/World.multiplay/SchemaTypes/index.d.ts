@@ -49,6 +49,7 @@ declare module "ZEPETO.Multiplay.Schema" {
 		itemName: string;
 		prevItemName: string;
 		bone: number;
+		prevBone: number;
 	}
 	class ZepetoAnimationParam extends Schema {
 		State: number;
@@ -60,9 +61,12 @@ declare module "ZEPETO.Multiplay.Schema" {
 		Acceleration: number;
 		MoveProgress: number;
 		IsSit: boolean;
+		inHandLeft: boolean;
+		inHandRight: boolean;
 		SamdasuState: number;
 	}
 	class Samdasu extends Schema {
+		SamdasuState: number;
 		TrashCount: number;
 		Score: number;
 		Rank: number;

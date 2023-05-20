@@ -110,10 +110,10 @@ Material:
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _ShadowStrength: 1
-    - _ShakeBending: 0.001
+    - _ShakeBending: 1
     - _ShakeDisplacement: 1
-    - _ShakeTime: 0.001
-    - _ShakeWindspeed: 0.001
+    - _ShakeTime: 1
+    - _ShakeWindspeed: 1
     - _Shininess: 0.115
     - _Smoothness: 0
     - _SmoothnessTextureChannel: 0

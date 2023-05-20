@@ -1,0 +1,38 @@
+fileFormatVersion: 2
+guid: ca51a84ac84393b4ebfa9b1be965a5e2
+importerOverride: ZEPETO.Script.Compiler:ZEPETO.Script:TypescriptAssetImporter
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: -1123457745, guid: 54cf806323ffe4418a4ce4cc63fe6b9d, type: 3}
+  isAssemblyDeclarations: 0
+  assembly: 
+  generateAllTypes: 1
+  types: []
+  generateWrapper: 0
+  overrideWrapperTypes: 0
+  wrapperTypes: []
+  WrapperFilters: []
+  wrapperOutputDirectory: Generated
+  compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
+    { value: true });\r\nconst ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nclass
+    VisibleManager extends ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    constructor()
+    {\r\n        super(...arguments);\r\n        this.visibleTargets = [];\r\n   
+    }\r\n    /* Game Manager */\r\n    RemoteStart() {\r\n        for (let i = 0;
+    i < this.visibleZones.childCount; i++) {\r\n            const zone = this.visibleZones.GetChild(i);\r\n           
+    const target = zone.GetChild(2);\r\n            target.name = `${target.name}_${i}`;\r\n           
+    this.visibleTargets.push(target.gameObject);\r\n            target.gameObject.SetActive(false);\r\n       
+    }\r\n    }\r\n    /* Visibler Script */\r\n    VisibleTarget(targetName) { this.TargetControl(targetName,
+    true); }\r\n    InvisibleTarget(targetName) { this.TargetControl(targetName,
+    false); }\r\n    /* Main Script */\r\n    TargetControl(targetName, isVisible)
+    {\r\n        for (const target of this.visibleTargets) {\r\n            if (target.name
+    == targetName) {\r\n                target.SetActive(isVisible);\r\n               
+    return true;\r\n            }\r\n        }\r\n        return false;\r\n    }\r\n}\r\nexports.default
+    = VisibleManager;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiVmlzaWJsZU1hbmFnZXIuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJWaXNpYmxlTWFuYWdlci50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOztBQUNBLGlEQUFxRDtBQUVyRCxNQUFxQixjQUFlLFNBQVEscUNBQXFCO0lBQWpFOztRQUlZLG1CQUFjLEdBQWlCLEVBQUUsQ0FBQztJQTJCOUMsQ0FBQztJQXpCRyxrQkFBa0I7SUFDWCxXQUFXO1FBQ2QsS0FBSSxJQUFJLENBQUMsR0FBQyxDQUFDLEVBQUUsQ0FBQyxHQUFDLElBQUksQ0FBQyxZQUFZLENBQUMsVUFBVSxFQUFFLENBQUMsRUFBRSxFQUFFO1lBQzlDLE1BQU0sSUFBSSxHQUFHLElBQUksQ0FBQyxZQUFZLENBQUMsUUFBUSxDQUFDLENBQUMsQ0FBQyxDQUFDO1lBQzNDLE1BQU0sTUFBTSxHQUFHLElBQUksQ0FBQyxRQUFRLENBQUMsQ0FBQyxDQUFDLENBQUM7WUFDaEMsTUFBTSxDQUFDLElBQUksR0FBRyxHQUFHLE1BQU0sQ0FBQyxJQUFJLElBQUksQ0FBQyxFQUFFLENBQUM7WUFDcEMsSUFBSSxDQUFDLGNBQWMsQ0FBQyxJQUFJLENBQUMsTUFBTSxDQUFDLFVBQVUsQ0FBQyxDQUFDO1lBQzVDLE1BQU0sQ0FBQyxVQUFVLENBQUMsU0FBUyxDQUFDLEtBQUssQ0FBQyxDQUFDO1NBQ3RDO0lBQ0wsQ0FBQztJQUVELHFCQUFxQjtJQUNkLGFBQWEsQ0FBQyxVQUFpQixJQUFJLElBQUksQ0FBQyxhQUFhLENBQUMsVUFBVSxFQUFFLElBQUksQ0FBQyxDQUFDLENBQUMsQ0FBQztJQUMxRSxlQUFlLENBQUMsVUFBaUIsSUFBSSxJQUFJLENBQUMsYUFBYSxDQUFDLFVBQVUsRUFBRSxLQUFLLENBQUMsQ0FBQyxDQUFDLENBQUM7SUFFcEYsaUJBQWlCO0lBQ1YsYUFBYSxDQUFDLFVBQWlCLEVBQUUsU0FBaUI7UUFDckQsS0FBSSxNQUFNLE1BQU0sSUFBSSxJQUFJLENBQUMsY0FBYyxFQUFFO1lBQ3JDLElBQUcsTUFBTSxDQUFDLElBQUksSUFBSSxVQUFVLEVBQUU7Z0JBQzFCLE1BQU0sQ0FBQyxTQUFTLENBQUMsU0FBUyxDQUFDLENBQUM7Z0JBQzVCLE9BQU8sSUFBSSxDQUFDO2FBQ2Y7U0FDSjtRQUNELE9BQU8sS0FBSyxDQUFDO0lBQ2pCLENBQUM7Q0FDSjtBQS9CRCxpQ0ErQkMifQ==","assetPath":"Assets/Zepeto
+    Multiplay Component/ZepetoScript/Managers/VisibleManager.ts","manifest":{"properties":[{"assembly":"UnityEngine.CoreModule","name":"visibleZones","type":"UnityEngine.Transform","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]}],"name":"VisibleManager","description":"","hasAnimatorMove":false},"isCompiled":true}'
+  typescriptHash: 650dfae48332357d9036c1a15efe581a
+  onlyWriteTrigger: 0

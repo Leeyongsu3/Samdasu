@@ -20,42 +20,70 @@ ScriptedImporter:
   wrapperOutputDirectory: Generated
   compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
     { value: true });\r\nconst UnityEngine_1 = require(\"UnityEngine\");\r\nconst
-    UnityEngine_UI_1 = require(\"UnityEngine.UI\");\r\nconst ZEPETO_Character_Controller_1
-    = require(\"ZEPETO.Character.Controller\");\r\nconst ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst
-    ZEPETO_World_1 = require(\"ZEPETO.World\");\r\nconst TypeManager_1 = require(\"./TypeManager\");\r\nclass
-    EquipManager extends ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    Start() {\r\n       
-    if (!this.multiplay)\r\n            this.multiplay = UnityEngine_1.GameObject.FindObjectOfType($typeof(ZEPETO_World_1.ZepetoWorldMultiplay));\r\n       
+    ZEPETO_Character_Controller_1 = require(\"ZEPETO.Character.Controller\");\r\nconst
+    ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst ZEPETO_World_1 = require(\"ZEPETO.World\");\r\nconst
+    SyncIndexManager_1 = require(\"../Common/SyncIndexManager\");\r\nconst GameManager_1
+    = require(\"./GameManager\");\r\nconst TypeManager_1 = require(\"./TypeManager\");\r\nclass
+    EquipManager extends ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    constructor()
+    {\r\n        super(...arguments);\r\n        this.balloons = [];\r\n    }\r\n   
+    Start() {\r\n        if (!this.multiplay)\r\n            this.multiplay = UnityEngine_1.GameObject.FindObjectOfType($typeof(ZEPETO_World_1.ZepetoWorldMultiplay));\r\n       
     this.multiplay.add_RoomJoined((room) => {\r\n            this.room = room;\r\n           
     this.room.AddMessageHandler(TypeManager_1.MESSAGE.Equip, (equipData) => {\r\n               
-    if (equipData.itemName == this.samdasuPetInWorld.name) {\r\n                   
-    this.EquipSamdasu(equipData);\r\n                }\r\n                else {\r\n                   
-    this.EquipItem(equipData);\r\n                }\r\n            });\r\n           
-    this.room.AddMessageHandler(TypeManager_1.MESSAGE.EquipChange, (equipData) =>
-    {\r\n                if (!equipData.prevItemName)\r\n                    return;\r\n               
-    this.UnEquipItem(equipData);\r\n                if (equipData.itemName == this.samdasuPetInWorld.name)
-    {\r\n                    this.EquipSamdasu(equipData);\r\n                }\r\n               
-    else {\r\n                    this.EquipItem(equipData);\r\n                }\r\n           
-    });\r\n            this.room.AddMessageHandler(TypeManager_1.MESSAGE.Unequip,
+    switch (equipData.itemName) {\r\n                    case this.samdasuPet.name:\r\n                       
+    this.EquipSamdasu(equipData);\r\n                        break;\r\n                   
+    case this.cake.name:\r\n                        this.EquipCake(equipData);\r\n                       
+    break;\r\n                    case TypeManager_1.Datas.Balloon:\r\n                       
+    this.EquipBalloon(equipData);\r\n                        // this.EquipItem(equipData);\r\n                       
+    break;\r\n                }\r\n            });\r\n            this.room.AddMessageHandler(TypeManager_1.MESSAGE.EquipChange,
+    (equipData) => {\r\n                if (!equipData.prevItemName)\r\n                   
+    return;\r\n                /* Equip */\r\n                switch (equipData.itemName)
+    {\r\n                    case this.samdasuPet.name:\r\n                       
+    this.EquipSamdasu(equipData);\r\n                        break;\r\n                   
+    case this.cake.name:\r\n                        this.EquipCake(equipData);\r\n                       
+    break;\r\n                    case TypeManager_1.Datas.Balloon:\r\n                       
+    this.UnEquipItem(equipData);\r\n                        this.EquipBalloon(equipData);\r\n                       
+    // this.EquipItem(equipData);\r\n                        break;\r\n               
+    }\r\n            });\r\n            this.room.AddMessageHandler(TypeManager_1.MESSAGE.Unequip,
     (equipData) => {\r\n                if (!equipData.prevItemName)\r\n                   
     return;\r\n                this.UnEquipItem(equipData);\r\n            });\r\n       
     });\r\n    }\r\n    /* Up Equip Item */\r\n    UnEquipItem(equipData) {\r\n       
+    if (equipData.prevItemName == this.cake.name)\r\n            return;\r\n       
     const anim = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.GetPlayer(equipData.sessionId).character.ZepetoAnimator;\r\n       
-    const bone = anim.GetBoneTransform(equipData.bone);\r\n        const prevName
-    = `${equipData.prevItemName}-${equipData.bone.toString()}`;\r\n        for (const
-    trans of bone.GetComponentsInChildren($typeof(UnityEngine_1.Transform))) {\r\n           
-    if (trans.name == prevName) {\r\n                UnityEngine_1.GameObject.Destroy(trans.gameObject);\r\n           
-    }\r\n        }\r\n    }\r\n    /* Equip Item */\r\n    EquipItem(equipData) {\r\n       
-    const anim = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.GetPlayer(equipData.sessionId).character.ZepetoAnimator;\r\n       
-    const bone = anim.GetBoneTransform(equipData.bone);\r\n        const prefab =
-    UnityEngine_1.Resources.Load(equipData.itemName);\r\n        const equip = UnityEngine_1.GameObject.Instantiate(prefab,
-    bone);\r\n        equip.name = `${equipData.itemName}-${equipData.bone.toString()}`;\r\n   
-    }\r\n    /** Samdasu **/\r\n    /* Player Equip Samdasu */\r\n    EquipSamdasu(equipData)
+    const prevBone = anim.GetBoneTransform(equipData.prevBone);\r\n        const
+    prevName = equipData.prevItemName;\r\n        console.log(` UnEquipItem 2 ${prevName}`);\r\n       
+    for (const trans of prevBone.GetComponentsInChildren($typeof(UnityEngine_1.Transform)))
+    {\r\n            if (trans.name == prevName) {\r\n                UnityEngine_1.GameObject.Destroy(trans.gameObject);\r\n               
+    switch (equipData.itemName) {\r\n                    case this.samdasuPet.name:\r\n                       
+    SyncIndexManager_1.default.SamdasuPetInHand = false;\r\n                       
+    break;\r\n                    case this.cake.name:\r\n                       
+    SyncIndexManager_1.default.CakeInHead = false;\r\n                        break;\r\n                   
+    case TypeManager_1.Datas.Balloon:\r\n                        SyncIndexManager_1.default.BalloonInHand
+    = false;\r\n                        break;\r\n                }\r\n           
+    }\r\n        }\r\n    }\r\n    // /* Equip Item */\r\n    // private EquipItem(equipData:EquipData)
+    {\r\n    //     const anim:Animator = ZepetoPlayers.instance.GetPlayer(equipData.sessionId).character.ZepetoAnimator;\r\n   
+    //     const bone = anim.GetBoneTransform(equipData.bone);\r\n    //     const
+    prefab = Resources.Load<GameObject>(equipData.itemName);\r\n    //     const
+    equip = GameObject.Instantiate(prefab, bone) as GameObject;\r\n    //     equip.name
+    = `${equipData.itemName}-${equipData.bone.toString()}`;\r\n    // }\r\n    /**
+    Samdasu **/\r\n    /* Player Equip Samdasu */\r\n    EquipSamdasu(equipData)
     {\r\n        const anim = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.GetPlayer(equipData.sessionId).character.ZepetoAnimator;\r\n       
     const bone = anim.GetBoneTransform(equipData.bone);\r\n        const equip =
-    UnityEngine_1.GameObject.Instantiate(this.samdasuPetInWorld, bone);\r\n       
-    equip.name = `${equipData.itemName}-${equipData.bone.toString()}`;\r\n    }\r\n}\r\nexports.default
-    = EquipManager;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiRXF1aXBNYW5hZ2VyLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiRXF1aXBNYW5hZ2VyLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7O0FBQUEsNkNBQXlGO0FBQ3pGLG1EQUF3QztBQUN4Qyw2RUFBNEQ7QUFHNUQsaURBQXFEO0FBQ3JELCtDQUFvRDtBQUNwRCwrQ0FBd0M7QUFFeEMsTUFBcUIsWUFBYSxTQUFRLHFDQUFxQjtJQVMzRCxLQUFLO1FBQ0QsSUFBRyxDQUFDLElBQUksQ0FBQyxTQUFTO1lBQ2QsSUFBSSxDQUFDLFNBQVMsR0FBRyx3QkFBVSxDQUFDLGdCQUFnQixTQUFDLG1DQUFvQixFQUFHLENBQUM7UUFFekUsSUFBSSxDQUFDLFNBQVMsZ0JBQWUsQ0FBQyxJQUFVLEVBQUUsRUFBRTtZQUN4QyxJQUFJLENBQUMsSUFBSSxHQUFHLElBQUksQ0FBQztZQUNqQixJQUFJLENBQUMsSUFBSSxDQUFDLGlCQUFpQixDQUFDLHFCQUFPLENBQUMsS0FBSyxFQUFFLENBQUMsU0FBbUIsRUFBRSxFQUFFO2dCQUMvRCxJQUFHLFNBQVMsQ0FBQyxRQUFRLElBQUksSUFBSSxDQUFDLGlCQUFpQixDQUFDLElBQUksRUFBRTtvQkFDbEQsSUFBSSxDQUFDLFlBQVksQ0FBQyxTQUFTLENBQUMsQ0FBQztpQkFDaEM7cUJBQU07b0JBQ0gsSUFBSSxDQUFDLFNBQVMsQ0FBQyxTQUFTLENBQUMsQ0FBQztpQkFDN0I7WUFDTCxDQUFDLENBQUMsQ0FBQztZQUVILElBQUksQ0FBQyxJQUFJLENBQUMsaUJBQWlCLENBQUMscUJBQU8sQ0FBQyxXQUFXLEVBQUUsQ0FBQyxTQUFtQixFQUFFLEVBQUU7Z0JBQ3JFLElBQUcsQ0FBQyxTQUFTLENBQUMsWUFBWTtvQkFBRSxPQUFPO2dCQUNuQyxJQUFJLENBQUMsV0FBVyxDQUFDLFNBQVMsQ0FBQyxDQUFDO2dCQUM1QixJQUFHLFNBQVMsQ0FBQyxRQUFRLElBQUksSUFBSSxDQUFDLGlCQUFpQixDQUFDLElBQUksRUFBRTtv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","assetPath":"Assets/Zepeto
-    Multiplay Component/ZepetoScript/Managers/EquipManager.ts","manifest":{"properties":[{"assembly":"ZEPETO.World","name":"multiplay","type":"ZEPETO.World.ZepetoWorldMultiplay","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"","name":"room","type":"ZEPETO.Multiplay.Room","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"UnityEngine.CoreModule","name":"samdasuPetInWorld","type":"UnityEngine.GameObject","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"Header","args":["\"Samdasus
-    Field\""]},{"name":"SerializeField","args":[]}]}],"name":"EquipManager","description":"","hasAnimatorMove":false},"isCompiled":true}'
-  typescriptHash: 93480da47d6dfed1cb56593f683ed5eb
+    UnityEngine_1.GameObject.Instantiate(this.samdasuPet, bone);\r\n        equip.name
+    = equipData.itemName;\r\n        SyncIndexManager_1.default.SamdasuPetInHand
+    = true;\r\n        /* Animation */\r\n        GameManager_1.default.instance.onPlayerDrink();\r\n   
+    }\r\n    /* Player Equip Balloon */\r\n    EquipBalloon(equipData) {\r\n       
+    const index = UnityEngine_1.Mathf.Floor(UnityEngine_1.Random.Range(0, this.balloons.length));\r\n       
+    const balloon = this.balloons[index];\r\n        const anim = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.GetPlayer(equipData.sessionId).character.ZepetoAnimator;\r\n       
+    const bone = anim.GetBoneTransform(equipData.bone);\r\n        const equip =
+    UnityEngine_1.GameObject.Instantiate(balloon, bone);\r\n        equip.name =
+    equipData.itemName;\r\n        SyncIndexManager_1.default.BalloonInHand = true;\r\n   
+    }\r\n    /* Player Equip 25 Cake */\r\n    EquipCake(equipData) {\r\n       
+    const anim = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.GetPlayer(equipData.sessionId).character.ZepetoAnimator;\r\n       
+    const bone = anim.GetBoneTransform(equipData.bone);\r\n        const equip =
+    UnityEngine_1.GameObject.Instantiate(this.cake, bone);\r\n        equip.name
+    = equipData.itemName;\r\n        SyncIndexManager_1.default.CakeInHead = true;\r\n   
+    }\r\n}\r\nexports.default = EquipManager;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiRXF1aXBNYW5hZ2VyLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiRXF1aXBNYW5hZ2VyLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7O0FBQUEsNkNBQXdHO0FBRXhHLDZFQUE0RDtBQUc1RCxpREFBcUQ7QUFDckQsK0NBQW9EO0FBQ3BELGlFQUEwRDtBQUMxRCwrQ0FBd0M7QUFDeEMsK0NBQStDO0FBRS9DLE1BQXFCLFlBQWEsU0FBUSxxQ0FBcUI7SUFBL0Q7O1FBUThCLGFBQVEsR0FBaUIsRUFBRSxDQUFDO0lBdUgxRCxDQUFDO0lBcEhHLEtBQUs7UUFDRCxJQUFHLENBQUMsSUFBSSxDQUFDLFNBQVM7WUFDZCxJQUFJLENBQUMsU0FBUyxHQUFHLHdCQUFVLENBQUMsZ0JBQWdCLFNBQUMsbUNBQW9CLEVBQUcsQ0FBQztRQUV6RSxJQUFJLENBQUMsU0FBUyxnQkFBZSxDQUFDLElBQVUsRUFBRSxFQUFFO1lBQ3hDLElBQUksQ0FBQyxJQUFJLEdBQUcsSUFBSSxDQUFDO1lBQ2pCLElBQUksQ0FBQyxJQUFJLENBQUMsaUJBQWlCLENBQUMscUJBQU8sQ0FBQyxLQUFLLEVBQUUsQ0FBQyxTQUFtQixFQUFFLEVBQUU7Z0JBQy9ELFFBQU8sU0FBUyxDQUFDLFFBQVEsRUFBRTtvQkFDdkIsS0FBSyxJQUFJLENBQUMsVUFBVSxDQUFDLElBQUk7d0JBQ3JCLElBQUksQ0FBQyxZQUFZLENBQUMsU0FBUyxDQUFDLENBQUM7d0JBQzdCLE1BQU07b0JBQ1YsS0FBSyxJQUFJLENBQUMsSUFBSSxDQUFDLElBQUk7d0JBQ2YsSUFBSSxDQUFDLFNBQVMsQ0FBQyxTQUFTLENBQUMsQ0FBQzt3QkFDMUIsTUFBTTtvQkFDVixLQUFLLG1CQUFLLENBQUMsT0FBTzt3QkFDZCxJQUFJLENBQUMsWUFBWSxDQUFDLFNBQVMsQ0FBQyxDQUFDO3dCQUM3Qiw2QkFBNkI7d0JBQzdCLE1BQU07aUJBQ2I7WUFDTCxDQUFDLENBQUMsQ0FBQztZQUVILElBQUksQ0FBQyxJQUFJLENBQUMs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","assetPath":"Assets/Zepeto
+    Multiplay Component/ZepetoScript/Managers/EquipManager.ts","manifest":{"properties":[{"assembly":"ZEPETO.World","name":"multiplay","type":"ZEPETO.World.ZepetoWorldMultiplay","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"","name":"room","type":"ZEPETO.Multiplay.Room","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"UnityEngine.CoreModule","name":"cake","type":"UnityEngine.GameObject","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"Header","args":["\"Samdasus
+    Field\""]},{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"balloons","type":"UnityEngine.GameObject[]","isArray":true,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"samdasuPet","type":"UnityEngine.GameObject","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]}],"name":"EquipManager","description":"","hasAnimatorMove":false},"isCompiled":true}'
+  typescriptHash: 31f657f85eaa0c37d6972a4637e828ad
   onlyWriteTrigger: 0

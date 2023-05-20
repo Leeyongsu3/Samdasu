@@ -1,81 +1,54 @@
 import { BoxCollider, GameObject } from 'UnityEngine';
 import { ZepetoPlayers } from 'ZEPETO.Character.Controller';
-import { Room, RoomData } from 'ZEPETO.Multiplay';
 import { ZepetoScriptBehaviour } from 'ZEPETO.Script'
-import { ZepetoWorldMultiplay } from 'ZEPETO.World';
-import { Anim, Datas, MESSAGE, SendName, SyncChair } from '../Managers/TypeManager';
-import TransformSyncHelper from '../Transform/TransformSyncHelper';
+import GameManager from '../Managers/GameManager';
+import { Anim, SendName } from '../Managers/TypeManager';
 
 export default class ChairSit extends ZepetoScriptBehaviour {
     
-    private m_tfHelper:TransformSyncHelper;
-    private multiplay: ZepetoWorldMultiplay;
-    private room: Room;
-    get Id() {
-        return this.m_tfHelper.Id;
+    /* Properties */
+    private _localSessionId: string;
+    public get localSessionId(): string { return this._localSessionId; }
+    public set localSessionId(value: string) {
+        if(this._localSessionId == null && value) this._localSessionId = value;
     }
-    private _isSit:bool = false;
-    get IsSit() {
-        return this._isSit;
-    }
-    set IsSit(isSit:bool){
-        this._isSit = isSit;
-    }
+    private chairId: string;
+    public get Id(): string { return this.chairId; }
+    private isSit:bool = false;
     private boxCol:BoxCollider;
     @SerializeField() private buttonObject:GameObject;
 
-    Start() {
-        this.m_tfHelper = this.GetComponent<TransformSyncHelper>();
-        this.multiplay = GameObject.FindObjectOfType<ZepetoWorldMultiplay>();
-        this.multiplay.RoomJoined += (room: Room) => {
-            this.room = room;
-            this.room.AddMessageHandler(MESSAGE.ChairSitDown, (message:SyncChair) => {
-                if(this.room.SessionId == message.OwnerSessionId) {
-                    this.ButtonOnOff(false);
-                }
-                if(this.m_tfHelper.Id == message.chairId) {
-                    this.PlayerSitDown(message.OwnerSessionId);
-                }
-            });
-            this.room.AddMessageHandler(MESSAGE.ChairSitUp, (message:SyncChair) => {
-                if(this.room.SessionId == message.OwnerSessionId) {
-                    this.ButtonOnOff(true);
-                }
-                if(this.m_tfHelper.Id == message.chairId) {
-                    this.PlayerSitUp(message.OwnerSessionId);
-                }
-            });
-        }
+    public RemoteStart(id:string) {
+        this.chairId = id;
         this.boxCol = this.transform.GetComponent<BoxCollider>();
         if(!this.buttonObject) this.buttonObject = this.transform.GetChild(2).gameObject;
     }
     
     /* Button on off */
-    ButtonOnOff(onOff:bool) {
+    public ButtonOnOff(onOff:bool) {
         this.boxCol.enabled = onOff;
         this.buttonObject.SetActive(onOff);
     }
     
     /* Sit Chair */
-    PlayerSitDown(sessionId:string) {
-        if(this.IsSit) return;
-        this.IsSit = true;
+    public PlayerSitDown(sessionId:string) {
+        if(this.isSit) return;
+        this.isSit = true;
         this.ButtonOnOff(false);
 
-        if(!ZepetoPlayers.instance.HasPlayer(sessionId) && sessionId != this.room.SessionId) return; // isLocal
+        if(!ZepetoPlayers.instance.HasPlayer(sessionId)) return;
         this.StartCoroutine(this.StartContinuousAnimation(sessionId));
     }
 
-    private SitControl(sit:boolean) {
-        ZepetoPlayers.instance.LocalPlayer.zepetoPlayer.character.ZepetoAnimator.SetBool(SendName.isSit, sit);
-    }
-
     private * StartContinuousAnimation(sessionId:string) {
+        /* Player Setting */
         const sitPosition = this.transform.GetChild(1);
         const player = ZepetoPlayers.instance.GetPlayer(sessionId).character;
         player.transform.parent = this.transform;
         player.Teleport(sitPosition.position, sitPosition.rotation);
 
+        /* Local Player Change Animation */
+        if(sessionId != this.localSessionId) return; 
         const anim = player.ZepetoAnimator;
         while(anim.GetBool(Anim.isSit)) {
             yield null;
@@ -83,30 +56,31 @@ export default class ChairSit extends ZepetoScriptBehaviour {
         this.SitControl(true)
         while(true) {
             if(player.tryJump || player.tryMove) {
-                this.PlayerSendSitUp()
+                GameManager.instance.PlayerSendSitUp(this.chairId);
                 break;
             }
             yield null;
         }
     }
-    
-    /* Send ChairSitUp */
-    PlayerSendSitUp() {
-        const data = new RoomData();
-        data.Add(SendName.isSit, false);
-        data.Add(SendName.chairId, this.m_tfHelper.Id);
-        this.room.Send(MESSAGE.ChairSit, data.GetObject());
-    }
 
     /* Recieve ChairSitUp */
-    private PlayerSitUp(sessionId:string) {
-        if(!this.IsSit) return;
-        this.IsSit = false;
+    public PlayerSitUp(sessionId:string) {
+        if(!this.isSit) return;
+        this.isSit = false;
         this.ButtonOnOff(true);
 
-        if(!ZepetoPlayers.instance.HasPlayer(sessionId) && sessionId != this.room.SessionId) return; // isLocal
+        /* Player Setting */
+        if(!ZepetoPlayers.instance.HasPlayer(sessionId)) return;
         const player = ZepetoPlayers.instance.GetPlayer(sessionId).character;
         player.transform.parent = null;
+
+        /* Local Player Change Animation */
+        if(sessionId != this.localSessionId) return; 
         this.SitControl(false);
+    }
+
+    /* Animation Play */
+    private SitControl(sit:boolean) {
+        ZepetoPlayers.instance.LocalPlayer.zepetoPlayer.character.ZepetoAnimator.SetBool(SendName.isSit, sit);
     }
 }

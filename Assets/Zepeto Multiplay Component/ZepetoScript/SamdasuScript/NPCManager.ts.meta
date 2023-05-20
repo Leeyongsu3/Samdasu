@@ -20,15 +20,19 @@ ScriptedImporter:
   wrapperOutputDirectory: Generated
   compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
     { value: true });\r\nconst ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst
-    ZEPETO_Character_Controller_1 = require(\"ZEPETO.Character.Controller\");\r\nclass
-    NPCManager extends ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    Start() {\r\n       
-    // Create a new instance of SpawnInfo and set its position and rotation based
-    on the object''s transform\r\n        const spawnInfo = new ZEPETO_Character_Controller_1.SpawnInfo();\r\n       
-    spawnInfo.position = this.transform.position;\r\n        spawnInfo.rotation =
-    this.transform.rotation;\r\n        // Use ZepetoCharacterCreator to create a
-    new character by Zepeto ID and assign it to _npc variable\r\n        ZEPETO_Character_Controller_1.ZepetoCharacterCreator.CreateByZepetoId(this.zepetoId,
-    spawnInfo, (character) => {\r\n            this._npc = character;\r\n       
-    });\r\n    }\r\n}\r\nexports.default = NPCManager;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiTlBDTWFuYWdlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIk5QQ01hbmFnZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQSxpREFBc0Q7QUFDdEQsNkVBQWlHO0FBRWpHLE1BQXFCLFVBQVcsU0FBUSxxQ0FBcUI7SUFPekQsS0FBSztRQUNELHVHQUF1RztRQUN2RyxNQUFNLFNBQVMsR0FBRyxJQUFJLHVDQUFTLEVBQUUsQ0FBQztRQUNsQyxTQUFTLENBQUMsUUFBUSxHQUFHLElBQUksQ0FBQyxTQUFTLENBQUMsUUFBUSxDQUFDO1FBQzdDLFNBQVMsQ0FBQyxRQUFRLEdBQUcsSUFBSSxDQUFDLFNBQVMsQ0FBQyxRQUFRLENBQUM7UUFFN0MsbUdBQW1HO1FBQ25HLG9EQUFzQixDQUFDLGdCQUFnQixDQUFDLElBQUksQ0FBQyxRQUFRLEVBQUUsU0FBUyxFQUFFLENBQUMsU0FBMEIsRUFBRSxFQUFFO1lBQzdGLElBQUksQ0FBQyxJQUFJLEdBQUcsU0FBUyxDQUFDO1FBQzFCLENBQUMsQ0FBQyxDQUFBO0lBQ04sQ0FBQztDQUNKO0FBbEJELDZCQWtCQyJ9","assetPath":"Assets/Zepeto
-    Multiplay Component/ZepetoScript/SamdasuScript/NPCManager.ts","manifest":{"properties":[{"assembly":"mscorlib","name":"zepetoId","type":"System.String","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[]}],"name":"NPCManager","description":"","hasAnimatorMove":false},"isCompiled":true}'
-  typescriptHash: b47e7e39777e8da705811469bd06d29e
+    ZEPETO_Character_Controller_1 = require(\"ZEPETO.Character.Controller\");\r\nconst
+    TypeManager_1 = require(\"../Managers/TypeManager\");\r\nclass NPCManager extends
+    ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    constructor() {\r\n        super(...arguments);\r\n       
+    /* Properties */\r\n        this.npcPosisions = [];\r\n        this.npcs = [];\r\n   
+    }\r\n    /* GameManager */\r\n    RemoteStart() {\r\n        this.SpanwNPC();\r\n   
+    }\r\n    /* Create NPC */\r\n    SpanwNPC() {\r\n        for (const pos of this.npcPosisions)
+    {\r\n            const spawnInfo = new ZEPETO_Character_Controller_1.SpawnInfo();\r\n           
+    spawnInfo.position = pos.position;\r\n            spawnInfo.rotation = pos.rotation;\r\n           
+    /* Create and Init NPC */\r\n            ZEPETO_Character_Controller_1.ZepetoCharacterCreator.CreateByZepetoId(TypeManager_1.Datas.kuaId,
+    spawnInfo, (character) => {\r\n                this.npcs.push(character);\r\n               
+    const animator = character.ZepetoAnimator;\r\n                animator.SetBool(TypeManager_1.Anim.isNPC,
+    true);\r\n            });\r\n        }\r\n    }\r\n}\r\nexports.default = NPCManager;\r\n//#
+    sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiTlBDTWFuYWdlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIk5QQ01hbmFnZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQSxpREFBc0Q7QUFDdEQsNkVBQWlHO0FBRWpHLHlEQUFzRDtBQUV0RCxNQUFxQixVQUFXLFNBQVEscUNBQXFCO0lBQTdEOztRQUVJLGdCQUFnQjtRQUNVLGlCQUFZLEdBQWdCLEVBQUUsQ0FBQztRQUNqRCxTQUFJLEdBQXNCLEVBQUUsQ0FBQztJQXNCekMsQ0FBQztJQXBCRyxpQkFBaUI7SUFDVixXQUFXO1FBQ2QsSUFBSSxDQUFDLFFBQVEsRUFBRSxDQUFDO0lBQ3BCLENBQUM7SUFFRCxnQkFBZ0I7SUFDUixRQUFRO1FBQ1osS0FBSSxNQUFNLEdBQUcsSUFBSSxJQUFJLENBQUMsWUFBWSxFQUFFO1lBQ2hDLE1BQU0sU0FBUyxHQUFHLElBQUksdUNBQVMsRUFBRSxDQUFDO1lBQ2xDLFNBQVMsQ0FBQyxRQUFRLEdBQUcsR0FBRyxDQUFDLFFBQVEsQ0FBQztZQUNsQyxTQUFTLENBQUMsUUFBUSxHQUFHLEdBQUcsQ0FBQyxRQUFRLENBQUM7WUFFbEMseUJBQXlCO1lBQ3pCLG9EQUFzQixDQUFDLGdCQUFnQixDQUFDLG1CQUFLLENBQUMsS0FBSyxFQUFFLFNBQVMsRUFBRSxDQUFDLFNBQTBCLEVBQUUsRUFBRTtnQkFDM0YsSUFBSSxDQUFDLElBQUksQ0FBQyxJQUFJLENBQUMsU0FBUyxDQUFDLENBQUM7Z0JBQzFCLE1BQU0sUUFBUSxHQUFHLFNBQVMsQ0FBQyxjQUFjLENBQUM7Z0JBQzFDLFFBQVEsQ0FBQyxPQUFPLENBQUMsa0JBQUksQ0FBQyxLQUFLLEVBQUUsSUFBSSxDQUFDLENBQUM7WUFDdkMsQ0FBQyxDQUFDLENBQUE7U0FDTDtJQUNMLENBQUM7Q0FDSjtBQTFCRCw2QkEwQkMifQ==","assetPath":"Assets/Zepeto
+    Multiplay Component/ZepetoScript/SamdasuScript/NPCManager.ts","manifest":{"properties":[{"assembly":"UnityEngine.CoreModule","name":"npcPosisions","type":"UnityEngine.Transform[]","isArray":true,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]}],"name":"NPCManager","description":"","hasAnimatorMove":false},"isCompiled":true}'
+  typescriptHash: c620697a9ba0bfa531a91a99f31145da
   onlyWriteTrigger: 0

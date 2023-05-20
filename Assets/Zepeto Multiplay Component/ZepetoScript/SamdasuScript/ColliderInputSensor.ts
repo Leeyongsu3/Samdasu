@@ -6,18 +6,18 @@ import LookAtTrigger from '../Sample Code/LookAtTrigger';
 export default class ColliderInputSensor extends ZepetoScriptBehaviour {
 
     /* Properties */
-    private _reviceObject: LookAtTrigger;
-    public get reviceObject(): LookAtTrigger {
-        return this._reviceObject;
+    private _receiveObject: LookAtTrigger;
+    public get receiveObject(): LookAtTrigger {
+        return this._receiveObject;
     }
-    public set reviceObject(value: LookAtTrigger) {
-        if(this._reviceObject) return;
-        this._reviceObject = value;
+    public set receiveObject(value: LookAtTrigger) {
+        if(this._receiveObject) return;
+        this._receiveObject = value;
     }
 
     OnTriggerEnter(collider : Collider) {
-        if(!this.reviceObject) return;
+        if(!this.receiveObject) return;
         if(!collider.gameObject.CompareTag(Datas.TeleportPoint)) return;
-        this.reviceObject.OnSensorTriggerEnter(collider);
+        this.receiveObject.OnSensorTriggerEnter(collider);
     }
 }

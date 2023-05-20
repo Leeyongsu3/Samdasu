@@ -71,7 +71,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8404601175953375299}
-  m_Mesh: {fileID: 2103982661663783442, guid: edb3627029311004688f371362587c74, type: 3}
+  m_Mesh: {fileID: 2103982661663783442, guid: 057c6ca325ff15b4fbef553a1073b72e, type: 3}
 --- !u!23 &8950745612527209782
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -91,7 +91,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8667ae861350eb84ab8948c897d3fa46, type: 2}
+  - {fileID: 2100000, guid: e524e48205f74fb439f942787c948370, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -148,6 +148,22 @@ PrefabInstance:
       propertyPath: script.unityValues.Array.data[0]
       value: 
       objectReference: {fileID: 6220923730538617508}
+    - target: {fileID: 3857616483679293209, guid: 178f0c1ffcc123641b736fd2547399bd, type: 3}
+      propertyPath: script.keys.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3857616483679293209, guid: 178f0c1ffcc123641b736fd2547399bd, type: 3}
+      propertyPath: script.values.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3857616483679293209, guid: 178f0c1ffcc123641b736fd2547399bd, type: 3}
+      propertyPath: script.keys.Array.data[0]
+      value: colliderInputSensor
+      objectReference: {fileID: 0}
+    - target: {fileID: 3857616483679293209, guid: 178f0c1ffcc123641b736fd2547399bd, type: 3}
+      propertyPath: script.unityValues.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3984588498615756970, guid: 178f0c1ffcc123641b736fd2547399bd, type: 3}
       propertyPath: m_Name
       value: Button

@@ -1,0 +1,52 @@
+fileFormatVersion: 2
+guid: fb7e246a6f3c56749b728d2b4cf79560
+importerOverride: ZEPETO.Script.Compiler:ZEPETO.Script:TypescriptAssetImporter
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: -1123457745, guid: 54cf806323ffe4418a4ce4cc63fe6b9d, type: 3}
+  isAssemblyDeclarations: 0
+  assembly: 
+  generateAllTypes: 1
+  types: []
+  generateWrapper: 0
+  overrideWrapperTypes: 0
+  wrapperTypes: []
+  WrapperFilters: []
+  wrapperOutputDirectory: Generated
+  compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
+    { value: true });\r\nconst __UnityEngine__ = require(\"UnityEngine\");\r\nconst
+    UnityEngine_1 = require(\"UnityEngine\");\r\nconst ZEPETO_Character_Controller_1
+    = require(\"ZEPETO.Character.Controller\");\r\nconst ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst
+    GameManager_1 = require(\"../Managers/GameManager\");\r\nclass ZoneTriggerController
+    extends ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    constructor() {\r\n       
+    super(...arguments);\r\n        this.isEffectPlay = false;\r\n    }\r\n    /*
+    GameManager */\r\n    RemoteStart() {\r\n        const first = this.transform.GetChild(0).gameObject;\r\n       
+    const second = this.transform.GetChild(1).gameObject;\r\n        const third
+    = this.transform.GetChild(2).gameObject;\r\n        this.particleSystemObjects
+    = [first, second, third];\r\n        for (const item of this.particleSystemObjects)
+    {\r\n            item.SetActive(false);\r\n        }\r\n    }\r\n    OnTriggerEnter(collider)
+    {\r\n        if (!ZEPETO_Character_Controller_1.ZepetoPlayers.instance.LocalPlayer)\r\n           
+    return;\r\n        const character = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.LocalPlayer.zepetoPlayer.character.gameObject;\r\n       
+    if (__UnityEngine__.Object.op_Equality(collider.gameObject, character)) {\r\n           
+    GameManager_1.default.instance.onTriggerFirework();\r\n        }\r\n    }\r\n   
+    /* GameManager */\r\n    PlayEffect() { this.StartCoroutine(this.OnPlayEffect());
+    }\r\n    *OnPlayEffect() {\r\n        if (this.isEffectPlay)\r\n            return;\r\n       
+    this.isEffectPlay = true;\r\n        if (!this.wait)\r\n            this.wait
+    = new UnityEngine_1.WaitForSeconds(0.3);\r\n        if (!this.wait3Sec)\r\n           
+    this.wait3Sec = new UnityEngine_1.WaitForSeconds(3);\r\n        /* Play Effects
+    */\r\n        for (const item of this.particleSystemObjects) {\r\n           
+    item.SetActive(true);\r\n            for (let i = 0; i < item.transform.childCount;
+    i++) {\r\n                const particle = item.transform.GetChild(i).GetComponent($typeof(UnityEngine_1.ParticleSystem));\r\n               
+    particle.Play();\r\n            }\r\n            yield this.wait;\r\n       
+    }\r\n        /* Stop Effects */\r\n        yield this.wait3Sec;\r\n        for
+    (const item of this.particleSystemObjects) {\r\n            item.SetActive(false);\r\n       
+    }\r\n        this.isEffectPlay = false;\r\n    }\r\n}\r\nexports.default = ZoneTriggerController;\r\n//#
+    sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiWm9uZVRyaWdnZXJDb250cm9sbGVyLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiWm9uZVRyaWdnZXJDb250cm9sbGVyLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7OztBQUFBLDZDQUFtRjtBQUNuRiw2RUFBNEQ7QUFDNUQsaURBQXFEO0FBQ3JELHlEQUFrRDtBQUVsRCxNQUFxQixxQkFBc0IsU0FBUSxxQ0FBcUI7SUFBeEU7O1FBSVksaUJBQVksR0FBWSxLQUFLLENBQUM7SUFrRDFDLENBQUM7SUE5Q0csaUJBQWlCO0lBQ1YsV0FBVztRQUNkLE1BQU0sS0FBSyxHQUFHLElBQUksQ0FBQyxTQUFTLENBQUMsUUFBUSxDQUFDLENBQUMsQ0FBQyxDQUFDLFVBQVUsQ0FBQztRQUNwRCxNQUFNLE1BQU0sR0FBRyxJQUFJLENBQUMsU0FBUyxDQUFDLFFBQVEsQ0FBQyxDQUFDLENBQUMsQ0FBQyxVQUFVLENBQUM7UUFDckQsTUFBTSxLQUFLLEdBQUcsSUFBSSxDQUFDLFNBQVMsQ0FBQyxRQUFRLENBQUMsQ0FBQyxDQUFDLENBQUMsVUFBVSxDQUFDO1FBQ3BELElBQUksQ0FBQyxxQkFBcUIsR0FBRyxDQUFDLEtBQUssRUFBRSxNQUFNLEVBQUUsS0FBSyxDQUFDLENBQUM7UUFDcEQsS0FBSSxNQUFNLElBQUksSUFBSSxJQUFJLENBQUMscUJBQXFCLEVBQUU7WUFDMUMsSUFBSSxDQUFDLFNBQVMsQ0FBQyxLQUFLLENBQUMsQ0FBQztTQUN6QjtJQUNMLENBQUM7SUFFRCxjQUFjLENBQUMsUUFBbUI7UUFDOUIsSUFBRyxDQUFDLDJDQUFhLENBQUMsUUFBUSxDQUFDLFdBQVc7WUFBRSxPQUFPO1FBRS9DLE1BQU0sU0FBUyxHQUFHLDJDQUFhLENBQUMsUUFBUSxDQUFDLFdBQVcsQ0FBQyxZQUFZLENBQUMsU0FBUyxDQUFDLFVBQVUsQ0FBQztRQUN2RiwyQkErQjA4UixXQUFZLENBL0JuOVIsUUFBUSxDQUFDLFVBQVUsRUFBSSxTQUFTLEdBQUU7WUFDakMscUJBQVcsQ0FBQyxRQUFRLENBQUMsaUJBQWlCLEVBQUUsQ0FBQztTQUM1QztJQUNMLENBQUM7SUFFRCxpQkFBaUI7SUFDVixVQUFVLEtBQUssSUFBSSxDQUFDLGNBQWMsQ0FBQyxJQUFJLENBQUMsWUFBWSxFQUFFLENBQUMsQ0FBQyxDQUFDLENBQUM7SUFDekQsQ0FBRSxZQUFZO1FBQ2xCLElBQUcsSUFBSSxDQUFDLFlBQVk7WUFBRSxPQUFPO1FBQzdCLElBQUksQ0FBQyxZQUFZLEdBQUcsSUFBSSxDQUFDO1FBRXpCLElBQUcsQ0FBQyxJQUFJLENBQUMsSUFBSTtZQUFFLElBQUksQ0FBQyxJQUFJLEdBQUcsSUFBSSw0QkFBYyxDQUFDLEdBQUcsQ0FBQyxDQUFDO1FBQ25ELElBQUcsQ0FBQyxJQUFJLENBQUMsUUFBUTtZQUFFLElBQUksQ0FBQyxRQUFRLEdBQUcsSUFBSSw0QkFBYyxDQUFDLENBQUMsQ0FBQyxDQUFDO1FBRXpELGtCQUFrQjtRQUNsQixLQUFJLE1BQU0sSUFBSSxJQUFJLElBQUksQ0FBQyxxQkFBcUIsRUFBRTtZQUMxQyxJQUFJLENBQUMsU0FBUyxDQUFDLElBQUksQ0FBQyxDQUFDO1lBQ3JCLEtBQUksSUFBSSxDQUFDLEdBQUMsQ0FBQyxFQUFFLENBQUMsR0FBQyxJQUFJLENBQUMsU0FBUyxDQUFDLFVBQVUsRUFBRSxDQUFDLEVBQUUsRUFBRTtnQkFDM0MsTUFBTSxRQUFRLEdBQUcsSUFBSSxDQUFDLFNBQVMsQ0FBQyxRQUFRLENBQUMsQ0FBQyxDQUFDLENBQUMsWUFBWSxTQUFDLDRCQUFjLEVBQUcsQ0FBQztnQkFDM0UsUUFBUSxDQUFDLElBQUksRUFBRSxDQUFDO2FBQ25CO1lBQ0QsTUFBTSxJQUFJLENBQUMsSUFBSSxDQUFDO1NBQ25CO1FBRUQsa0JBQWtCO1FBQ2xCLE1BQU0sSUFBSSxDQUFDLFFBQVEsQ0FBQztRQUNwQixLQUFJLE1BQU0sSUFBSSxJQUFJLElBQUksQ0FBQyxxQkFBcUIsRUFBRTtZQUMxQyxJQUFJLENBQUMsU0FBUyxDQUFDLEtBQUssQ0FBQyxDQUFDO1NBQ3pCO1FBQ0QsSUFBSSxDQUFDLFlBQVksR0FBRyxLQUFLLENBQUM7SUFDOUIsQ0FBQztDQUNKO0FBdERELHdDQXNEQyJ9","assetPath":"Assets/Zepeto
+    Multiplay Component/ZepetoScript/SamdasuScript/ZoneTriggerController.ts","manifest":{"properties":[],"name":"ZoneTriggerController","description":"","hasAnimatorMove":false},"isCompiled":true}'
+  typescriptHash: a4fa3874e159510343a988b5c277dfea
+  onlyWriteTrigger: 0

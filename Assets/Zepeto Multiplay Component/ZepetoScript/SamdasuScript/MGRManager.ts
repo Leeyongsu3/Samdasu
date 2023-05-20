@@ -72,9 +72,12 @@ export default class MGRManager extends ZepetoScriptBehaviour {
                 this.timer += Time.deltaTime;
 
             } else if(this.timer > this.playTime && this.currentSpeed <= this.minSpeed) {
+                /* Rotate Stop : Accel-- */
+                this.currentSpeed = Mathf.Lerp(this.currentSpeed, 0, Time.deltaTime);
+
                 /* State Change */
-                this.timer = 0;
-                this.isPlay = false;
+                GameManager.instance.MGRisPlay(false);
+                // this.isPlay = false;
             }
 
             /* Play Rotate */
@@ -91,11 +94,11 @@ export default class MGRManager extends ZepetoScriptBehaviour {
             
             /* State Change */
             if(this.timer > this.coolTime) {
-                this.timer = 0;
-                this.isPlay = true;
+                GameManager.instance.MGRisPlay(true);
+                // this.isPlay = true;
             }
         }
-        this.m_tfHelper.rotateSpeed = this.currentSpeed;
+        // this.m_tfHelper.rotateSpeed = this.currentSpeed;
     }
 
     /* Get Ride Horse Target */
@@ -120,6 +123,7 @@ export default class MGRManager extends ZepetoScriptBehaviour {
 
     /* On IsPlayState Change */
     private OnIsPlayChanged(newVal:boolean) {
+        this.timer = 0;
         this.buttonObject.SetActive(!newVal);
         
         /* Player Ride Off */

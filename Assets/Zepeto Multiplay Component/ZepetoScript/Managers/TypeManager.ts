@@ -3,6 +3,7 @@ import { Button, Image, Text } from 'UnityEngine.UI';
 import { ZepetoScriptBehaviour } from 'ZEPETO.Script'
 import OXController from '../SamdasuScript/OXController';
 
+
 export default class TypeManager {
 }
 //////////////////////////////////////////////// About Index Server
@@ -17,6 +18,7 @@ export enum MESSAGE {
     EquipChange = "EquipChange",
     Unequip = "Unequip",
     LOG = "Log",
+    Visible = "Visible",
 
     /** Samdasu **/
     Clear_Stamp = "Clear_Stamp",
@@ -28,6 +30,8 @@ export enum MESSAGE {
     Ride_MGR = "Ride_MGR",
     Ride_OFF = "Ride_OFF",
     // Samdasu_Drink = "Samdasu_Drink",
+    MGR_Play = "MGR_Play",
+    Play_Effect = "Play_Effect",
 }
 
 /* Server Connect Messages Room Datas Name */
@@ -50,6 +54,10 @@ export enum SendName {
     name = "name",
     isClear = "isClear",
     stamp = "stamp",
+    attach = "attach",
+    isPlay = "isPlay",
+    effectType = "effectType",
+    isVisible = "isVisible",
 }
 
 /* Player Speed Datas Name */
@@ -73,7 +81,7 @@ export enum SamdasuState {
     Ride_Horse = 10,
     Ride_Wheel = 20,
     Ride_MGR = 30,
-    Samdasu_Drink = 40,
+    Pick_Item = 40, Samdasu_Drink = 41,
     Swim = 50,
 }
 
@@ -84,10 +92,28 @@ export enum SamdasuState {
 /* Sprite World Button */
 export enum ButtonType {
     NONE = -1,
-    Trash = 20, Add_Horse = 21, Ride_Wheel = 22, Ride_MGR = 23, Samdasu_Pick = 24, Samdasu_Drink = 25,
-    NPC_Trader = 30, NPC_Creater = 31, NPC_B = 32, NPC_C = 33,
+    Trash = 20, Add_Horse = 21, Ride_Wheel = 22, Ride_MGR = 23, Samdasu_Pick = 24, Balloon_Pick = 27, 
+    NPC_Hanlabong = 30, NPC_Trash = 31, NPC_Render = 32, NPC_Cake = 33,
     Chair,
     EquipHead, EquipRightHand, EquipLeftHand, EquipBody,
+    Visible,//
+}
+
+/* Camera Mode Data */
+export enum CameraMode {
+    FPS, TPS,
+}
+
+/* Camera Mode Data */
+export enum EffectType {
+    NONE = -1,
+    Firework = 1,
+}
+
+/* Camera Mode Data */
+export enum HandType {
+    NONE = -1,
+    RightHand, LeftHand,
 }
 
 
@@ -101,6 +127,10 @@ export enum LoadingType {
     NONE = "",
 }
 
+export enum Language {
+    EN, KR
+}
+
 /** Samdasu **/
 /* Stickers Datas */
 export interface Sticker {
@@ -108,16 +138,20 @@ export interface Sticker {
     count:number;
 }
 export enum StickerType {
-    _01 = "01",
-    _02 = "02",
-    _03 = "03",
-    _04 = "04",
-    _05 = "05",
-    _06 = "06",
-    _07 = "07",
-    _08 = "08",
-    _09 = "09",
-    _10 = "10",
+    candle25 = "candle25",
+    flower_red = "flower_red",
+    mulbangul = "mulbangul",
+    backrockdam = "backrockdam",
+    airplane = "airplane",
+    samdasu = "samdasu",
+    songee = "songee",
+    flower_yellow = "flower_yellow",
+    horse = "horse",
+    congraturation = "congraturation",
+    halbang = "halbang",
+    hanrabong = "hanrabong",
+    haenyeo = "haenyeo",
+    volcano = "volcano",
 }
 export interface StickerUI {
     buy:CountUI;
@@ -159,12 +193,6 @@ export interface StampUI {
     stamp:Stamp;
 }
 
-/* Trashes Datas */
-export interface TrashCreater {
-    yesButton:GameObject;
-    count_text:Text;
-}
-
 
 
 //////////////////////////////////////////////// Samadasu Others
@@ -176,6 +204,24 @@ export interface ButtonInfo {
     countText:Text,
     countImage:Image,
     instances:GameObject[],
+}
+
+/* Render Instantiated Item */
+export interface RenderItemData {
+    gameObject:GameObject,
+    transform:Transform,
+    scale_suporter:number,
+    rot_suporter:number,
+}
+
+/* Samdasu Render Mode Type */
+export enum RenderPhotoMode {
+    Default, Edit_Mode, Result_Mode,
+}
+
+/* Samdasu Render Sticker Data */
+export enum RenderData {
+    z = 40.5,
 }
 
 /* OX Quiz Datas */
@@ -190,6 +236,7 @@ export interface HorseRider {
     horse:GameObject,
     horseAnimator:Animator,
     ownerAnimator:Animator,
+    startRiding:boolean,
 }
 
 /* Ride MGR Datas */
@@ -199,15 +246,24 @@ export interface MGRRide {
     id:number,
 }
 
-/* Samdasu Render Mode Type */
-export enum RenderPhotoMode {
-    Default, Edit_Mode, Result_Mode,
+/* LeaderBoard Datas */
+export enum RankData {
+    /* LeaderBoard Id */
+    ScoreId = "e08e19bf-e09b-4e8f-be09-4eb6116c5f8f",
+    TrashScoreId = "3adc3467-a9a1-4e03-a328-10c13cdf1ad5",
+    
+    /* Recycle Datas */
+    Rank_Start = 1,
+    Rank_End = 10,
+    Empty = "",
 }
 
-/* Samdasu King Orange Change State */
-export enum OrangeChangeState {
-    NONE =-1,
-    Level_1 = 0, Level_2 = 1, Level_3 = 2, Level_4 = 3, Level_5 = 4,
+export interface RankUI {
+    panel:GameObject,
+    rank:number,
+    text_Rank:Text,
+    text_Id:Text,
+    text_Score:Text,
 }
 
 
@@ -217,6 +273,12 @@ export enum OrangeChangeState {
 export enum Datas {
     // LeaderBoard Id 
     TrashScoreId = "9290993a-299c-462c-a907-3abbdb190d21",
+
+    // NPC Id
+    kuaId = "samdasoostory",
+
+    // Names
+    Balloon = "Balloon",
 
     // Transform Point
     SpawnPoint = "SpawnPoint",
@@ -253,7 +315,14 @@ export enum Anim {
     Acceleration = "Acceleration",
     MoveProgress = "MoveProgress",
     isSit = "isSit",
+    inHandLeft = "inHandLeft",
+    inHandRight = "inHandRight",
+    
+    // OX Quiz
     Active = "Active",
+
+    // NPC Animation
+    isNPC = "isNPC",
 }
 
 /* Chair Sit Datas */
@@ -282,5 +351,8 @@ export enum LAYER {
 export enum ERROR {
     NOT_ADDED_STIKERS = "NOT Added Stickers......",
     NOT_SELECTED_STICKERS = "NOT Selected...",
+    NOT_FOUND_ITEM = "NOT FOUND ITEM....",
     NOT_FOUND_HORSE = "NOT FOUND HORSE",
+    NOT_MATCHED_OBJECT = "NOT MATCHED OBJECT....",
+    ITS_FULL_PLAYERS = "IT'S FULL PLAYERS....",
 }

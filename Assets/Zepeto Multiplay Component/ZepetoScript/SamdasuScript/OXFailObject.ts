@@ -5,13 +5,11 @@ import OXManager from './OXManager';
 
 export default class OXFailObject extends ZepetoScriptBehaviour {
 
-    private manager: OXManager;
-
     OnTriggerEnter(collider : Collider) {
         const character = ZepetoPlayers.instance.LocalPlayer.zepetoPlayer.character.gameObject;
         if(collider.gameObject == character) {
-            if(!this.manager) this.manager = this.transform.parent.parent.parent.GetComponent<OXManager>();
-            this.manager.OnTouchedFailObject();
+            const manager = this.transform.parent.parent.parent.GetComponent<OXManager>();
+            manager.OnTouchedFailObject();
         }
     }
 

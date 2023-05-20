@@ -1,7 +1,8 @@
 import { Collider } from 'UnityEngine';
 import { ZepetoPlayers } from 'ZEPETO.Character.Controller';
 import { ZepetoScriptBehaviour } from 'ZEPETO.Script'
-import GameManager, { SamdasuState } from '../Managers/GameManager';
+import GameManager from '../Managers/GameManager';
+import { SamdasuState } from '../Managers/TypeManager';
 
 export default class SwimController extends ZepetoScriptBehaviour {
     
@@ -9,7 +10,7 @@ export default class SwimController extends ZepetoScriptBehaviour {
         if(!ZepetoPlayers.instance.LocalPlayer) return;
         const character = ZepetoPlayers.instance.LocalPlayer.zepetoPlayer.character.gameObject;
         if(collider.gameObject == character) {
-            GameManager.instance.Swim(true);
+            GameManager.instance.SetSamdasuState(SamdasuState.Swim, true);
         }
     }
     
@@ -17,7 +18,7 @@ export default class SwimController extends ZepetoScriptBehaviour {
         if(!ZepetoPlayers.instance.LocalPlayer) return;
         const character = ZepetoPlayers.instance.LocalPlayer.zepetoPlayer.character.gameObject;
         if(collider.gameObject == character) {
-            GameManager.instance.Swim(false);
+            GameManager.instance.SetSamdasuState(SamdasuState.Swim, false);
         }
     }
 

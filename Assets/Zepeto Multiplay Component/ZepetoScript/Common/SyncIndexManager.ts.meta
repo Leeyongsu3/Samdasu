@@ -19,13 +19,15 @@ ScriptedImporter:
   WrapperFilters: []
   wrapperOutputDirectory: Generated
   compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
-    { value: true });\r\nconst ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nclass
-    SyncIndexManager extends ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n}\r\nexports.default
-    = SyncIndexManager;\r\n/** This is used to give a unique ID to synchronization
-    objects that do not have a separate ID. */\r\nSyncIndexManager.SyncIndex = 0;\r\n/*
-    Samdasu */\r\nSyncIndexManager.Rank = 0;\r\nSyncIndexManager.Score = 0;\r\nSyncIndexManager.TrashCount
+    { value: true });\r\nconst ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst
+    TypeManager_1 = require(\"../Managers/TypeManager\");\r\nclass SyncIndexManager
+    extends ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n}\r\nexports.default = SyncIndexManager;\r\n/**
+    This is used to give a unique ID to synchronization objects that do not have
+    a separate ID. */\r\nSyncIndexManager.SyncIndex = 0;\r\nSyncIndexManager.SyncChairIndex
+    = 0;\r\nSyncIndexManager.language = TypeManager_1.Language.KR;\r\n/* Samdasu
+    */\r\nSyncIndexManager.Rank = 0;\r\nSyncIndexManager.Score = 0;\r\nSyncIndexManager.TrashCount
     = 0;\r\nSyncIndexManager.Carbin_Id = 0;\r\nSyncIndexManager.MGR_Id = 0;\r\nSyncIndexManager.STAMPS
-    = new Map();\r\nSyncIndexManager.STICKERS = new Map();\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiU3luY0luZGV4TWFuYWdlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIlN5bmNJbmRleE1hbmFnZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQSxpREFBcUQ7QUFHckQsTUFBcUIsZ0JBQWlCLFNBQVEscUNBQXFCOztBQUFuRSxtQ0FjQztBQWJHLGtHQUFrRztBQUNwRiwwQkFBUyxHQUFVLENBQUMsQ0FBQztBQUVuQyxhQUFhO0FBQ0MscUJBQUksR0FBVSxDQUFDLENBQUM7QUFDaEIsc0JBQUssR0FBVSxDQUFDLENBQUM7QUFDakIsMkJBQVUsR0FBVSxDQUFDLENBQUM7QUFFdEIsMEJBQVMsR0FBVSxDQUFDLENBQUM7QUFDckIsdUJBQU0sR0FBVSxDQUFDLENBQUM7QUFFbEIsdUJBQU0sR0FBc0IsSUFBSSxHQUFHLEVBQWlCLENBQUM7QUFDckQseUJBQVEsR0FBd0IsSUFBSSxHQUFHLEVBQW1CLENBQUMifQ==","assetPath":"Assets/Zepeto
+    = new Map();\r\nSyncIndexManager.STICKERS = new Map();\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiU3luY0luZGV4TWFuYWdlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIlN5bmNJbmRleE1hbmFnZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQSxpREFBcUQ7QUFDckQseURBQW1FO0FBRW5FLE1BQXFCLGdCQUFpQixTQUFRLHFDQUFxQjs7QUFBbkUsbUNBc0JDO0FBckJHLGtHQUFrRztBQUNwRiwwQkFBUyxHQUFVLENBQUMsQ0FBQztBQUNyQiwrQkFBYyxHQUFVLENBQUMsQ0FBQztBQUMxQix5QkFBUSxHQUFZLHNCQUFRLENBQUMsRUFBRSxDQUFDO0FBUTlDLGFBQWE7QUFDQyxxQkFBSSxHQUFVLENBQUMsQ0FBQztBQUNoQixzQkFBSyxHQUFVLENBQUMsQ0FBQztBQUNqQiwyQkFBVSxHQUFVLENBQUMsQ0FBQztBQUV0QiwwQkFBUyxHQUFVLENBQUMsQ0FBQztBQUNyQix1QkFBTSxHQUFVLENBQUMsQ0FBQztBQUVsQix1QkFBTSxHQUFzQixJQUFJLEdBQUcsRUFBaUIsQ0FBQztBQUNyRCx5QkFBUSxHQUF3QixJQUFJLEdBQUcsRUFBbUIsQ0FBQyJ9","assetPath":"Assets/Zepeto
     Multiplay Component/ZepetoScript/Common/SyncIndexManager.ts","manifest":{"properties":[],"name":"SyncIndexManager","description":"","hasAnimatorMove":false},"isCompiled":true}'
-  typescriptHash: e98243fd7f80bc7485425a8c94e806b3
+  typescriptHash: 15d31a4e23d566f5f3b61b4017f06077
   onlyWriteTrigger: 0
