@@ -8,9 +8,16 @@ export default class OXFailObject extends ZepetoScriptBehaviour {
     OnTriggerEnter(collider : Collider) {
         const character = ZepetoPlayers.instance.LocalPlayer.zepetoPlayer.character.gameObject;
         if(collider.gameObject == character) {
-            const manager = this.transform.parent.parent.parent.GetComponent<OXManager>();
+            const manager = this.GetManager();
             manager.OnTouchedFailObject();
         }
+    }
+
+    private GetManager() {
+        const managerObject = this.transform.parent.parent.parent;
+        let manager = managerObject.GetComponent<OXManager>();
+        if(manager) return manager; 
+        else return managerObject.parent.GetComponent<OXManager>();
     }
 
 }

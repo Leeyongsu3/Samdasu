@@ -43,6 +43,7 @@ export default class RenderCameraController extends ZepetoScriptBehaviour {
     
     private renderState: RenderPhotoMode = RenderPhotoMode.Default;
     private controller: GameObject;
+    private isFirst: boolean = false;
     private wait: YieldInstruction;
 
     /* GameManager */
@@ -341,6 +342,12 @@ export default class RenderCameraController extends ZepetoScriptBehaviour {
     /* Instantiate Sticker */
     private InstantiateSticker(item:GameObject, info:ButtonInfo) {
         if(!(info.count > 0)) return;
+
+        /* Wood of the Samdasu */
+        if(!this.isFirst) {
+            this.isFirst = true;
+            GameManager.instance.onCreateStickerObject();
+        }
 
         /* Instante Sticker Object */
         const editCanvas = this.editRenderCanvas.transform;

@@ -40,10 +40,10 @@ export default class FerrisWheelManager extends ZepetoScriptBehaviour {
 
         /* Ferris Wheel Body Rotate */
         if(!this.m_tfHelper.isOwner) return;
-        const x = (this.rotateSpeed * Time.deltaTime) % 360;
+        const z = (this.rotateSpeed * Time.deltaTime) % 360;
         this.transform.eulerAngles = new Vector3(
-            this.transform.rotation.eulerAngles.x + x,
+            this.transform.rotation.eulerAngles.x,
             this.transform.rotation.eulerAngles.y,
-            this.transform.rotation.eulerAngles.z);
+            this.transform.rotation.eulerAngles.z + z);
     }
 }

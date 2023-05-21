@@ -809,8 +809,6 @@ export default class UIManager extends ZepetoScriptBehaviour {
         for(let i=0; i<player_sticker.Count; i++) {
             for(const key of keys) {
                 if(key == player_sticker[i].name) {
-                    console.log(key);
-                    
                     this.stickerBuyPanel.GetChild(i).name = key;
                     this.stickerRenderPanel.GetChild(i).name = key;
                     this.stickerInventoryUI.GetChild(4).GetChild(i).name = key;

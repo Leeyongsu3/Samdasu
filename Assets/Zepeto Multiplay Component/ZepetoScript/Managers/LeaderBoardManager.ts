@@ -22,22 +22,17 @@ export default class LeaderBoardManager extends ZepetoScriptBehaviour {
 
     /* Init Rank Panel UI */
     private SetRankPanel(panel:Transform, index:number) {
-        const text_Rank = panel.GetChild(0).GetComponent<Text>();
         const text_Id = panel.GetChild(1).GetComponent<Text>();
         const text_Score = panel.GetChild(2).GetComponent<Text>();
-
+        
         /* Set Clear */
-        if(index > 0) {
-            text_Rank.text = index.toString();
-            text_Id.text = RankData.Empty;
-            text_Score.text = RankData.Empty;
-        }
+        text_Id.text = RankData.Empty;
+        text_Score.text = RankData.Empty;
         
         /* Pushed Array */
         const ui:RankUI = {
             panel:panel.gameObject,
             rank:index,
-            text_Rank:text_Rank,
             text_Id:text_Id,
             text_Score:text_Score,
         };
@@ -61,7 +56,7 @@ export default class LeaderBoardManager extends ZepetoScriptBehaviour {
     private GetSetRank() {
         LeaderboardAPI.GetRangeRank(RankData.ScoreId, RankData.Rank_Start, RankData.Rank_End, ResetRule.week, false, (result: GetRangeRankResponse) => {
             /* Text Clear */
-            for(let i=1; i<this.rankUIs.length; i++) {
+            for(let i=0; i<this.rankUIs.length; i++) {
                 const ui = this.rankUIs[i];
                 ui.text_Id.text = RankData.Empty;
                 ui.text_Score.text = RankData.Empty;
@@ -69,11 +64,12 @@ export default class LeaderBoardManager extends ZepetoScriptBehaviour {
 
             /* Update Rank Text */
             if (result.rankInfo.rankList) {
-                for (let i = 0; i < result.rankInfo.rankList.length; ++i) {
+                for (let i=0; i < result.rankInfo.rankList.length; i++) {
                     const data = result.rankInfo.rankList.get_Item(i);
-                    const ui = this.rankUIs[data.rank];
+                    const ui = this.rankUIs[data.rank-1];
                     ui.text_Id.text = data.name;
                     ui.text_Score.text = data.score.toString();
+                    console.log(ui.panel.name, data.name, data.score);
                 }
             }
         }, (error: string) => {

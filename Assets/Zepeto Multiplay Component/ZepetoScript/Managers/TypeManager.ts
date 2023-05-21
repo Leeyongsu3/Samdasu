@@ -249,7 +249,8 @@ export interface MGRRide {
 /* LeaderBoard Datas */
 export enum RankData {
     /* LeaderBoard Id */
-    ScoreId = "e08e19bf-e09b-4e8f-be09-4eb6116c5f8f",
+    // ScoreId = "e08e19bf-e09b-4e8f-be09-4eb6116c5f8f",
+    ScoreId = "9290993a-299c-462c-a907-3abbdb190d21",
     TrashScoreId = "3adc3467-a9a1-4e03-a328-10c13cdf1ad5",
     
     /* Recycle Datas */
@@ -261,7 +262,6 @@ export enum RankData {
 export interface RankUI {
     panel:GameObject,
     rank:number,
-    text_Rank:Text,
     text_Id:Text,
     text_Score:Text,
 }
