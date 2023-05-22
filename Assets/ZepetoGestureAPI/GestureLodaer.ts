@@ -33,7 +33,7 @@ export default class GestureLoader extends ZepetoScriptBehaviour {
             this.contents = contents;
             // console.log(`this.contents.Length ${this.contents.Length}`);
             for (let i = 0; i < this._count; i++) {
-                if(this.contents.length <= i) return;
+                if(this.contents.Length <= i) return;
                 if (!this.contents[i].IsDownloadedThumbnail) {
                     // Take a thumbnail photo using my character
                     this.contents[i].DownloadThumbnail(this._myCharacter,() =>{

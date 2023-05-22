@@ -487,7 +487,7 @@ export default class GameManager extends ZepetoScriptBehaviour {
 
     /* Samdasu Visible */
     public onCreateStickerObject() {
-        this.samdasuPetInWorld.transform.parent.gameObject.SetActive(true);
+        this.samdasuPetInWorld.transform.gameObject.SetActive(true);
     }
 
     /* Player Drink Samdasu */

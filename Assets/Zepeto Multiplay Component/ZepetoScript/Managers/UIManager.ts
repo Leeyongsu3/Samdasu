@@ -40,6 +40,7 @@ export default class UIManager extends ZepetoScriptBehaviour {
     @SerializeField() private trashCountText: Text;
     @SerializeField() private trashScoreText: Text;
     @SerializeField() private buttonPanel: Transform;
+    @SerializeField() private cameraChangeButton: Button;
     
     @Header("Stamps UIs")
     @SerializeField() private stampUI: Transform;
@@ -135,11 +136,13 @@ export default class UIManager extends ZepetoScriptBehaviour {
     public RemoteStart() {
         /* Init */
         let isFPS = false;
-        // this.cameraChangeButton.onClick.AddListener(() => {
-        //     if(isFPS) GameManager.instance.SetCameraTPS();
-        //     else GameManager.instance.SetCameraFPS();
-        //     isFPS = !isFPS;
-        // })
+        if(this.cameraChangeButton) {
+            this.cameraChangeButton.onClick.AddListener(() => {
+                if(isFPS) GameManager.instance.SetCameraTPS();
+                else GameManager.instance.SetCameraFPS();
+                isFPS = !isFPS;
+            })
+        }
 
         /* Samdasu */
         this.SetHelloUI();

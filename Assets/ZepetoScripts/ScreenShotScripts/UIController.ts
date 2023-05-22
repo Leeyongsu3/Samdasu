@@ -2,7 +2,6 @@ import { Canvas, GameObject, Screen, Rect, RectTransform, Resources, WaitForSeco
 import { Button, Image, Text, Toggle } from 'UnityEngine.UI'
 import { ZepetoScriptBehaviour } from 'ZEPETO.Script'
 import { OfficialContentType } from 'ZEPETO.World';
-import { LAYER, TOAST_MESSAGE } from '../../Zepeto Multiplay Component/ZepetoScript/Managers/TypeManager';
 import GestureLoader from '../../ZepetoGestureAPI/GestureLodaer';
 import GestureLodaer from '../../ZepetoGestureAPI/GestureLodaer';
 import Thumbnail from '../../ZepetoGestureAPI/Thumbnail';
@@ -71,6 +70,20 @@ export default class UIController extends ZepetoScriptBehaviour {
 
     /*Player Layer Setting*/
     private playerLayer: number = 0;
+
+    LAYER = {
+        everything: -1,
+        nothing: 0,
+        UI: 5,
+    };
+
+    // Data
+    TOAST_MESSAGE = {
+        feedUploading: "Uploading...",
+        feedCompleted: "Done",
+        feedFailed: "Failed",
+        screenShotSaveCompleted: "Saved!"
+    };
 
 
     Awake() {
@@ -193,7 +206,7 @@ export default class UIController extends ZepetoScriptBehaviour {
         // 1. Btn: Save Screenshot
         this.saveButton.onClick.AddListener(() => {
             this.screenShot.SaveScreenShot();
-            this.StartCoroutine(this.ShowToastMessage(TOAST_MESSAGE.screenShotSaveCompleted));
+            this.StartCoroutine(this.ShowToastMessage(this.TOAST_MESSAGE.screenShotSaveCompleted));
         });
 
         // 2. Btn: Share Screenshots
@@ -204,7 +217,7 @@ export default class UIController extends ZepetoScriptBehaviour {
         // 3. Btn: Upload Feed
         this.createFeedButton.onClick.AddListener(() => {
             this.screenShot.CreateFeedScreenShot();
-            this.StartCoroutine(this.ShowToastMessage(TOAST_MESSAGE.feedUploading));
+            this.StartCoroutine(this.ShowToastMessage(this.TOAST_MESSAGE.feedUploading));
         });
 
         // 4. Btn: Close the Screenshot Results Screen
@@ -270,10 +283,10 @@ export default class UIController extends ZepetoScriptBehaviour {
     public ShowCreateFeedResult(result: Boolean) {
         if (result) {
             this.createFeedButton.gameObject.SetActive(false);
-            this.StartCoroutine(this.ShowToastMessage(TOAST_MESSAGE.feedCompleted));
+            this.StartCoroutine(this.ShowToastMessage(this.TOAST_MESSAGE.feedCompleted));
         }
         else {
-            this.StartCoroutine(this.ShowToastMessage(TOAST_MESSAGE.feedFailed));
+            this.StartCoroutine(this.ShowToastMessage(this.TOAST_MESSAGE.feedFailed));
         }
     }
 
@@ -281,7 +294,7 @@ export default class UIController extends ZepetoScriptBehaviour {
     *ShowToastMessage(text: string) {
         yield this.waitForSecond;
         let toastMessage: GameObject = null;
-        if (text == TOAST_MESSAGE.feedFailed)
+        if (text == this.TOAST_MESSAGE.feedFailed)
             toastMessage = GameObject.Instantiate<GameObject>(this.toastErrorMessage);
         else
             toastMessage = GameObject.Instantiate<GameObject>(this.toastSuccessMessage);
@@ -297,13 +310,14 @@ export default class UIController extends ZepetoScriptBehaviour {
         if (active) {
             this.backgroundCanvas.gameObject.SetActive(!active);
             //Layer Settings to Everything
-            this.screenShotModeManager.GetSelfieCamera().cullingMask = LAYER.everything;
-            this.screenShotModeManager.GetZepetoCamera().cullingMask = LAYER.everything;
+            this.screenShotModeManager.GetSelfieCamera().cullingMask = this.LAYER.everything;
+            this.screenShotModeManager.GetZepetoCamera().cullingMask = this.LAYER.everything;
         } else {
             this.backgroundCanvas.gameObject.SetActive(!active);
             //Change the Layer setting to only include nothing, player, and UI Layers
-            this.screenShotModeManager.GetSelfieCamera().cullingMask = LAYER.nothing | 1 << this.playerLayer | 1 << LAYER.UI;
-            this.screenShotModeManager.GetZepetoCamera().cullingMask = LAYER.nothing | 1 << this.playerLayer | 1 << LAYER.UI;
+            this.screenShotModeManager.GetSelfieCamera().cullingMask = this.LAYER.nothing | 1 << this.playerLayer | 1 << this.LAYER.UI;
+            this.screenShotModeManager.GetZepetoCamera().cullingMask = this.LAYER.nothing | 1 << this.playerLayer | 1 << this.LAYER.UI;
         }
     }
 }
+

@@ -257,6 +257,7 @@ export enum RankData {
     Rank_Start = 1,
     Rank_End = 10,
     Empty = "",
+    Zero = "0",
 }
 
 export interface RankUI {

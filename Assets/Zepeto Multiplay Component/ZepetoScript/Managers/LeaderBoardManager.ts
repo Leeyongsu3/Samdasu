@@ -22,12 +22,12 @@ export default class LeaderBoardManager extends ZepetoScriptBehaviour {
 
     /* Init Rank Panel UI */
     private SetRankPanel(panel:Transform, index:number) {
-        const text_Id = panel.GetChild(1).GetComponent<Text>();
-        const text_Score = panel.GetChild(2).GetComponent<Text>();
+        const text_Id = panel.GetChild(0).GetComponent<Text>();
+        const text_Score = panel.GetChild(1).GetComponent<Text>();
         
         /* Set Clear */
         text_Id.text = RankData.Empty;
-        text_Score.text = RankData.Empty;
+        text_Score.text = RankData.Zero;
         
         /* Pushed Array */
         const ui:RankUI = {
