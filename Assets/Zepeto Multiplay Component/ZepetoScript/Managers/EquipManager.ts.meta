@@ -18,36 +18,57 @@ ScriptedImporter:
   wrapperTypes: []
   WrapperFilters: []
   wrapperOutputDirectory: Generated
-  compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
-    { value: true });\r\nconst UnityEngine_1 = require(\"UnityEngine\");\r\nconst
+  compiledResult: '{"source":"\"use strict\";\r\nvar __decorate = (this && this.__decorate)
+    || function (decorators, target, key, desc) {\r\n    var c = arguments.length,
+    r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target,
+    key) : desc, d;\r\n    if (typeof Reflect === \"object\" && typeof Reflect.decorate
+    === \"function\") r = Reflect.decorate(decorators, target, key, desc);\r\n   
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i])
+    r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;\r\n   
+    return c > 3 && r && Object.defineProperty(target, key, r), r;\r\n};\r\nObject.defineProperty(exports,
+    \"__esModule\", { value: true });\r\nconst UnityEngine_1 = require(\"UnityEngine\");\r\nconst
     ZEPETO_Character_Controller_1 = require(\"ZEPETO.Character.Controller\");\r\nconst
     ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst ZEPETO_World_1 = require(\"ZEPETO.World\");\r\nconst
     SyncIndexManager_1 = require(\"../Common/SyncIndexManager\");\r\nconst GameManager_1
-    = require(\"./GameManager\");\r\nconst TypeManager_1 = require(\"./TypeManager\");\r\nclass
-    EquipManager extends ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    constructor()
-    {\r\n        super(...arguments);\r\n        this.balloons = [];\r\n    }\r\n   
-    Start() {\r\n        if (!this.multiplay)\r\n            this.multiplay = UnityEngine_1.GameObject.FindObjectOfType($typeof(ZEPETO_World_1.ZepetoWorldMultiplay));\r\n       
+    = require(\"./GameManager\");\r\nconst TypeManager_1 = require(\"./TypeManager\");\r\nconst
+    UIManager_1 = require(\"./UIManager\");\r\nclass EquipManager extends ZEPETO_Script_1.ZepetoScriptBehaviour
+    {\r\n    constructor() {\r\n        super(...arguments);\r\n        this.balloons
+    = [];\r\n    }\r\n    static get instance() {\r\n        if (this._instance ===
+    null) {\r\n            this._instance = UnityEngine_1.GameObject.FindObjectOfType($typeof(EquipManager));\r\n           
+    if (this._instance === null) {\r\n                this._instance = new UnityEngine_1.GameObject(EquipManager.name).AddComponent($typeof(EquipManager));\r\n           
+    }\r\n        }\r\n        return this._instance;\r\n    }\r\n    get balloonsCount()
+    { return this.balloons.length; }\r\n    GetBalloonsName(index) { return this.balloons[index].name;
+    }\r\n    /* Singleton */\r\n    Awake() {\r\n        if (EquipManager._instance
+    !== null && EquipManager._instance !== this) {\r\n            UnityEngine_1.GameObject.Destroy(this.gameObject);\r\n       
+    }\r\n        else {\r\n            EquipManager._instance = this;\r\n           
+    UnityEngine_1.GameObject.DontDestroyOnLoad(this.gameObject);\r\n        }\r\n   
+    }\r\n    Start() {\r\n        if (!this.multiplay)\r\n            this.multiplay
+    = UnityEngine_1.GameObject.FindObjectOfType($typeof(ZEPETO_World_1.ZepetoWorldMultiplay));\r\n       
     this.multiplay.add_RoomJoined((room) => {\r\n            this.room = room;\r\n           
     this.room.AddMessageHandler(TypeManager_1.MESSAGE.Equip, (equipData) => {\r\n               
     switch (equipData.itemName) {\r\n                    case this.samdasuPet.name:\r\n                       
     this.EquipSamdasu(equipData);\r\n                        break;\r\n                   
     case this.cake.name:\r\n                        this.EquipCake(equipData);\r\n                       
-    break;\r\n                    case TypeManager_1.Datas.Balloon:\r\n                       
-    this.EquipBalloon(equipData);\r\n                        // this.EquipItem(equipData);\r\n                       
-    break;\r\n                }\r\n            });\r\n            this.room.AddMessageHandler(TypeManager_1.MESSAGE.EquipChange,
+    break;\r\n                    case TypeManager_1.Datas.Balloon:\r\n                   
+    case TypeManager_1.Datas.Balloon_A:\r\n                    case TypeManager_1.Datas.Balloon_B:\r\n                   
+    case TypeManager_1.Datas.Balloon_C:\r\n                        this.EquipBalloon(equipData);\r\n                       
+    // this.EquipItem(equipData);\r\n                        break;\r\n               
+    }\r\n            });\r\n            this.room.AddMessageHandler(TypeManager_1.MESSAGE.EquipChange,
     (equipData) => {\r\n                if (!equipData.prevItemName)\r\n                   
     return;\r\n                /* Equip */\r\n                switch (equipData.itemName)
     {\r\n                    case this.samdasuPet.name:\r\n                       
     this.EquipSamdasu(equipData);\r\n                        break;\r\n                   
     case this.cake.name:\r\n                        this.EquipCake(equipData);\r\n                       
-    break;\r\n                    case TypeManager_1.Datas.Balloon:\r\n                       
-    this.UnEquipItem(equipData);\r\n                        this.EquipBalloon(equipData);\r\n                       
-    // this.EquipItem(equipData);\r\n                        break;\r\n               
-    }\r\n            });\r\n            this.room.AddMessageHandler(TypeManager_1.MESSAGE.Unequip,
+    break;\r\n                    case TypeManager_1.Datas.Balloon:\r\n                   
+    case TypeManager_1.Datas.Balloon_A:\r\n                    case TypeManager_1.Datas.Balloon_B:\r\n                   
+    case TypeManager_1.Datas.Balloon_C:\r\n                        this.UnEquipItem(equipData);\r\n                       
+    this.EquipBalloon(equipData);\r\n                        // this.EquipItem(equipData);\r\n                       
+    break;\r\n                }\r\n            });\r\n            this.room.AddMessageHandler(TypeManager_1.MESSAGE.Unequip,
     (equipData) => {\r\n                if (!equipData.prevItemName)\r\n                   
     return;\r\n                this.UnEquipItem(equipData);\r\n            });\r\n       
-    });\r\n    }\r\n    /* Up Equip Item */\r\n    UnEquipItem(equipData) {\r\n       
-    if (equipData.prevItemName == this.cake.name)\r\n            return;\r\n       
+    });\r\n        this.cake.name = TypeManager_1.Datas.Cake;\r\n        this.samdasuPet.name
+    = TypeManager_1.Datas.Samdasu;\r\n    }\r\n    /* Up Equip Item */\r\n    UnEquipItem(equipData)
+    {\r\n        // if(equipData.prevItemName == this.cake.name) return;\r\n       
     const anim = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.GetPlayer(equipData.sessionId).character.ZepetoAnimator;\r\n       
     const prevBone = anim.GetBoneTransform(equipData.prevBone);\r\n        const
     prevName = equipData.prevItemName;\r\n        console.log(` UnEquipItem 2 ${prevName}`);\r\n       
@@ -57,10 +78,12 @@ ScriptedImporter:
     SyncIndexManager_1.default.SamdasuPetInHand = false;\r\n                       
     break;\r\n                    case this.cake.name:\r\n                       
     SyncIndexManager_1.default.CakeInHead = false;\r\n                        break;\r\n                   
-    case TypeManager_1.Datas.Balloon:\r\n                        SyncIndexManager_1.default.BalloonInHand
-    = false;\r\n                        break;\r\n                }\r\n           
-    }\r\n        }\r\n    }\r\n    // /* Equip Item */\r\n    // private EquipItem(equipData:EquipData)
-    {\r\n    //     const anim:Animator = ZepetoPlayers.instance.GetPlayer(equipData.sessionId).character.ZepetoAnimator;\r\n   
+    case TypeManager_1.Datas.Balloon:\r\n                    case TypeManager_1.Datas.Balloon_A:\r\n                   
+    case TypeManager_1.Datas.Balloon_B:\r\n                    case TypeManager_1.Datas.Balloon_C:\r\n                       
+    SyncIndexManager_1.default.BalloonInHand = false;\r\n                       
+    break;\r\n                }\r\n            }\r\n        }\r\n    }\r\n    //
+    /* Equip Item */\r\n    // private EquipItem(equipData:EquipData) {\r\n    //    
+    const anim:Animator = ZepetoPlayers.instance.GetPlayer(equipData.sessionId).character.ZepetoAnimator;\r\n   
     //     const bone = anim.GetBoneTransform(equipData.bone);\r\n    //     const
     prefab = Resources.Load<GameObject>(equipData.itemName);\r\n    //     const
     equip = GameObject.Instantiate(prefab, bone) as GameObject;\r\n    //     equip.name
@@ -70,20 +93,30 @@ ScriptedImporter:
     const bone = anim.GetBoneTransform(equipData.bone);\r\n        const equip =
     UnityEngine_1.GameObject.Instantiate(this.samdasuPet, bone);\r\n        equip.name
     = equipData.itemName;\r\n        SyncIndexManager_1.default.SamdasuPetInHand
-    = true;\r\n        /* Animation */\r\n        GameManager_1.default.instance.onPlayerDrink();\r\n   
-    }\r\n    /* Player Equip Balloon */\r\n    EquipBalloon(equipData) {\r\n       
-    const index = UnityEngine_1.Mathf.Floor(UnityEngine_1.Random.Range(0, this.balloons.length));\r\n       
-    const balloon = this.balloons[index];\r\n        const anim = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.GetPlayer(equipData.sessionId).character.ZepetoAnimator;\r\n       
-    const bone = anim.GetBoneTransform(equipData.bone);\r\n        const equip =
-    UnityEngine_1.GameObject.Instantiate(balloon, bone);\r\n        equip.name =
-    equipData.itemName;\r\n        SyncIndexManager_1.default.BalloonInHand = true;\r\n   
-    }\r\n    /* Player Equip 25 Cake */\r\n    EquipCake(equipData) {\r\n       
-    const anim = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.GetPlayer(equipData.sessionId).character.ZepetoAnimator;\r\n       
+    = true;\r\n        /* Animation */\r\n        GameManager_1.default.instance.onPlayerDrink();\r\n       
+    /* Button Visible */\r\n        if (this.room.SessionId == equipData.sessionId)\r\n           
+    UIManager_1.default.instance.UnequipButtonVisibler(TypeManager_1.UnequipButtonType.RightHand,
+    true);\r\n    }\r\n    /* Player Equip Balloon */\r\n    EquipBalloon(equipData)
+    {\r\n        for (const balloon of this.balloons) {\r\n            if (balloon.name
+    == equipData.itemName) {\r\n                const anim = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.GetPlayer(equipData.sessionId).character.ZepetoAnimator;\r\n               
+    const bone = anim.GetBoneTransform(equipData.bone);\r\n                const
+    equip = UnityEngine_1.GameObject.Instantiate(balloon, bone);\r\n               
+    equip.name = equipData.itemName;\r\n                SyncIndexManager_1.default.BalloonInHand
+    = true;\r\n                /* Button Visible */\r\n                if (this.room.SessionId
+    == equipData.sessionId)\r\n                    UIManager_1.default.instance.UnequipButtonVisibler(TypeManager_1.UnequipButtonType.LeftHand,
+    true);\r\n                break;\r\n            }\r\n        }\r\n    }\r\n   
+    /* Player Equip 25 Cake */\r\n    EquipCake(equipData) {\r\n        const anim
+    = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.GetPlayer(equipData.sessionId).character.ZepetoAnimator;\r\n       
     const bone = anim.GetBoneTransform(equipData.bone);\r\n        const equip =
     UnityEngine_1.GameObject.Instantiate(this.cake, bone);\r\n        equip.name
-    = equipData.itemName;\r\n        SyncIndexManager_1.default.CakeInHead = true;\r\n   
-    }\r\n}\r\nexports.default = EquipManager;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiRXF1aXBNYW5hZ2VyLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiRXF1aXBNYW5hZ2VyLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7O0FBQUEsNkNBQXdHO0FBRXhHLDZFQUE0RDtBQUc1RCxpREFBcUQ7QUFDckQsK0NBQW9EO0FBQ3BELGlFQUEwRDtBQUMxRCwrQ0FBd0M7QUFDeEMsK0NBQStDO0FBRS9DLE1BQXFCLFlBQWEsU0FBUSxxQ0FBcUI7SUFBL0Q7O1FBUThCLGFBQVEsR0FBaUIsRUFBRSxDQUFDO0lBdUgxRCxDQUFDO0lBcEhHLEtBQUs7UUFDRCxJQUFHLENBQUMsSUFBSSxDQUFDLFNBQVM7WUFDZCxJQUFJLENBQUMsU0FBUyxHQUFHLHdCQUFVLENBQUMsZ0JBQWdCLFNBQUMsbUNBQW9CLEVBQUcsQ0FBQztRQUV6RSxJQUFJLENBQUMsU0FBUyxnQkFBZSxDQUFDLElBQVUsRUFBRSxFQUFFO1lBQ3hDLElBQUksQ0FBQyxJQUFJLEdBQUcsSUFBSSxDQUFDO1lBQ2pCLElBQUksQ0FBQyxJQUFJLENBQUMsaUJBQWlCLENBQUMscUJBQU8sQ0FBQyxLQUFLLEVBQUUsQ0FBQyxTQUFtQixFQUFFLEVBQUU7Z0JBQy9ELFFBQU8sU0FBUyxDQUFDLFFBQVEsRUFBRTtvQkFDdkIsS0FBSyxJQUFJLENBQUMsVUFBVSxDQUFDLElBQUk7d0JBQ3JCLElBQUksQ0FBQyxZQUFZLENBQUMsU0FBUyxDQUFDLENBQUM7d0JBQzdCLE1BQU07b0JBQ1YsS0FBSyxJQUFJLENBQUMsSUFBSSxDQUFDLElBQUk7d0JBQ2YsSUFBSSxDQUFDLFNBQVMsQ0FBQyxTQUFTLENBQUMsQ0FBQzt3QkFDMUIsTUFBTTtvQkFDVixLQUFLLG1CQUFLLENBQUMsT0FBTzt3QkFDZCxJQUFJLENBQUMsWUFBWSxDQUFDLFNBQVMsQ0FBQyxDQUFDO3dCQUM3Qiw2QkFBNkI7d0JBQzdCLE1BQU07aUJBQ2I7WUFDTCxDQUFDLENBQUMsQ0FBQztZQUVILElBQUksQ0FBQyxJQUFJLENBQUMs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","assetPath":"Assets/Zepeto
+    = equipData.itemName;\r\n        SyncIndexManager_1.default.CakeInHead = true;\r\n       
+    /* Button Visible */\r\n        // if(this.room.SessionId == equipData.sessionId)
+    UIManager.instance.UnequipButtonVisibler(UnequipButtonType.Head, true);\r\n   
+    }\r\n}\r\n/* Singleton */\r\nEquipManager._instance = null;\r\n__decorate([],
+    EquipManager.prototype, \"cake\", void 0);\r\n__decorate([], EquipManager.prototype,
+    \"balloons\", void 0);\r\n__decorate([], EquipManager.prototype, \"samdasuPet\",
+    void 0);\r\nexports.default = EquipManager;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiRXF1aXBNYW5hZ2VyLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiRXF1aXBNYW5hZ2VyLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7O0FBQUEsNkNBQXdHO0FBRXhHLDZFQUE0RDtBQUc1RCxpREFBcUQ7QUFDckQsK0NBQW9EO0FBQ3BELGlFQUEwRDtBQUMxRCwrQ0FBd0M7QUFDeEMsK0NBQWtFO0FBQ2xFLDJDQUFvQztBQUVwQyxNQUFxQixZQUFhLFNBQVEscUNBQXFCO0lBQS9EOztRQW9COEIsYUFBUSxHQUFpQixFQUFFLENBQUM7SUF5SjFELENBQUM7SUF6S1UsTUFBTSxLQUFLLFFBQVE7UUFDdEIsSUFBSSxJQUFJLENBQUMsU0FBUyxLQUFLLElBQUksRUFBRTtZQUN6QixJQUFJLENBQUMsU0FBUyxHQUFHLHdCQUFVLENBQUMsZ0JBQWdCLFNBQUMsWUFBWSxFQUFHLENBQUM7WUFDN0QsSUFBSSxJQUFJLENBQUMsU0FBUyxLQUFLLElBQUksRUFBRTtnQkFDekIsSUFBSSxDQUFDLFNBQVMsR0FBRyxJQUFJLHdCQUFVLENBQUMsWUFBWSxDQUFDLElBQUksQ0FBQyxDQUFDLFlBQVksU0FBQyxZQUFZLEVBQUcsQ0FBQzthQUNuRjtTQUNKO1FBQ0QsT0FBTyxJQUFJLENBQUMsU0FBUyxDQUFDO0lBQzFCLENBQUM7SUFVRCxJQUFXLGFBQWEsS0FBYSxPQUFPLElBQUksQ0FBQyxRQUFRLENBQUMsTUFBTSxDQUFDLENBQUMsQ0FBQztJQUM1RCxlQUFlLENBQUMsS0FBWSxJQUFZLE9BQU8sSUFBSSxDQUFDLFFBQVEsQ0FBQyxLQUFLLENBQUMsQ0FBQyxJQUFJLENBQUMsQ0FBQyxDQUFDO0lBRWxGLGVBQWU7SUFDUCxLQUFLO1FBQ1QsSUFBSSxZQUFZLENBQUMsU0FBUyxLQUFLLElBQUksSUFBSSxZQUFZLENBQUMsU0FBUyxLQUFLLElBQUksRUFBRTtZQUNwRSx3QkFBVSxDQUFDLE9BQU8sQ0FBQyxJQUFJLENBQUMsVUFBVSxDQUFDLENBQUM7U0FDdkM7YUFBTTtZQUNILFlBQVksQ0FBQyxTQUFTLEdBQUcsSUFBSSxDQUFDO1lBQzlCLHdCQUFVLENBQUMsaUJBQWlCLENBQUMsSUFBSSxDQUFDLFVBQVUsQ0FBQyxDQUFDO1NBQ2pEO0lBQ0wsQ0FBQztJQUVELEtBQUs7UUFDRCxJQUFHLENBQUMsSUFBSSxDQUFDLFNBQVM7WUFDZCxJQUFJLENBQUMsU0FBUyxHQUFHLHdCQUFVLENBQUMsZ0JBQWdCLFNBQUMsbUNBQW9CLEVBQUcsQ0FBQztRQUV6RSxJQUFJLENBQUMsU0FBUyxnQkFBZSxDQUFDLElBQVUsRUFBRSxFQUFFO1lBQ3hDLElBQUksQ0FBQyxJQUFJLEdBQUcsSUFBSSxDQUFDO1lBQ2pCLElBQUksQ0FBQyxJQUFJLENBQUMsaUJBQWlCLENBQUMscUJBQU8sQ0FBQyxLQUFLLEVBQUUsQ0FBQyxTQUFtQixFQUFFLEVBQUU7Z0JBQy9ELFFBQU8sU0FBUyxDQUFDLFFBQVEsRUFBRTtvQkFDdkIsS0FBSyxJQUFJLENBQUMsVUFBVSxDQUFDLElBQUk7d0JBQ3JCLElBQUksQ0FBQyxZQUFZLENBQUMsU0FBUyxDQUFDLENBQUM7d0JBQzdCLE1BQU07b0JBQ1YsS0FBSyxJQUFJLENBQUMsSUFBSSxDQUFDLElBQUk7d0JBQ2YsSUFBSSxDQUFDLFNBQVMsQ0FBQyxTQUFTLENBQUMsQ0FBQzt3QkFDMUIsTUFBTTtvQkFDVixLQUFLLG1CQUFLLENBQUMsT0FBTyxDQUFFO29CQUNwQixLQUFLLG1CQUFLLENBQUMsU0FBUyxDQUFFO29CQUN0QixLQUFLLG1CQUFLLENBQUMsU0FBUyxDQUFFO29CQUN0QixLQUFLLG1CQUFLLENBQUMsU0FBUzt3QkFDaEIsSUFBSSxDQUFDLFlBQVksQ0FBQyxTQUFTLENBQUMsQ0FBQzt3QkFDN0IsNkJBQTZCO3dCQUM3QixNQUFNO2lCQUNiO1lBQ0wsQ0FBQyxDQUFDLENBQUM7WUFFSCxJQUFJLENBQUMsSUFBSSxDQUFDLGlCQUFpQixDQUFDLHFCQUFPLENBQUMsV0FBVyxFQUFFLENBQUMsU0FBbUIsRUFBRSxFQUFFO2dCQUNyRSxJQUFHLENBQUMsU0FBUyxDQUFDLFlBQVk7b0JBQUUsT0FBTztnQkFFbkMsV0FBVztnQkFDWCxRQUFPLFNBQVMsQ0FBQyxRQUFRLEVBQUU7b0JBQ3ZCLEtBQUssSUFBSSxDQUFDLFVBQVUsQ0FBQyxJQUFJO3dCQUNyQixJQUFJLENBQUMsWUFBWSxDQUFDLFNBQVMsQ0FBQyxDQUFDO3dCQUM3QixNQUFNO29CQUNWLEtBQUssSUFBSSxDQUFDLElBQUksQ0FBQyxJQUFJO3dCQUNmLElBQUksQ0FBQyxTQUFTLENBQUMsU0FBUyxDQUFDLENBQUM7d0JBQzFCLE1BQU07b0JBQ1YsS0FBSyxtQkFBSyxDQUFDLE9BQU8sQ0FBRTtvQkFDcEIsS0FBSyxtQkFBSyxDQUFDLFNBQVMsQ0FBRTtvQkFDdEIsS0FBSyxtQkFBSyxDQUFDLFNBQVMsQ0FBRTtvQkFDdEIsS0FBSyxtQkFBSyxDQUFDLFNBQVM7d0JBQ2hCLElBQUksQ0FBQyxXQUFXLENBQUMsU0FBUyxDQUFDLENBQUM7d0JBQzVCLElBQUksQ0FBQyxZQUFZLENBQUMsU0FBUyxDQUFDLENBQUM7d0JBQzdCLDZCQUE2Qjt3QkFDN0IsTUFBTTtpQkFDYjtZQUNMLENBQUMsQ0FBQyxDQUFDO1lBRUgsSUFBSSxDQUFDLElBQUksQ0FBQyxpQkFBaUIsQ0FBQyxxQkFBTyxDQUFDLE9BQU8sRUFBRSxDQUFDLFNBQW1CLEVBQUUsRUFBRTtnQkFDakUsSUFBRyxDQUFDLFNBQVMsQ0FBQyxZQUFZO29CQUFFLE9BQU87Z0JBQ25DLElBQUksQ0FBQyxXQUFXLENBQUMsU0FBUyxDQUFDLENBQUM7WUFDaEMsQ0FBQyxDQUFDLENBQUM7UUFDUCxDQUFDLEVBQUE7UUFDRCxJQUFJLENBQUMsSUFBSSxDQUFDLElBQUksR0FBRyxtQkFBSyxDQUFDLElBQUksQ0FBQztRQUM1QixJQUFJLENBQUMsVUFBVSxDQUFDLElBQUksR0FBRyxtQkFBSyxDQUFDLE9BQU8sQ0FBQztJQUN6QyxDQUFDO0lBRUQsbUJBQW1CO0lBQ1gsV0FBVyxDQUFDLFNBQW1CO1FBQ25DLHVEQUF1RDtRQUN2RCxNQUFNLElBQUksR0FBWSwyQ0FBYSxDQUFDLFFBQVEsQ0FBQyxTQUFTLENBQUMsU0FBUyxDQUFDLFNBQVMsQ0FBQyxDQUFDLFNBQVMsQ0FBQyxjQUFjLENBQUM7UUFDckcsTUFBTSxRQUFRLEdBQUcsSUFBSSxDQUFDLGdCQUFnQixDQUFDLFNBQVMsQ0FBQyxRQUFRLENBQUMsQ0FBQztRQUMzRCxNQUFNLFFBQVEsR0FBRyxTQUFTLENBQUMsWUFBWSxDQUFDO1FBQ3hDLE9BQU8sQ0FBQyxHQUFHLENBQUMsa0JBQWtCLFFBQVEsRUFBRSxDQUFDLENBQUM7UUFDMUMsS0FBSSxNQUFNLEtBQUssSUFBSSxRQUFRLENBQUMsdUJBQXVCLFNBQUMsdUJBQVMsSUFBSztZQUM5RCxJQUFHLEtBQUssQ0FBQyxJQUFJLElBQUksUUFBUSxFQUFFO2dCQUN2Qix3QkFBVSxDQUFDLE9BQU8sQ0FBQyxLQUFLLENBQUMsVUFBVSxDQUFDLENBQUM7Z0JBR3JDLFFBQU8sU0FBUyxDQUFDLFFBQVEsRUFBRTtvQkFDdkIsS0FBSyxJQUFJLENBQUMsVUFBVSxDQUFDLElBQUk7d0JBQ3JCLDBCQUFnQixDQUFDLGdCQUFnQixHQUFHLEtBQUssQ0FBQzt3QkFDMUMsTUFBTTtvQkFDVixLQUFLLElBQUksQ0FBQyxJQUFJLENBQUMsSUFBSTt3QkFDZiwwQkFBZ0IsQ0FBQyxVQUFVLEdBQUcsS0FBSyxDQUFDO3dCQUNwQyxNQUFNO29CQUNWLEtBQUssbUJBQUssQ0FBQyxPQUFPLENBQUU7b0JBQ3BCLEtBQUssbUJBQUssQ0FBQyxTQUFTLENBQUU7b0JBQ3RCLEtBQUssbUJBQUssQ0FBQyxTQUFTLENBQUU7b0JBQ3RCLEtBQUssbUJBQUssQ0FBQyxTQUFTO3dCQUNoQiwwQkFBZ0IsQ0FBQyxhQUFhLEdBQUcsS0FBSyxDQUFDO3dCQUN2QyxNQUFNO2lCQUNiO2FBQ0o7U0FDSjtJQUNMLENBQUM7SUFFRCxtQkFBbUI7SUFDbkIsMkNBQTJDO0lBQzNDLDRHQUE0RztJQUM1RywwREFBMEQ7SUFDMUQscUVBQXFFO0lBQ3JFLHdFQUF3RTtJQUN4RSx5RUFBeUU7SUFDekUsSUFBSTtJQUVKLGVBQWU7SUFDZiwwQkFBMEI7SUFDbEIsWUFBWSxDQUFDLFNBQW1CO1FBQ3BDLE1BQU0sSUFBSSxHQUFZLDJDQUFhLENBQUMsUUFBUSxDQUFDLFNBQVMsQ0FBQyxTQUFTLENBQUMsU0FBUyxDQUFDLENBQUMsU0FBUyxDQUFDLGNBQWMsQ0FBQztRQUNyRyxNQUFNLElBQUksR0FBRyxJQUFJLENBQUMsZ0JBQWdCLENBQUMsU0FBUyxDQUFDLElBQUksQ0FBQyxDQUFDO1FBQ25ELE1BQU0sS0FBSyxHQUFHLHdCQUFVLENBQUMsV0FBVyxDQUFDLElBQUksQ0FBQyxVQUFVLEVBQUUsSUFBSSxDQUFlLENBQUM7UUFDMUUsS0FBSyxDQUFDLElBQUksR0FBRyxTQUFTLENBQUMsUUFBUSxDQUFDO1FBQ2hDLDBCQUFnQixDQUFDLGdCQUFnQixHQUFHLElBQUksQ0FBQztRQUV6QyxlQUFlO1FBQ2YscUJBQVcsQ0FBQyxRQUFRLENBQUMsYUFBYSxFQUFFLENBQUM7UUFFckMsb0JBQW9CO1FBQ3BCLElBQUcsSUFBSSxDQUFDLElBQUksQ0FBQyxTQUFTLElBQUksU0FBUyxDQUFDLFNBQVM7WUFBRSxtQkFBUyxDQUFDLFFBQVEsQ0FBQyxxQkFBcUIsQ0FBQywrQkFBaUIsQ0FBQyxTQUFTLEVBQUUsSUFBSSxDQUFDLENBQUM7SUFDL0gsQ0FBQztJQUVELDBCQUEwQjtJQUNsQixZQUFZLENBQUMsU0FBbUI7UUFDcEMsS0FBSSxNQUFNLE9BQU8sSUFBSSxJQUFJLENBQUMsUUFBUSxFQUFFO1lBQ2hDLElBQUcsT0FBTyxDQUFDLElBQUksSUFBSSxTQUFTLENBQUMsUUFBUSxFQUFFO2dCQUNuQyxNQUFNLElBQUksR0FBWSwyQ0FBYSxDQUFDLFFBQVEsQ0FBQyxTQUFTLENBQUMsU0FBUyxDQUFDLFNBQVMsQ0FBQyxDQUFDLFNBQVMsQ0FBQyxjQUFjLENBQUM7Z0JBQ3JHLE1BQU0sSUFBSSxHQUFHLElBQUksQ0FBQyxnQkFBZ0IsQ0FBQyxTQUFTLENBQUMsSUFBSSxDQUFDLENBQUM7Z0JBQ25ELE1BQU0sS0FBSyxHQUFHLHdCQUFVLENBQUMsV0FBVyxDQUFDLE9BQU8sRUFBRSxJQUFJLENBQWUsQ0FBQztnQkFDbEUsS0FBSyxDQUFDLElBQUksR0FBRyxTQUFTLENBQUMsUUFBUSxDQUFDO2dCQUNoQywwQkFBZ0IsQ0FBQyxhQUFhLEdBQUcsSUFBSSxDQUFDO2dCQUV0QyxvQkFBb0I7Z0JBQ3BCLElBQUcsSUFBSSxDQUFDLElBQUksQ0FBQyxTQUFTLElBQUksU0FBUyxDQUFDLFNBQVM7b0JBQUUsbUJBQVMsQ0FBQyxRQUFRLENBQUMscUJBQXFCLENBQUMsK0JBQWlCLENBQUMsUUFBUSxFQUFFLElBQUksQ0FBQyxDQUFDO2dCQUMxSCxNQUFNO2FBQ1Q7U0FDSjtJQUNMLENBQUM7SUFFRCwwQkFBMEI7SUFDbEIsU0FBUyxDQUFDLFNBQW1CO1FBQ2pDLE1BQU0sSUFBSSxHQUFZLDJDQUFhLENBQUMsUUFBUSxDQUFDLFNBQVMsQ0FBQyxTQUFTLENBQUMsU0FBUyxDQUFDLENBQUMsU0FBUyxDQUFDLGNBQWMsQ0FBQztRQUNyRyxNQUFNLElBQUksR0FBRyxJQUFJLENBQUMsZ0JBQWdCLENBQUMsU0FBUyxDQUFDLElBQUksQ0FBQyxDQUFDO1FBQ25ELE1BQU0sS0FBSyxHQUFHLHdCQUFVLENBQUMsV0FBVyxDQUFDLElBQUksQ0FBQyxJQUFJLEVBQUUsSUFBSSxDQUFlLENBQUM7UUFDcEUsS0FBSyxDQUFDLElBQUksR0FBRyxTQUFTLENBQUMsUUFBUSxDQUFDO1FBQ2hDLDBCQUFnQixDQUFDLFVBQVUsR0FBRyxJQUFJLENBQUM7UUFFbkMsb0JBQW9CO1FBQ3BCLHlIQUF5SDtJQUM3SCxDQUFDOztBQTFLRCxlQUFlO0FBQ0Esc0JBQVMsR0FBaUIsSUFBSSxDQUFDO0FBZ0I1QixzREFBeUI7QUFDekIsMERBQW9DO0FBQ3BDLDREQUErQjtBQXJCckQsK0JBNktDIn0=","assetPath":"Assets/Zepeto
     Multiplay Component/ZepetoScript/Managers/EquipManager.ts","manifest":{"properties":[{"assembly":"ZEPETO.World","name":"multiplay","type":"ZEPETO.World.ZepetoWorldMultiplay","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"","name":"room","type":"ZEPETO.Multiplay.Room","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[]},{"assembly":"UnityEngine.CoreModule","name":"cake","type":"UnityEngine.GameObject","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"Header","args":["\"Samdasus
     Field\""]},{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"balloons","type":"UnityEngine.GameObject[]","isArray":true,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"samdasuPet","type":"UnityEngine.GameObject","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]}],"name":"EquipManager","description":"","hasAnimatorMove":false},"isCompiled":true}'
-  typescriptHash: 31f657f85eaa0c37d6972a4637e828ad
+  typescriptHash: 1b20ad67c76ab8480f8768b52d438443
   onlyWriteTrigger: 0

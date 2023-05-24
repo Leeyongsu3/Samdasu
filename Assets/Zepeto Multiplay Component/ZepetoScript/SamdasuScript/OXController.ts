@@ -1,5 +1,6 @@
 import { Animator, BoxCollider, Collider, GameObject, Transform } from 'UnityEngine';
 import { Button } from 'UnityEngine.UI';
+import { ZepetoPlayers } from 'ZEPETO.Character.Controller';
 import { ZepetoScriptBehaviour } from 'ZEPETO.Script'
 import SyncIndexManager from '../Common/SyncIndexManager';
 import { Anim, Language } from '../Managers/TypeManager';
@@ -51,7 +52,10 @@ export default class OXController extends ZepetoScriptBehaviour {
 
     /* Mission Trigger */
     private OnTriggerEnter(collider : Collider) {
-        if(this.block.enabled) {
+        if(!ZepetoPlayers.instance.LocalPlayer) return;
+        
+        const character = ZepetoPlayers.instance.LocalPlayer.zepetoPlayer.character.gameObject;
+        if(collider.gameObject == character && this.block.enabled) {
             this.Localizing();
             this.targetUI.SetActive(true);
         }

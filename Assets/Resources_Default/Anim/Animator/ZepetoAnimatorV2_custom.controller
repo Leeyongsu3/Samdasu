@@ -2673,7 +2673,7 @@ AnimatorStateTransition:
     m_ConditionEvent: SamdasuState
     m_EventTreshold: 40
   - m_ConditionMode: 1
-    m_ConditionEvent: inHandRight
+    m_ConditionEvent: isHold
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1413044185882842155}
@@ -3000,7 +3000,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: inHandRight
+    m_ConditionEvent: isHold
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 9125801488448382014}
@@ -6395,13 +6395,7 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: inHandLeft
-    m_Type: 4
-    m_DefaultFloat: 0
-    m_DefaultInt: 0
-    m_DefaultBool: 0
-    m_Controller: {fileID: 0}
-  - m_Name: inHandRight
+  - m_Name: isHold
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -6424,18 +6418,6 @@ AnimatorController:
     m_Name: Right Hand
     m_StateMachine: {fileID: -6433553650702990671}
     m_Mask: {fileID: 31900000, guid: 54a1e15a512bd444bb0f8007f85626dd, type: 2}
-    m_Motions: []
-    m_Behaviours: []
-    m_BlendingMode: 0
-    m_SyncedLayerIndex: -1
-    m_DefaultWeight: 1
-    m_IKPass: 1
-    m_SyncedLayerAffectsTiming: 0
-    m_Controller: {fileID: 9100000}
-  - serializedVersion: 5
-    m_Name: Left Hand
-    m_StateMachine: {fileID: 5039114554451216406}
-    m_Mask: {fileID: 31900000, guid: 7eb492826e2fbe04497de57f4535a544, type: 2}
     m_Motions: []
     m_Behaviours: []
     m_BlendingMode: 0
@@ -9799,7 +9781,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: ffcc77a915444454f920fc6a6b8cfe69, type: 2}
+  m_Motion: {fileID: 7400000, guid: 6dbbbf4c2539b7143a35e2e89957a08a, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

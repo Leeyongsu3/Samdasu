@@ -2,7 +2,7 @@ import { Camera, GameObject, Input, LayerMask, Mathf, Physics, RaycastHit, Trans
 import { ZepetoPlayers } from 'ZEPETO.Character.Controller';
 import { ZepetoScriptBehaviour } from 'ZEPETO.Script'
 import { ZepetoWorldMultiplay } from 'ZEPETO.World';
-import { Datas, RenderData } from '../Managers/TypeManager';
+import { Datas } from '../Managers/TypeManager';
 import RenderCameraController from './RenderCameraController';
 
 export default class RenderCaremaManager extends ZepetoScriptBehaviour {
@@ -61,31 +61,38 @@ export default class RenderCaremaManager extends ZepetoScriptBehaviour {
 
             /* Touch Start */
             if(Input.GetMouseButtonDown(0) && this.isHold == false) {
+                console.log(`Render Down`);
+
                 const ray = this.renderCamera.ScreenPointToRay(Input.mousePosition);
                 const hitInfo = $ref<RaycastHit>();
                 if(Physics.SphereCast(ray, 0.5, hitInfo, Mathf.Infinity, this.layer_rnd)) {
+                    console.log(`Render Down SphereCast`);
                     this.touchItem = hitInfo.value.transform;
-                    this.touchPoint = new Vector3(hitInfo.value.point.x, hitInfo.value.point.y, RenderData.z);
+                    this.touchPoint = new Vector3(hitInfo.value.point.x, hitInfo.value.point.y, 3);
                     this.isHold = true;
                 }
 
             /* Touch Drag */
             } else if(Input.GetMouseButton(0) && this.isHold == true) {
+                console.log(`Render ---`);
                 const ray = this.renderCamera.ScreenPointToRay(Input.mousePosition);
                 const hitInfo = $ref<RaycastHit>();
                 if(Physics.SphereCast(ray, 0.5, hitInfo, Mathf.Infinity, this.layer_Frame)) {
-                    this.touchPoint = new Vector3(hitInfo.value.point.x, hitInfo.value.point.y, RenderData.z);
+                    console.log(`Render --- SphereCast`);
+                    this.touchPoint = new Vector3(hitInfo.value.point.x, hitInfo.value.point.y, hitInfo.value.point.z);
                     this.touchItem.position = this.touchPoint;
                 }
                 
             /* Touch End */
             } else if(Input.GetMouseButtonUp(0) && this.isHold == true) {
+                console.log(`Render UP`);
 
                 /* TEST */
                 const ray = this.renderCamera.ScreenPointToRay(Input.mousePosition);
                 const hitInfo = $ref<RaycastHit>();
                 if(Physics.SphereCast(ray, 0.5, hitInfo, Mathf.Infinity, this.layer_Frame)) {
-                    this.touchPoint = new Vector3(hitInfo.value.point.x, hitInfo.value.point.y, RenderData.z);
+                    console.log(`Render UP SphereCast`);
+                    this.touchPoint = new Vector3(hitInfo.value.point.x, hitInfo.value.point.y, hitInfo.value.point.z);
                     this.touchItem.position = this.touchPoint;
                 }
                 this.isHold = false;

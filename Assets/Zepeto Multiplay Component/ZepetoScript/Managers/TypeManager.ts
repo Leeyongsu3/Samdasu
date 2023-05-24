@@ -110,12 +110,6 @@ export enum EffectType {
     Firework = 1,
 }
 
-/* Camera Mode Data */
-export enum HandType {
-    NONE = -1,
-    RightHand, LeftHand,
-}
-
 
 
 //////////////////////////////////////////////// About UI Manager
@@ -180,12 +174,16 @@ export interface Stamp {
     isClear:boolean;
 }
 export enum StampType {
-    STAMP_MGR = "STAMP_MGR",
-    STAMP_WHEEL = "STAMP_WHEEL",
+    STAMP_LAND = "STAMP_LAND",
+    STAMP_HORSE = "STAMP_HORSE",
     STAMP_WATER = "STAMP_WATER",
     STAMP_TRASH = "STAMP_TRASH",
     STAMP_OX_QUIZ = "STAMP_OX_QUIZ",
     STAMP_STICKER = "STAMP_STICKER",
+}
+export enum LandStamp {
+    HALF_STAMP_WHEEL = "HALF_STAMP_WHEEL",
+    HALF_STAMP_MGR = "HALF_STAMP_MGR",
 }
 export interface StampUI {
     gameObject:GameObject;
@@ -217,11 +215,6 @@ export interface RenderItemData {
 /* Samdasu Render Mode Type */
 export enum RenderPhotoMode {
     Default, Edit_Mode, Result_Mode,
-}
-
-/* Samdasu Render Sticker Data */
-export enum RenderData {
-    z = 40.5,
 }
 
 /* OX Quiz Datas */
@@ -267,6 +260,12 @@ export interface RankUI {
     text_Score:Text,
 }
 
+export enum UnequipButtonType {
+    Head = 5,
+    RightHand = 6,
+    LeftHand = 7,
+}
+
 
 //////////////////////////////////////////////// Others
 
@@ -279,7 +278,12 @@ export enum Datas {
     kuaId = "samdasoostory",
 
     // Names
+    Cake = "Cake",
+    Samdasu = "Samdasu",
     Balloon = "Balloon",
+    Balloon_A = "Balloon_A",
+    Balloon_B = "Balloon_B",
+    Balloon_C = "Balloon_C",
 
     // Transform Point
     SpawnPoint = "SpawnPoint",
@@ -316,8 +320,7 @@ export enum Anim {
     Acceleration = "Acceleration",
     MoveProgress = "MoveProgress",
     isSit = "isSit",
-    inHandLeft = "inHandLeft",
-    inHandRight = "inHandRight",
+    isHold = "isHold",
     
     // OX Quiz
     Active = "Active",

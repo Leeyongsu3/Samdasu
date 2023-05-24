@@ -19,6 +19,7 @@ export default class UIController extends ZepetoScriptBehaviour {
 
     /* Screenshot Mode */
     @Header("Screenshot Mode")
+    public mainCanvas: GameObject;
     public screenShotModeButton: Button;
     public viewChangeButton: Button;
     public backgroundOnOffButton: Button;
@@ -133,6 +134,7 @@ export default class UIController extends ZepetoScriptBehaviour {
         this.screenShotModeButton.onClick.AddListener(() => {
             this.screenShotModeButton.gameObject.SetActive(false);
             this.screenShotPanel.gameObject.SetActive(true);
+            this.mainCanvas.SetActive(false);
 
             //Initialize the camera view to the default ZEPETO camera
             this.isThirdPersonView = true;
@@ -179,6 +181,7 @@ export default class UIController extends ZepetoScriptBehaviour {
                 this.SetBackgroundActive(true);
                 this.isBackgroundOn = true;
             }
+            this.mainCanvas.SetActive(true);
             this.screenShotModeButton.gameObject.SetActive(true);
             this.screenShotPanel.gameObject.SetActive(false);
             this.gestureButton.gameObject.SetActive(true);
@@ -224,6 +227,7 @@ export default class UIController extends ZepetoScriptBehaviour {
         this.screenShotResultExitButton.onClick.AddListener(() => {
             this.screenShotResultBackground.gameObject.SetActive(false);
             this.screenShotResultPanel.gameObject.SetActive(false);
+            this.mainCanvas.SetActive(true);
         });
 
         /** Gesture 

@@ -25,6 +25,18 @@ export default class HorseRideManager extends ZepetoScriptBehaviour {
         if(!this.horseRiders) return;
         for(const rider of this.horseRiders) {
             if(!rider) continue;
+            if(!ZepetoPlayers.instance.HasPlayer(rider.sessionId)) {
+                /* Return Horse */
+                const index = this.horseRiders.indexOf(rider);
+                this.horseRiders.splice(index, 1);
+                
+                /* Input Horse Group */
+                rider.horse.transform.SetParent(this.horsePoolGroup);
+                rider.horse.transform.position = this.horsePoolGroup.position;
+                rider.horse.transform.rotation = this.horsePoolGroup.rotation;
+                rider.horse.SetActive(false);
+                continue;
+            }
 
             /* Riding Start */
             if(rider.ownerAnimator.GetInteger(Anim.SamdasuState) == SamdasuState.Ride_Horse) rider.startRiding = true;
@@ -44,6 +56,7 @@ export default class HorseRideManager extends ZepetoScriptBehaviour {
 
     /* Ride ON Horse */
     public RideHorse(sessionId:string, localSessionId:string) {
+        if(!ZepetoPlayers.instance.HasPlayer(sessionId)) return;
         
         /* Init */
         if(!this.horseRiders) this.horseRiders = [];

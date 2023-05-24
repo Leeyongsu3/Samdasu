@@ -1,4 +1,4 @@
-import { Animator, BoxCollider, Camera, CharacterController, GameObject, HumanBodyBones, MeshRenderer, Quaternion, Transform, Vector3, WaitForSeconds } from 'UnityEngine';
+import { Animator, BoxCollider, Camera, CharacterController, GameObject, HumanBodyBones, Mathf, MeshRenderer, Quaternion, Random, Transform, Vector3, WaitForSeconds } from 'UnityEngine';
 import { UIZepetoPlayerControl, ZepetoCharacter, ZepetoPlayers } from 'ZEPETO.Character.Controller';
 import { Room, RoomData } from 'ZEPETO.Multiplay';
 import { Player } from 'ZEPETO.Multiplay.Schema';
@@ -18,8 +18,9 @@ import ChairSit from '../Sample Code/ChairSit';
 import LookAt from '../Sample Code/LookAt';
 import AnimatorSyncHelper from '../Transform/AnimatorSyncHelper';
 import TransformSyncHelper from '../Transform/TransformSyncHelper';
+import EquipManager from './EquipManager';
 import LeaderBoardManager from './LeaderBoardManager';
-import { Anim, ButtonType, CameraMode, Datas, EffectType, ERROR, HandType, LoadingType, MESSAGE, SamdasuState, SendName, StampType, SyncChair, SyncRide } from './TypeManager';
+import { Anim, ButtonType, CameraMode, Datas, EffectType, ERROR, LandStamp, LoadingType, MESSAGE, SamdasuState, SendName, StampType, SyncChair, SyncRide } from './TypeManager';
 import UIManager from './UIManager';
 import VisibleManager from './VisibleManager';
 
@@ -53,14 +54,14 @@ export default class GameManager extends ZepetoScriptBehaviour {
     @Header("Managers")
     @SerializeField() private _leaderboardManager: Transform;
     @SerializeField() private _horseRideManager: Transform;
-    @SerializeField() private _treeKingManager: Transform;
+    // @SerializeField() private _treeKingManager: Transform;
     @SerializeField() private _visibleManager: Transform;
     @SerializeField() private _trashManager: Transform;
     @SerializeField() private _mgrManager: Transform;
     @SerializeField() private _npcManager: Transform;
     private leaderboardManager: LeaderBoardManager;
     private horseRideManager: HorseRideManager;
-    private treeKingManager: TreeKingManager;
+    // private treeKingManager: TreeKingManager;
     private visibleManager: VisibleManager;
     private trashManager: TrashManager;
     private mgrManager: MGRManager;
@@ -80,7 +81,12 @@ export default class GameManager extends ZepetoScriptBehaviour {
     @Header("Others")
     @SerializeField() private trashFoolGroup: Transform;
     @SerializeField() private samdasuPetInWorld: GameObject;
+
+    public get samdasuName(): string { return this.samdasuPetInWorld.name }
+    private halfStamp_MGR: boolean = false;
+    private halfStamp_Wheel: boolean = false; 
     
+    /* Singleton */
     private Awake() {
         if (GameManager._instance !== null && GameManager._instance !== this) {
             GameObject.Destroy(this.gameObject);
@@ -120,6 +126,7 @@ export default class GameManager extends ZepetoScriptBehaviour {
 
             this.room.AddMessageHandler(MESSAGE.Play_Effect, (message:any) => {
                 this.zoneTriggerController.PlayEffect();
+                this.leaderboardManager.UpdateScore();
             });
 
             this.room.AddMessageHandler(MESSAGE.Ride_MGR, (message:SyncRide) => {
@@ -200,12 +207,12 @@ export default class GameManager extends ZepetoScriptBehaviour {
         this._horseRideManager = null;
         console.log(`[GameManager] HorseRideManager loaded success`);
 
-        const treeKingManager = this._treeKingManager.GetComponent<TreeKingManager>();
-        if(treeKingManager) this.treeKingManager = treeKingManager;
-        else this.treeKingManager = GameObject.FindObjectOfType<TreeKingManager>();
-        this._treeKingManager = null;
-        treeKingManager.RemoteStart();
-        console.log(`[GameManager] TreeKingManager loaded success`);
+        // const treeKingManager = this._treeKingManager.GetComponent<TreeKingManager>();
+        // if(treeKingManager) this.treeKingManager = treeKingManager;
+        // else this.treeKingManager = GameObject.FindObjectOfType<TreeKingManager>();
+        // this._treeKingManager = null;
+        // treeKingManager.RemoteStart();
+        // console.log(`[GameManager] TreeKingManager loaded success`);
 
         const trashManager = this._trashManager.GetComponent<TrashManager>();
         if(trashManager) this.trashManager = trashManager;
@@ -353,10 +360,13 @@ export default class GameManager extends ZepetoScriptBehaviour {
 
             case ButtonType.Balloon_Pick:
                 /* Player State Set */
-                this.SetSamdasuState(SamdasuState.Pick_Item, true, HandType.LeftHand);
+                this.SetSamdasuState(SamdasuState.Pick_Item, true);
+
+                const index = Mathf.Floor(Random.Range(0, EquipManager.instance.balloonsCount));
+                const balloon = EquipManager.instance.GetBalloonsName(index);
 
                 /* Samdasu Equip */
-                data.Add(SendName.name, Datas.Balloon);
+                data.Add(SendName.name, balloon);
                 data.Add(SendName.attach, HumanBodyBones.LeftHand);
                 this.room.Send(MESSAGE.Equip, data.GetObject());
                 break;
@@ -365,11 +375,11 @@ export default class GameManager extends ZepetoScriptBehaviour {
                 if(this.samdasuPetInWorld != target.gameObject) return console.error(ERROR.NOT_MATCHED_OBJECT);
 
                 /* Player State Set */
-                this.SetSamdasuState(SamdasuState.Pick_Item, true, HandType.RightHand);
+                this.SetSamdasuState(SamdasuState.Pick_Item, true, true);
 
                 /* Samdasu Equip */
                 if(!SyncIndexManager.SamdasuPetInHand) {
-                    data.Add(SendName.name, target.GetChild(0).name);
+                    data.Add(SendName.name, Datas.Samdasu);
                     data.Add(SendName.attach, HumanBodyBones.RightHand);
                     this.room.Send(MESSAGE.Equip, data.GetObject());
                 }
@@ -386,7 +396,7 @@ export default class GameManager extends ZepetoScriptBehaviour {
 
             case ButtonType.NPC_Cake:
                 /* Samdasu Equip */
-                data.Add(SendName.name, target.name);
+                data.Add(SendName.name, Datas.Cake);
                 data.Add(SendName.attach, HumanBodyBones.Head);
                 this.room.Send(MESSAGE.Equip, data.GetObject());
                 break;
@@ -498,7 +508,6 @@ export default class GameManager extends ZepetoScriptBehaviour {
         /* Animator Check */
         const anim = ZepetoPlayers.instance.GetPlayer(this.room.SessionId).character.ZepetoAnimator;
         if(anim.GetInteger(Anim.SamdasuState) != SamdasuState.Pick_Item) return;
-        if(!anim.GetBool(Anim.inHandRight)) return;
         if(!SyncIndexManager.SamdasuPetInHand) return;
 
         /* Player Play Animation */
@@ -522,7 +531,7 @@ export default class GameManager extends ZepetoScriptBehaviour {
         yield new WaitForSeconds(3);
 
         /* Player State Set Return */
-        this.SetSamdasuState(SamdasuState.Pick_Item, true, HandType.RightHand);
+        this.SetSamdasuState(SamdasuState.Pick_Item, true, true);
         
         /* Controller ON */
         this.joyCon.gameObject.SetActive(true);
@@ -530,8 +539,19 @@ export default class GameManager extends ZepetoScriptBehaviour {
         characterController.enabled = true;
         // destory samdasu in the hand
 
-        /* Samdasu Drink Stamp */
-        this.ClearStampMission(StampType.STAMP_WATER);
+        /* Samdasu Drink Stamp Check */
+        const waterStamp = SyncIndexManager.STAMPS.get(StampType.STAMP_WATER);
+        if(!waterStamp.isClear) this.ClearStampMission(StampType.STAMP_WATER);
+    }
+
+    /* Check Land Half Stamp */
+    private CheckLandStamp(halfStamp:LandStamp) {
+        if(halfStamp == LandStamp.HALF_STAMP_MGR) this.halfStamp_MGR = true;
+        else if(halfStamp == LandStamp.HALF_STAMP_WHEEL) this.halfStamp_Wheel = true;
+        
+        /* Samdasu Drink Stamp Check */
+        const landStamp = SyncIndexManager.STAMPS.get(StampType.STAMP_LAND);
+        if(!landStamp.isClear && this.halfStamp_MGR && this.halfStamp_Wheel) this.ClearStampMission(StampType.STAMP_LAND);
     }
 
     /* Player Ride Merry-Go-Round */
@@ -575,12 +595,12 @@ export default class GameManager extends ZepetoScriptBehaviour {
 
     /* Player No Ride MerryGoRound */
     private RideOffMerryGoRound(sessionId:string, isComplete:boolean) {
+        if (!this.room || !this.room.IsConnected) return;
+        if(!ZepetoPlayers.instance.HasPlayer(this.room.SessionId)) return;
+
         /* Local Player Ride Off UI */
         if(this.room.SessionId == sessionId) UIManager.instance.currentSamdasuState = null;
         const result = this.mgrManager.RideOffPlayer(sessionId);
-
-        if (!this.room || !this.room.IsConnected) return;
-        if(!ZepetoPlayers.instance.HasPlayer(this.room.SessionId)) return;
 
         /* Character Teleport */
         const character = ZepetoPlayers.instance.GetPlayer(sessionId).character;
@@ -602,7 +622,7 @@ export default class GameManager extends ZepetoScriptBehaviour {
     
             /* Local Player Get Stamp */
             if(isComplete) {
-                this.ClearStampMission(StampType.STAMP_MGR);
+                this.CheckLandStamp(LandStamp.HALF_STAMP_MGR);
             }
         }
     }
@@ -676,7 +696,7 @@ export default class GameManager extends ZepetoScriptBehaviour {
 
             /* Local Player Get Stamp */
             if(isComplete) {
-                this.ClearStampMission(StampType.STAMP_WHEEL);
+                this.CheckLandStamp(LandStamp.HALF_STAMP_WHEEL);
             }
         }
     }
@@ -708,7 +728,7 @@ export default class GameManager extends ZepetoScriptBehaviour {
 
     /** Local Player Animation **/
     /* Local Player Swim */
-    public SetSamdasuState(samdasuState:SamdasuState, isPlay:boolean, hand:HandType = HandType.NONE) {
+    public SetSamdasuState(samdasuState:SamdasuState, isPlay:boolean, isHold:boolean = false) {
         const animator = ZepetoPlayers.instance.GetPlayer(this.room.SessionId).character.ZepetoAnimator;
 
         /* Stop Animation */
@@ -726,23 +746,14 @@ export default class GameManager extends ZepetoScriptBehaviour {
         if(!isPlay && prevState != samdasuState) return;
         console.log(`SetSamdasuState ${prevState} ${samdasuState} ${isPlay}`);
     
-        switch (+hand) {
-            case HandType.RightHand:
-            case HandType.LeftHand:
-                this.PlayHandAnimation(hand, isPlay);
-                break;
-        
-            default:
-                if(samdasuState != SamdasuState.Samdasu_Drink) {
-                    this.PlayHandAnimation(HandType.NONE, false);
-                    SyncIndexManager.BalloonInHand = false;
-                    SyncIndexManager.SamdasuPetInHand = false;
+        animator.SetBool(Anim.isHold, isHold);
+        if(samdasuState != SamdasuState.Samdasu_Drink && samdasuState != SamdasuState.Pick_Item) {
+            SyncIndexManager.BalloonInHand = false;
+            SyncIndexManager.SamdasuPetInHand = false;
 
-                    /* Unequip Pick Item */
-                    this.Unequip(HumanBodyBones.LeftHand, this.samdasuPetInWorld.name);
-                    this.Unequip(HumanBodyBones.RightHand, Datas.Balloon);
-                }
-                break;
+            /* Unequip Pick Item */
+            this.Unequip(HumanBodyBones.LeftHand, this.samdasuPetInWorld.name);
+            this.Unequip(HumanBodyBones.RightHand, Datas.Balloon);
         }
 
         /* Animation Play */
@@ -750,27 +761,6 @@ export default class GameManager extends ZepetoScriptBehaviour {
 
         /* Horse Ride Button Visibler */
         UIManager.instance.HorseRideButtonVisibler(this.IsCanRide());
-    }
-
-    /* Local Player Hand Animation */
-    private PlayHandAnimation(hand:HandType, isPlay:boolean) {
-        const animator = ZepetoPlayers.instance.GetPlayer(this.room.SessionId).character.ZepetoAnimator;
-        
-        /* Play Local Animaion */
-        switch (+hand) {
-            case HandType.RightHand:
-                animator.SetBool(Anim.inHandRight, isPlay);
-                break;
-
-            case HandType.LeftHand:
-                animator.SetBool(Anim.inHandLeft, isPlay);
-                break;
-        
-            default:
-                animator.SetBool(Anim.inHandRight, false);
-                animator.SetBool(Anim.inHandLeft, false);
-                break;
-        }
     }
 
     /* Local Player Animation */

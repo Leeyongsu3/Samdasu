@@ -7,9 +7,22 @@ import { ZepetoScriptBehaviour } from 'ZEPETO.Script'
 import { ZepetoWorldMultiplay } from 'ZEPETO.World';
 import SyncIndexManager from '../Common/SyncIndexManager';
 import GameManager from './GameManager';
-import { Datas, MESSAGE } from './TypeManager';
+import { Datas, MESSAGE, UnequipButtonType } from './TypeManager';
+import UIManager from './UIManager';
 
 export default class EquipManager extends ZepetoScriptBehaviour {
+
+    /* Singleton */
+    private static _instance: EquipManager = null;
+    public static get instance(): EquipManager {
+        if (this._instance === null) {
+            this._instance = GameObject.FindObjectOfType<EquipManager>();
+            if (this._instance === null) {
+                this._instance = new GameObject(EquipManager.name).AddComponent<EquipManager>();
+            }
+        }
+        return this._instance;
+    }
     
     public multiplay: ZepetoWorldMultiplay;
     public room: Room;
@@ -19,6 +32,18 @@ export default class EquipManager extends ZepetoScriptBehaviour {
     @SerializeField() private cake: GameObject;
     @SerializeField() private balloons: GameObject[] = [];
     @SerializeField() private samdasuPet: GameObject;
+    public get balloonsCount(): number { return this.balloons.length; }
+    public GetBalloonsName(index:number): string { return this.balloons[index].name; }
+    
+    /* Singleton */
+    private Awake() {
+        if (EquipManager._instance !== null && EquipManager._instance !== this) {
+            GameObject.Destroy(this.gameObject);
+        } else {
+            EquipManager._instance = this;
+            GameObject.DontDestroyOnLoad(this.gameObject);
+        }
+    }
 
     Start() {
         if(!this.multiplay)
@@ -35,6 +60,9 @@ export default class EquipManager extends ZepetoScriptBehaviour {
                         this.EquipCake(equipData);
                         break;
                     case Datas.Balloon :
+                    case Datas.Balloon_A :
+                    case Datas.Balloon_B :
+                    case Datas.Balloon_C :
                         this.EquipBalloon(equipData);
                         // this.EquipItem(equipData);
                         break;
@@ -53,6 +81,9 @@ export default class EquipManager extends ZepetoScriptBehaviour {
                         this.EquipCake(equipData);
                         break;
                     case Datas.Balloon :
+                    case Datas.Balloon_A :
+                    case Datas.Balloon_B :
+                    case Datas.Balloon_C :
                         this.UnEquipItem(equipData);
                         this.EquipBalloon(equipData);
                         // this.EquipItem(equipData);
@@ -65,11 +96,13 @@ export default class EquipManager extends ZepetoScriptBehaviour {
                 this.UnEquipItem(equipData);
             });
         }
+        this.cake.name = Datas.Cake;
+        this.samdasuPet.name = Datas.Samdasu;
     }
     
     /* Up Equip Item */
     private UnEquipItem(equipData:EquipData) {
-        if(equipData.prevItemName == this.cake.name) return;
+        // if(equipData.prevItemName == this.cake.name) return;
         const anim:Animator = ZepetoPlayers.instance.GetPlayer(equipData.sessionId).character.ZepetoAnimator;
         const prevBone = anim.GetBoneTransform(equipData.prevBone);
         const prevName = equipData.prevItemName;
@@ -87,6 +120,9 @@ export default class EquipManager extends ZepetoScriptBehaviour {
                         SyncIndexManager.CakeInHead = false;
                         break;
                     case Datas.Balloon :
+                    case Datas.Balloon_A :
+                    case Datas.Balloon_B :
+                    case Datas.Balloon_C :
                         SyncIndexManager.BalloonInHand = false;
                         break;
                 }
@@ -114,18 +150,26 @@ export default class EquipManager extends ZepetoScriptBehaviour {
 
         /* Animation */
         GameManager.instance.onPlayerDrink();
+
+        /* Button Visible */
+        if(this.room.SessionId == equipData.sessionId) UIManager.instance.UnequipButtonVisibler(UnequipButtonType.RightHand, true);
     }
 
     /* Player Equip Balloon */
     private EquipBalloon(equipData:EquipData) {
-        const index = Mathf.Floor(Random.Range(0, this.balloons.length));
-        const balloon = this.balloons[index];
-
-        const anim:Animator = ZepetoPlayers.instance.GetPlayer(equipData.sessionId).character.ZepetoAnimator;
-        const bone = anim.GetBoneTransform(equipData.bone);
-        const equip = GameObject.Instantiate(balloon, bone) as GameObject;
-        equip.name = equipData.itemName;
-        SyncIndexManager.BalloonInHand = true;
+        for(const balloon of this.balloons) {
+            if(balloon.name == equipData.itemName) {
+                const anim:Animator = ZepetoPlayers.instance.GetPlayer(equipData.sessionId).character.ZepetoAnimator;
+                const bone = anim.GetBoneTransform(equipData.bone);
+                const equip = GameObject.Instantiate(balloon, bone) as GameObject;
+                equip.name = equipData.itemName;
+                SyncIndexManager.BalloonInHand = true;
+                
+                /* Button Visible */
+                if(this.room.SessionId == equipData.sessionId) UIManager.instance.UnequipButtonVisibler(UnequipButtonType.LeftHand, true);
+                break;
+            }
+        }
     }
 
     /* Player Equip 25 Cake */
@@ -135,5 +179,8 @@ export default class EquipManager extends ZepetoScriptBehaviour {
         const equip = GameObject.Instantiate(this.cake, bone) as GameObject;
         equip.name = equipData.itemName;
         SyncIndexManager.CakeInHead = true;
+                
+        /* Button Visible */
+        // if(this.room.SessionId == equipData.sessionId) UIManager.instance.UnequipButtonVisibler(UnequipButtonType.Head, true);
     }
 }

@@ -279,14 +279,11 @@ export default class SyncComponentModule extends IModule {
             equipData.itemName = message.name;
             equipData.bone = message.attach;
             equipData.key = `${client.sessionId}_${equipData.bone}`;
-            console.log(equipData.key);
+            console.log(`${MESSAGE.Equip} : ${equipData.key} ${equipData.itemName}`);
 
             if(this.server.state.equipDatas.has(equipData.key)) {
                 const prevData = this.server.state.equipDatas.get(equipData.key);
                 if(prevData.sessionId == client.sessionId) {
-                    // if(equipData.prevItemName == "Balloon" && equipData.itemName == "Balloon") {
-
-                    // }
                     equipData.prevItemName = prevData.itemName;
                     equipData.prevBone = prevData.bone;
                     msg = MESSAGE.EquipChange;
@@ -302,7 +299,7 @@ export default class SyncComponentModule extends IModule {
             equipData.itemName = message.name;
             equipData.bone = message.attach;
             equipData.key = `${client.sessionId}_${equipData.bone}`;
-            console.log(equipData.key);
+            console.log(`${MESSAGE.Unequip} : ${equipData.key} ${equipData.itemName}`);
             
             if(this.server.state.equipDatas.has(equipData.key)) {
                 const prevData = this.server.state.equipDatas.get(equipData.key);
@@ -451,12 +448,12 @@ export default class SyncComponentModule extends IModule {
         const player = players.get(sessionId);
 
         /* Set Array Data */
-        player.samdasu.Stamps.push(this.ProcessingStamp(StampType.STAMP_MGR));
+        player.samdasu.Stamps.push(this.ProcessingStamp(StampType.STAMP_LAND));
         player.samdasu.Stamps.push(this.ProcessingStamp(StampType.STAMP_OX_QUIZ));
         player.samdasu.Stamps.push(this.ProcessingStamp(StampType.STAMP_STICKER));
         player.samdasu.Stamps.push(this.ProcessingStamp(StampType.STAMP_TRASH));
         player.samdasu.Stamps.push(this.ProcessingStamp(StampType.STAMP_WATER));
-        player.samdasu.Stamps.push(this.ProcessingStamp(StampType.STAMP_WHEEL));
+        player.samdasu.Stamps.push(this.ProcessingStamp(StampType.STAMP_HORSE));
     }
 
     /* Trash Sticker */
@@ -630,8 +627,8 @@ enum SamdasuState {
 }
 
 enum StampType {
-    STAMP_MGR = "STAMP_MGR",
-    STAMP_WHEEL = "STAMP_WHEEL",
+    STAMP_LAND = "STAMP_LAND",
+    STAMP_HORSE = "STAMP_HORSE",
     STAMP_WATER = "STAMP_WATER",
     STAMP_TRASH = "STAMP_TRASH",
     STAMP_OX_QUIZ = "STAMP_OX_QUIZ",

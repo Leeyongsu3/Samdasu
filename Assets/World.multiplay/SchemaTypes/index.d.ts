@@ -60,9 +60,8 @@ declare module "ZEPETO.Multiplay.Schema" {
 		FallSpeed: number;
 		Acceleration: number;
 		MoveProgress: number;
-		IsSit: boolean;
-		inHandLeft: boolean;
-		inHandRight: boolean;
+		isSit: boolean;
+		isHold: boolean;
 		SamdasuState: number;
 	}
 	class Samdasu extends Schema {

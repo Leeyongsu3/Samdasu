@@ -64,9 +64,8 @@ export default class PlayerSync extends ZepetoScriptBehaviour {
         animator.SetFloat(Anim.FallSpeed, animationParam.FallSpeed);
         animator.SetFloat(Anim.Acceleration, animationParam.Acceleration);
         animator.SetFloat(Anim.MoveProgress, animationParam.MoveProgress);
-        animator.SetBool(Anim.isSit, animationParam.IsSit);
-        animator.SetBool(Anim.inHandLeft, animationParam.inHandLeft);
-        animator.SetBool(Anim.inHandRight, animationParam.inHandRight);
+        animator.SetBool(Anim.isSit, animationParam.isSit);
+        animator.SetBool(Anim.isHold, animationParam.isHold);
         animator.SetInteger(Anim.SamdasuState, animationParam.SamdasuState);
 
         /* When Player Ride MGR */
@@ -168,8 +167,7 @@ export default class PlayerSync extends ZepetoScriptBehaviour {
                 animationParam.Add(Anim.Acceleration, this._animator.GetFloat(Anim.Acceleration));
                 animationParam.Add(Anim.MoveProgress, this._animator.GetFloat(Anim.MoveProgress));
                 animationParam.Add(Anim.isSit, this._animator.GetBool(Anim.isSit));
-                animationParam.Add(Anim.inHandLeft, this._animator.GetBool(Anim.inHandLeft));
-                animationParam.Add(Anim.inHandRight, this._animator.GetBool(Anim.inHandRight));
+                animationParam.Add(Anim.isHold, this._animator.GetBool(Anim.isHold));
                 animationParam.Add(Anim.SamdasuState, this._animator.GetInteger(Anim.SamdasuState));
                 data.Add(SendName.animationParam, animationParam.GetObject());
 

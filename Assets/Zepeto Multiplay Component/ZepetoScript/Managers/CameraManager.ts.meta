@@ -18,29 +18,49 @@ ScriptedImporter:
   wrapperTypes: []
   WrapperFilters: []
   wrapperOutputDirectory: Generated
-  compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
-    { value: true });\r\nconst UnityEngine_1 = require(\"UnityEngine\");\r\nconst
-    ZEPETO_Character_Controller_1 = require(\"ZEPETO.Character.Controller\");\r\nconst
-    ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst ZEPETO_World_1 = require(\"ZEPETO.World\");\r\nconst
-    GameManager_1 = require(\"./GameManager\");\r\nclass CameraManager extends ZEPETO_Script_1.ZepetoScriptBehaviour
-    {\r\n    Start() {\r\n        if (!this.multiplay)\r\n            this.multiplay
-    = UnityEngine_1.GameObject.FindObjectOfType($typeof(ZEPETO_World_1.ZepetoWorldMultiplay));\r\n       
-    this.layer_btn = 1 << UnityEngine_1.LayerMask.NameToLayer(\"Button\"); // Layer
-    6\r\n    }\r\n    /* Raycasting */\r\n    Update() {\r\n        if (this.multiplay.Room
-    != null && this.multiplay.Room.IsConnected) {\r\n            const hasPlayer
-    = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.HasPlayer(this.multiplay.Room.SessionId);\r\n           
-    if (hasPlayer) {\r\n                this.Raycasting();\r\n            }\r\n       
-    }\r\n    }\r\n    Raycasting() {\r\n        if (UnityEngine_1.Input.GetMouseButtonUp(0))
-    {\r\n            const ray = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.ZepetoCamera.camera.ScreenPointToRay(UnityEngine_1.Input.mousePosition);\r\n           
-    const hitInfo = $ref();\r\n            // if(Physics.Raycast(ray, hitInfo, Mathf.Infinity,
-    this.layer_btn)) {\r\n            //     console.log(`${hitInfo.value.transform.name}
-    ${hitInfo.value.transform.gameObject.layer} ${this.layer_btn}`);\r\n           
-    //     GameManager.instance.SwitchButtonScript(hitInfo.value.transform);\r\n           
-    // }\r\n            if (UnityEngine_1.Physics.SphereCast(ray, 0.5, hitInfo, UnityEngine_1.Mathf.Infinity,
-    this.layer_btn)) {\r\n                // console.log(`${hitInfo.value.transform.name}
-    ${hitInfo.value.transform.gameObject.layer} ${this.layer_btn}`);\r\n               
-    GameManager_1.default.instance.SwitchButtonScript(hitInfo.value.transform);\r\n           
-    }\r\n        }\r\n    }\r\n}\r\nexports.default = CameraManager;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiQ2FtZXJhTWFuYWdlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIkNhbWVyYU1hbmFnZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQSw2Q0FBK0Y7QUFDL0YsNkVBQTREO0FBQzVELGlEQUFxRDtBQUNyRCwrQ0FBb0Q7QUFDcEQsK0NBQXdDO0FBRXhDLE1BQXFCLGFBQWMsU0FBUSxxQ0FBcUI7SUFNNUQsS0FBSztRQUNELElBQUcsQ0FBQyxJQUFJLENBQUMsU0FBUztZQUNkLElBQUksQ0FBQyxTQUFTLEdBQUcsd0JBQVUsQ0FBQyxnQkFBZ0IsU0FBQyxtQ0FBb0IsRUFBRyxDQUFDO1FBRXpFLElBQUksQ0FBQyxTQUFTLEdBQUcsQ0FBQyxJQUFJLHVCQUFTLENBQUMsV0FBVyxDQUFDLFFBQVEsQ0FBQyxDQUFDLENBQUMsVUFBVTtJQUNyRSxDQUFDO0lBRUQsZ0JBQWdCO0lBQ2hCLE1BQU07UUFDRixJQUFJLElBQUksQ0FBQyxTQUFTLENBQUMsSUFBSSxJQUFJLElBQUksSUFBSSxJQUFJLENBQUMsU0FBUyxDQUFDLElBQUksQ0FBQyxXQUFXLEVBQUU7WUFDaEUsTUFBTSxTQUFTLEdBQUcsMkNBQWEsQ0FBQyxRQUFRLENBQUMsU0FBUyxDQUFDLElBQUksQ0FBQyxTQUFTLENBQUMsSUFBSSxDQUFDLFNBQVMsQ0FBQyxDQUFDO1lBQ2xGLElBQUksU0FBUyxFQUFFO2dCQUNYLElBQUksQ0FBQyxVQUFVLEVBQUUsQ0FBQzthQUNyQjtTQUNKO0lBQ0wsQ0FBQztJQUVELFVBQVU7UUFDTixJQUFHLG1CQUFLLENBQUMsZ0JBQWdCLENBQUMsQ0FBQyxDQUFDLEVBQUU7WUFDMUIsTUFBTSxHQUFHLEdBQUcsMkNBQWEsQ0FBQyxRQUFRLENBQUMsWUFBWSxDQUFDLE1BQU0sQ0FBQyxnQkFBZ0IsQ0FBQyxtQkFBSyxDQUFDLGFBQWEsQ0FBQyxDQUFDO1lBQzdGLE1BQU0sT0FBTyxHQUFHLElBQUksRUFBYyxDQUFDO1lBQ25DLHNFQUFzRTtZQUN0RSxvSEFBb0g7WUFDcEgsd0VBQXdFO1lBQ3hFLElBQUk7WUFDSixJQUFHLHFCQUFPLENBQUMsVUFBVSxDQUFDLEdBQUcsRUFBRSxHQUFHLEVBQUUsT0FBTyxFQUFFLG1CQUFLLENBQUMsUUFBUSxFQUFFLElBQUksQ0FBQyxTQUFTLENBQUMsRUFBRTtnQkFDdEUsZ0hBQWdIO2dCQUNoSCxxQkFBVyxDQUFDLFFBQVEsQ0FBQyxrQkFBa0IsQ0FBQyxPQUFPLENBQUMsS0FBSyxDQUFDLFNBQVMsQ0FBQyxDQUFDO2FBQ3BFO1NBQ0o7SUFDTCxDQUFDO0NBQ0o7QUFyQ0QsZ0NBcUNDIn0=","assetPath":"Assets/Zepeto
-    Multiplay Component/ZepetoScript/Managers/CameraManager.ts","manifest":{"properties":[{"assembly":"ZEPETO.World","name":"multiplay","type":"ZEPETO.World.ZepetoWorldMultiplay","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[]}],"name":"CameraManager","description":"","hasAnimatorMove":false},"isCompiled":true}'
-  typescriptHash: fafd4b7612c24961257fb22867b9431c
+  compiledResult: "{\"source\":\"\\\"use strict\\\";\\r\\nObject.defineProperty(exports,
+    \\\"__esModule\\\", { value: true });\\r\\nconst __UnityEngine__ = require(\\\"UnityEngine\\\");\\r\\nconst
+    UnityEngine_1 = require(\\\"UnityEngine\\\");\\r\\nconst ZEPETO_Character_Controller_1
+    = require(\\\"ZEPETO.Character.Controller\\\");\\r\\nconst ZEPETO_Script_1 =
+    require(\\\"ZEPETO.Script\\\");\\r\\nconst ZEPETO_World_1 = require(\\\"ZEPETO.World\\\");\\r\\nconst
+    GameManager_1 = require(\\\"./GameManager\\\");\\r\\nconst TypeManager_1 = require(\\\"./TypeManager\\\");\\r\\nclass
+    CameraManager extends ZEPETO_Script_1.ZepetoScriptBehaviour {\\r\\n    Start()
+    {\\r\\n        if (!this.multiplay)\\r\\n            this.multiplay = UnityEngine_1.GameObject.FindObjectOfType($typeof(ZEPETO_World_1.ZepetoWorldMultiplay));\\r\\n       
+    this.layer_btn = 1 << UnityEngine_1.LayerMask.NameToLayer(TypeManager_1.Datas.Button);
+    // Layer 6\\r\\n    }\\r\\n    /* Raycasting */\\r\\n    Update() {\\r\\n       
+    if (this.multiplay.Room != null && this.multiplay.Room.IsConnected) {\\r\\n           
+    const hasPlayer = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.HasPlayer(this.multiplay.Room.SessionId);\\r\\n           
+    if (hasPlayer) {\\r\\n                this.Raycasting();\\r\\n            }\\r\\n       
+    }\\r\\n    }\\r\\n    Raycasting() {\\r\\n        // iphone \uC774\uC288\\r\\n       
+    // \uC544\uC774\uD3F0\uC740 \uC660\uC9C0\uB294 \uBAA8\uB974\uAC9F\uC9C0\uB9CC\\r\\n       
+    // ButtonUp\uC77C\uB54C ButtonDown\uACFC Button\uB97C \uBB34\uC2DC\uD55C\uB2E4\\r\\n       
+    // \uBE48 \uACF5\uAC04\uC5D0 \uD130\uCE58 \uD6C4\uC5D0 \uB4DC\uB798\uADF8\uC0C1\uD0DC\uC5D0\uC11C
+    \uBC84\uD2BC \uC704\uC5D0\uC11C ButtonUp\uC744 \uD560 \uB54C\uB9CC \uC791\uB3D9\uB41C\uB2E4!!!!\\r\\n       
+    if (UnityEngine_1.Input.GetMouseButtonDown(0)) {\\r\\n            console.log(`Input
+    Down`);\\r\\n            const ray = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.ZepetoCamera.camera.ScreenPointToRay(UnityEngine_1.Input.mousePosition);\\r\\n           
+    const hitInfo = $ref();\\r\\n            if (UnityEngine_1.Physics.SphereCast(ray,
+    0.5, hitInfo, UnityEngine_1.Mathf.Infinity, this.layer_btn)) {\\r\\n               
+    this.hitValue = hitInfo.value.transform.gameObject;\\r\\n            }\\r\\n           
+    else {\\r\\n                this.hitValue = null;\\r\\n            }\\r\\n           
+    // } else if(Input.GetMouseButton(0)) {\\r\\n            //     console.log(`Input
+    BUTTON !!!`);\\r\\n        }\\r\\n        else if (this.hitValue && UnityEngine_1.Input.GetMouseButtonUp(0))
+    {\\r\\n            console.log(`Input Up`);\\r\\n            const ray = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.ZepetoCamera.camera.ScreenPointToRay(UnityEngine_1.Input.mousePosition);\\r\\n           
+    const hitInfo = $ref();\\r\\n            console.log(`Input Up 0 ${this.hitValue}
+    ${hitInfo.value} `);\\r\\n            if (UnityEngine_1.Physics.SphereCast(ray,
+    0.5, hitInfo, UnityEngine_1.Mathf.Infinity, this.layer_btn)) {\\r\\n               
+    console.log(`Input Up 1 ${this.hitValue} ${hitInfo.value.transform.gameObject}
+    ${__UnityEngine__.Object.op_Equality(this.hitValue, hitInfo.value.transform.gameObject)}`);\\r\\n               
+    if (__UnityEngine__.Object.op_Equality(this.hitValue, hitInfo.value.transform.gameObject))
+    {\\r\\n                    console.log(`Input Up 2`);\\r\\n                   
+    GameManager_1.default.instance.SwitchButtonScript(hitInfo.value.transform);\\r\\n               
+    }\\r\\n            }\\r\\n            this.hitValue = null;\\r\\n        }\\r\\n       
+    // if(Input.GetMouseButtonUp(0)) {\\r\\n        //     console.log(`Input Up`);\\r\\n       
+    //     const ray = ZepetoPlayers.instance.ZepetoCamera.camera.ScreenPointToRay(Input.mousePosition);\\r\\n       
+    //     const hitInfo = $ref<RaycastHit>();\\r\\n        //     if(Physics.SphereCast(ray,
+    0.5, hitInfo, Mathf.Infinity, this.layer_btn)) {\\r\\n        //         console.log(`Input
+    Up`);\\r\\n        //         GameManager.instance.SwitchButtonScript(hitInfo.value.transform);\\r\\n       
+    //     }\\r\\n        // }\\r\\n    }\\r\\n}\\r\\nexports.default = CameraManager;\\r\\n//#
+    sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiQ2FtZXJhTWFuYWdlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIkNhbWVyYU1hbmFnZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7O0FBQUEsNkNBQTBHO0FBQzFHLDZFQUE0RDtBQUM1RCxpREFBcUQ7QUFDckQsK0NBQW9EO0FBQ3BELCtDQUF3QztBQUN4QywrQ0FBc0M7QUFFdEMsTUFBcUIsYUFBYyxTQUFRLHFDQUFxQjtJQU81RCxLQUFLO1FBQ0QsSUFBRyxDQUFDLElBQUksQ0FBQyxTQUFTO1lBQ2QsSUFBSSxDQUFDLFNBQVMsR0FBRyx3QkFBVSxDQUFDLGdCQUFnQixTQUFDLG1DQUFvQixFQUFHLENBQUM7UUFFekUsSUFBSSxDQUFDLFNBQVMsR0FBRyxDQUFDLElBQUksdUJBQVMsQ0FBQyxXQUFXLENBQUMsbUJBQUssQ0FBQyxNQUFNLENBQUMsQ0FBQyxDQUFDLFVBQVU7SUFFekUsQ0FBQztJQUVELGdCQUFnQjtJQUNoQixNQUFNO1FBQ0YsSUFBSSxJQUFJLENBQUMsU0FBUyxDQUFDLElBQUksSUFBSSxJQUFJLElBQUksSUFBSSxDQUFDLFNBQVMsQ0FBQyxJQUFJLENBQUMsV0FBVyxFQUFFO1lBQ2hFLE1BQU0sU0FBUyxHQUFHLDJDQUFhLENBQUMsUUFBUSxDQUFDLFNBQVMsQ0FBQyxJQUFJLENBQUMsU0FBUyxDQUFDLElBQUksQ0FBQyxTQUFTLENBQUMsQ0FBQztZQUNsRixJQUFJLFNBQVMsRUFBRTtnQkFDWCxJQUFJLENBQUMsVUFBVSxFQUFFLENBQUM7YUFDckI7U0FDSjtJQUNMLENBQUM7SUFFRCxVQUFVO1FBQ04sWUFBWTtRQUNaLGlCQUFpQjtRQUNqQixzQ0FBc0M7UUFDdEMscURBQXFEO1FBQ3JELElBQUcsbUJBQUssQ0FBQyxrQkFBa0IsQ0FBQyxDQUFDLENBQUMsRUFBRTtZQUM1QixPQUFPLENBQUMsR0FBRyxDQUFDLFlBQVksQ0FBQyxDQUFDO1lBRTFCLE1BQU0sR0FBRyxHQUFHLDJDQUFhLENBQUMsUUFBUSxDQUFDLFlBQVksQ0FBQyxNQUFNLENBQUMsZ0JBQWdCLENBQUMsbUJBQUssQ0FBQyxhQUFhLENBQUMsQ0FBQztZQUM3RixNQUFNLE9BQU8sR0FBRyxJQUFJLEVBQWMsQ0FBQztZQUNuQyxJQUFHLHFCQUFPLENBQUMsVUFBVSxDQUFDLEdBQUcsRUFBRSxHQUFHLEVBQUUsT0FBTyxFQUFFLG1CQUFLLENBQUMsUUFBUSxFQUFFLElBQUksQ0FBQyxTQUFTLENBQUMsRUFBRTtnQkFDdEUsSUFBSSxDQUFDLFFBQVEsR0FBRyxPQUFPLENBQUMsS0FBSyxDQUFDLFNBQVMsQ0FBQyxVQUFVLENBQUM7YUFDdEQ7aUJBQU07Z0JBQ0gsSUFBSSxDQUFDLFFBQVEsR0FBRyxJQUFJLENBQUM7YUFDeEI7WUFFTCx1Q0FBdUM7WUFDdkMsdUNBQXVDO1NBRXRDO2FBQU0sSUFBRyxJQUFJLENBQUMsUUFBUSxJQUFJLG1CQUFLLENBQUMsZ0JBQWdCLENBQUMsQ0FBQyxDQUFDLEVBQUU7WUFDbEQsT0FBTyxDQUFDLEdBQUcsQ0FBQyxVQUFVLENBQUMsQ0FBQztZQUN4QixNQUFNLEdBQUcsR0FBRywyQ0FBYSxDQUFDLFFBQVEsQ0FBQyxZQUFZLENBQUMsTUFBTSxDQUFDLGdCQUFnQixDQUFDLG1CQUFLLENBQUMsYUFBYSxDQUFDLENBQUM7WUFDN0YsTUFBTSxPQUFPLEdBQUcsSUFBSSxFQUFjLENBQUM7WUFDbkMsT0FBTyxDQUFDLEdBQUcsQ0FBQyxjQUFjLElBQUksQ0FBQyxRQUFRLElBQUksT0FBTyxDQUFDLEtBQUssR0FBRyxDQUFDLENBQUM7WUFDN0QsSUFBRyxxQkFBTyxDQUFDLFVBQVUsQ0FBQyxHQUFHLEVBQUUsR0FBRyxFQUFFLE9BQU8sRUFBRSxtQkFBSyxDQUFDLFFBQVEsRUFBRSxJQUFJLENBQUMsU0FBUyxDQUFDLEVBQUU7Z0JBQ3RFLE9BQU8sQ0FBQyxHQUFHLENBQUMsY0FBYyxJQUFJLENBQUMsUUFBUSxJQUFJLE9BQU8sQ0FBQyxLQUFLLENBQUMsU0FBUyxDQUFDLFVBQVUsSUFBSSx1QkFrQml3UCxXQUFZLENBbEI3d1AsSUFBSSxDQUFDLFFBQVEsRUFBSSxPQUFPLENBQUMsS0FBSyxDQUFDLFNBQVMsQ0FBQyxVQUFVLENBQUEsRUFBRSxDQUFDLENBQUM7Z0JBQ3hJLDJCQWlCazFQLFdBQVksQ0FqQjMxUCxJQUFJLENBQUMsUUFBUSxFQUFJLE9BQU8sQ0FBQyxLQUFLLENBQUMsU0FBUyxDQUFDLFVBQVUsR0FBRTtvQkFDcEQsT0FBTyxDQUFDLEdBQUcsQ0FBQyxZQUFZLENBQUMsQ0FBQztvQkFDMUIscUJBQVcsQ0FBQyxRQUFRLENBQUMsa0JBQWtCLENBQUMsT0FBTyxDQUFDLEtBQUssQ0FBQyxTQUFTLENBQUMsQ0FBQztpQkFDcEU7YUFDSjtZQUNELElBQUksQ0FBQyxRQUFRLEdBQUcsSUFBSSxDQUFDO1NBQ3hCO1FBQ0Qsa0NBQWtDO1FBQ2xDLCtCQUErQjtRQUMvQixvR0FBb0c7UUFDcEcsMENBQTBDO1FBQzFDLGtGQUFrRjtRQUNsRixtQ0FBbUM7UUFDbkMsNEVBQTRFO1FBQzVFLFFBQVE7UUFDUixJQUFJO0lBQ1IsQ0FBQztDQUNKO0FBcEVELGdDQW9FQyJ9\",\"assetPath\":\"Assets/Zepeto
+    Multiplay Component/ZepetoScript/Managers/CameraManager.ts\",\"manifest\":{\"properties\":[{\"assembly\":\"ZEPETO.World\",\"name\":\"multiplay\",\"type\":\"ZEPETO.World.ZepetoWorldMultiplay\",\"isArray\":false,\"initValue\":[],\"enumKeys\":[],\"enumValues\":[],\"attributes\":[]}],\"name\":\"CameraManager\",\"description\":\"\",\"hasAnimatorMove\":false},\"isCompiled\":true}"
+  typescriptHash: 26fba147e1a0ced8e192426cc4bf37ce
   onlyWriteTrigger: 0

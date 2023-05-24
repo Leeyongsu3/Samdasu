@@ -1,5 +1,5 @@
 import { ArraySchema } from 'types/ArraySchema';
-import { GameObject, RectTransform, Sprite, Transform } from 'UnityEngine';
+import { GameObject, HumanBodyBones, Sprite, Transform } from 'UnityEngine';
 import { Button, Image, Text } from 'UnityEngine.UI';
 import { Room, RoomData } from 'ZEPETO.Multiplay';
 import { ZepetoScriptBehaviour } from 'ZEPETO.Script'
@@ -7,7 +7,7 @@ import { ZepetoWorldMultiplay } from 'ZEPETO.World';
 import SyncIndexManager from '../Common/SyncIndexManager';
 import LookAt from '../Sample Code/LookAt';
 import GameManager from './GameManager';
-import { Datas, LoadingType, Stamp, StampUI, StampType, Sticker, StickerSelected, StickerUI, MESSAGE, StickerType, SendName, ERROR, Language } from './TypeManager';
+import { LoadingType, Stamp, StampUI, StampType, Sticker, StickerSelected, StickerUI, MESSAGE, StickerType, SendName, ERROR, Language, Datas, UnequipButtonType } from './TypeManager';
 
 export default class UIManager extends ZepetoScriptBehaviour {
 
@@ -97,7 +97,7 @@ export default class UIManager extends ZepetoScriptBehaviour {
     public set currentSamdasuState(value: string) {
         this._currentSamdasuState = value;
         const check = value != null && value != undefined;
-        // this.buttonPanel.GetChild(0).gameObject.SetActive(check);
+        // this.buttonPanel.GetChild(4).gameObject.SetActive(check);
     }
 
     private Awake() {
@@ -185,7 +185,7 @@ export default class UIManager extends ZepetoScriptBehaviour {
     /* Horse Button Visibler */
     public HorseRideButtonVisibler(isVisible:boolean) {
         if(this.isAddHorse) {
-            this.buttonPanel.GetChild(1).gameObject.SetActive(isVisible);
+            this.buttonPanel.GetChild(0).gameObject.SetActive(isVisible);
         }
     }
 
@@ -238,9 +238,6 @@ export default class UIManager extends ZepetoScriptBehaviour {
         const closeButton = this.npcTrashUI.GetChild(3).GetComponent<Button>();
         const kr_Button = this.npcTrashUI.GetChild(4).GetComponent<Button>();
         const en_Button = this.npcTrashUI.GetChild(5).GetComponent<Button>();
-        // const nextButton = this.npcTrashUI.GetChild(6).GetComponent<Button>();
-        // const pointButton = this.npcTraderUI.GetChild(2).GetComponent<Button>();
-        // const stickButton = this.npcTraderUI.GetChild(3).GetComponent<Button>();
 
         /* First Talk */
         const kr = slide_Images.GetChild(0);
@@ -365,24 +362,31 @@ export default class UIManager extends ZepetoScriptBehaviour {
         // /* Branch - Point UI */
         const point_kr = pointUI.GetChild(0);
         const point_en = pointUI.GetChild(1);
-        const point_nextButton = pointUI.GetChild(2).GetComponent<Button>();
-        point_nextButton.onClick.AddListener(() => {
-            this.npcTrashUI.gameObject.SetActive(false);
-            for(const btn of npcButtons) btn.RemoteStartLooking();
-            choice_Images.gameObject.SetActive(true);
-            pointUI.gameObject.SetActive(false);
-            this.openUI = null;
-            console.log(point_nextButton, SyncIndexManager.TrashCount >= 10);
+        const point_nextButtons:Button[] = [];
+        point_nextButtons.push(point_kr.GetChild(1).GetComponent<Button>());
+        point_nextButtons.push(point_en.GetChild(1).GetComponent<Button>());
+        for(const point_nextButton of point_nextButtons) {
+            point_nextButton.onClick.AddListener(() => {
+                this.npcTrashUI.gameObject.SetActive(false);
+                for(const btn of npcButtons) btn.RemoteStartLooking();
+                choice_Images.gameObject.SetActive(true);
+                pointUI.gameObject.SetActive(false);
+                this.openUI = null;
+                console.log(point_nextButton, SyncIndexManager.TrashCount >= 10);
+    
+                if(SyncIndexManager.TrashCount >= 10) {
+                    const data = new RoomData();
+                    data.Add(SendName.trashCount, 10);
+                    this.room.Send(MESSAGE.Add_Point, data.GetObject());
 
-            if(SyncIndexManager.TrashCount >= 10) {
-                const data = new RoomData();
-                data.Add(SendName.trashCount, 10);
-                this.room.Send(MESSAGE.Add_Point, data.GetObject());
-                GameManager.instance.ClearStampMission(StampType.STAMP_TRASH);
-            } else {
-                // NEED to UI
-            }
-        });
+                    /* Stamp Check */
+                    const trashStamp = SyncIndexManager.STAMPS.get(StampType.STAMP_TRASH);
+                    if(!trashStamp.isClear) GameManager.instance.ClearStampMission(StampType.STAMP_TRASH);
+                } else {
+                    // NEED to UI
+                }
+            });
+        }
         
         /* Branch - Create UI */
         const create_kr = createUI.GetChild(0);
@@ -445,6 +449,7 @@ export default class UIManager extends ZepetoScriptBehaviour {
             const look = button.GetComponent<LookAt>();
             npcButtons.push(look);
         }
+        this.npcTrashButtons = [];
     }
 
     /* Samdasu NPC Horse Rental UI */
@@ -498,7 +503,7 @@ export default class UIManager extends ZepetoScriptBehaviour {
             const look = button.GetComponent<LookAt>();
             npcButtons.push(look);
         }
-        this.npcHorseButtons = null;
+        this.npcHorseButtons = [];
     }
 
     /* Samdasu NPC Photo Render UI */
@@ -697,7 +702,10 @@ export default class UIManager extends ZepetoScriptBehaviour {
             this.openUI = null;
             image_A.sprite = null;
             image_B.sprite = null;
-            GameManager.instance.ClearStampMission(StampType.STAMP_TRASH);
+
+            /* Stamp Check */
+            const trashStamp = SyncIndexManager.STAMPS.get(StampType.STAMP_TRASH);
+            if(!trashStamp.isClear) GameManager.instance.ClearStampMission(StampType.STAMP_TRASH);
         });
 
         clearButton.onClick.AddListener(() => {
@@ -734,20 +742,13 @@ export default class UIManager extends ZepetoScriptBehaviour {
     
     /* Samdasu Button Panel */
     private SetButtonPanel() {
-        const returnButton = this.buttonPanel.GetChild(0).GetComponent<Button>();
-        const horseButton = this.buttonPanel.GetChild(1).GetComponent<Button>();
-        const invenButton = this.buttonPanel.GetChild(2).GetComponent<Button>();
-        const stampButton = this.buttonPanel.GetChild(3).GetComponent<Button>();
-
-        returnButton.onClick.AddListener(() => {
-            if(this.currentSamdasuState) {
-                const data = new RoomData();
-                data.Add(SendName.SamdasuState, this.currentSamdasuState);
-                data.Add(SendName.isComplete, false);
-                this.room.Send(MESSAGE.Ride_OFF, data.GetObject());
-            }
-            this.currentSamdasuState = null;
-        });
+        const horseButton = this.buttonPanel.GetChild(0).GetComponent<Button>();
+        const invenButton = this.buttonPanel.GetChild(1).GetComponent<Button>();
+        const stampButton = this.buttonPanel.GetChild(2).GetComponent<Button>();
+        // const returnButton = this.buttonPanel.GetChild(4).GetComponent<Button>();
+        // const unequipHButton = this.buttonPanel.GetChild(+UnequipButtonType.Head).GetComponent<Button>();
+        const unequipRButton = this.buttonPanel.GetChild(+UnequipButtonType.RightHand).GetComponent<Button>();
+        const unequipLButton = this.buttonPanel.GetChild(+UnequipButtonType.LeftHand).GetComponent<Button>();
         
         horseButton.onClick.AddListener(() => {
             if(!this.isHorseRide) {
@@ -759,6 +760,10 @@ export default class UIManager extends ZepetoScriptBehaviour {
                 data.Add(SendName.SamdasuState, MESSAGE.Ride_Horse);
                 data.Add(SendName.isComplete, true);
                 this.room.Send(MESSAGE.Ride_OFF, data.GetObject());
+                
+                /* Stamp Check */
+                const horseStamp = SyncIndexManager.STAMPS.get(StampType.STAMP_HORSE);
+                if(!horseStamp.isClear) GameManager.instance.ClearStampMission(StampType.STAMP_HORSE);
             }
         });
         
@@ -771,6 +776,50 @@ export default class UIManager extends ZepetoScriptBehaviour {
             this.stampUI.gameObject.SetActive(!this.stampUI.gameObject.activeSelf);
             this.openUI = this.stampUI.gameObject.activeSelf ? this.stampUI.gameObject : null;
         });
+
+        // returnButton.onClick.AddListener(() => {
+        //     if(this.currentSamdasuState) {
+        //         const data = new RoomData();
+        //         data.Add(SendName.SamdasuState, this.currentSamdasuState);
+        //         data.Add(SendName.isComplete, false);
+        //         this.room.Send(MESSAGE.Ride_OFF, data.GetObject());
+        //     }
+        //     this.currentSamdasuState = null;
+        // });
+
+        // unequipHButton.onClick.AddListener(() => {
+        //     const data = new RoomData();
+        //     data.Add(SendName.attach, HumanBodyBones.Head);
+        //     data.Add(SendName.name, Datas.Cake);
+        //     this.room.Send(MESSAGE.Unequip, data.GetObject());
+        //     unequipHButton.gameObject.SetActive(false);
+        // });
+
+        unequipRButton.onClick.AddListener(() => {
+            const data = new RoomData();
+            data.Add(SendName.attach, HumanBodyBones.RightHand);
+            data.Add(SendName.name, Datas.Samdasu);
+            this.room.Send(MESSAGE.Unequip, data.GetObject());
+            unequipRButton.gameObject.SetActive(false);
+        });
+
+        unequipLButton.onClick.AddListener(() => {
+            const data = new RoomData();
+            data.Add(SendName.attach, HumanBodyBones.LeftHand);
+            data.Add(SendName.name, Datas.Balloon);
+            this.room.Send(MESSAGE.Unequip, data.GetObject());
+            unequipLButton.gameObject.SetActive(false);
+        });
+
+        // returnButton.gameObject.SetActive(false);
+        // unequipHButton.gameObject.SetActive(false);
+        unequipRButton.gameObject.SetActive(false);
+        unequipLButton.gameObject.SetActive(false);
+    }
+
+    /* Unequip Button Visibler */
+    public UnequipButtonVisibler(unBtnType:UnequipButtonType, isVisible:boolean) {
+        this.buttonPanel.GetChild(+unBtnType).gameObject.SetActive(isVisible);
     }
     
     /* Samdasu Stamp UI */
@@ -792,9 +841,15 @@ export default class UIManager extends ZepetoScriptBehaviour {
         this.stamps = new Map<string, StampUI>();
         for(let i=0; i<player_stamp.Count; i++) {
             for(const key of keys) {
+                let index = 0;
+                for(let t=0; t<stampPanel.childCount; t++) {
+                    if(stampPanel.GetChild(t).name == key) {
+                        index = t;
+                        break;
+                    }
+                }
                 if(key == player_stamp[i].name) {
-                    stampPanel.GetChild(i).name = key;
-                    this.stamps.set(key, this.ProcessingStamp(stampPanel.GetChild(i), key, player_stamp[i].isClear));
+                    this.stamps.set(key, this.ProcessingStamp(stampPanel.GetChild(index), key, player_stamp[i].isClear));
                     this.UpdateStampUI(this.room.SessionId, player_stamp[i] as Stamp);
                 }
             }

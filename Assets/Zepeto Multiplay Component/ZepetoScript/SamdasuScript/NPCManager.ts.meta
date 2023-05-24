@@ -21,18 +21,19 @@ ScriptedImporter:
   compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
     { value: true });\r\nconst ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst
     ZEPETO_Character_Controller_1 = require(\"ZEPETO.Character.Controller\");\r\nconst
-    TypeManager_1 = require(\"../Managers/TypeManager\");\r\nclass NPCManager extends
-    ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    constructor() {\r\n        super(...arguments);\r\n       
-    /* Properties */\r\n        this.npcPosisions = [];\r\n        this.npcs = [];\r\n   
-    }\r\n    /* GameManager */\r\n    RemoteStart() {\r\n        this.SpanwNPC();\r\n   
-    }\r\n    /* Create NPC */\r\n    SpanwNPC() {\r\n        for (const pos of this.npcPosisions)
-    {\r\n            const spawnInfo = new ZEPETO_Character_Controller_1.SpawnInfo();\r\n           
-    spawnInfo.position = pos.position;\r\n            spawnInfo.rotation = pos.rotation;\r\n           
+    UnityEngine_1 = require(\"UnityEngine\");\r\nconst TypeManager_1 = require(\"../Managers/TypeManager\");\r\nclass
+    NPCManager extends ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    constructor()
+    {\r\n        super(...arguments);\r\n        /* Properties */\r\n        this.npcPosisions
+    = [];\r\n        this.npcs = [];\r\n    }\r\n    /* GameManager */\r\n    RemoteStart()
+    {\r\n        this.SpanwNPC();\r\n    }\r\n    /* Create NPC */\r\n    SpanwNPC()
+    {\r\n        for (const pos of this.npcPosisions) {\r\n            const spawnInfo
+    = new ZEPETO_Character_Controller_1.SpawnInfo();\r\n            spawnInfo.position
+    = pos.position;\r\n            spawnInfo.rotation = pos.rotation;\r\n           
     /* Create and Init NPC */\r\n            ZEPETO_Character_Controller_1.ZepetoCharacterCreator.CreateByZepetoId(TypeManager_1.Datas.kuaId,
     spawnInfo, (character) => {\r\n                this.npcs.push(character);\r\n               
     const animator = character.ZepetoAnimator;\r\n                animator.SetBool(TypeManager_1.Anim.isNPC,
     true);\r\n            });\r\n        }\r\n    }\r\n}\r\nexports.default = NPCManager;\r\n//#
-    sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiTlBDTWFuYWdlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIk5QQ01hbmFnZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQSxpREFBc0Q7QUFDdEQsNkVBQWlHO0FBRWpHLHlEQUFzRDtBQUV0RCxNQUFxQixVQUFXLFNBQVEscUNBQXFCO0lBQTdEOztRQUVJLGdCQUFnQjtRQUNVLGlCQUFZLEdBQWdCLEVBQUUsQ0FBQztRQUNqRCxTQUFJLEdBQXNCLEVBQUUsQ0FBQztJQXNCekMsQ0FBQztJQXBCRyxpQkFBaUI7SUFDVixXQUFXO1FBQ2QsSUFBSSxDQUFDLFFBQVEsRUFBRSxDQUFDO0lBQ3BCLENBQUM7SUFFRCxnQkFBZ0I7SUFDUixRQUFRO1FBQ1osS0FBSSxNQUFNLEdBQUcsSUFBSSxJQUFJLENBQUMsWUFBWSxFQUFFO1lBQ2hDLE1BQU0sU0FBUyxHQUFHLElBQUksdUNBQVMsRUFBRSxDQUFDO1lBQ2xDLFNBQVMsQ0FBQyxRQUFRLEdBQUcsR0FBRyxDQUFDLFFBQVEsQ0FBQztZQUNsQyxTQUFTLENBQUMsUUFBUSxHQUFHLEdBQUcsQ0FBQyxRQUFRLENBQUM7WUFFbEMseUJBQXlCO1lBQ3pCLG9EQUFzQixDQUFDLGdCQUFnQixDQUFDLG1CQUFLLENBQUMsS0FBSyxFQUFFLFNBQVMsRUFBRSxDQUFDLFNBQTBCLEVBQUUsRUFBRTtnQkFDM0YsSUFBSSxDQUFDLElBQUksQ0FBQyxJQUFJLENBQUMsU0FBUyxDQUFDLENBQUM7Z0JBQzFCLE1BQU0sUUFBUSxHQUFHLFNBQVMsQ0FBQyxjQUFjLENBQUM7Z0JBQzFDLFFBQVEsQ0FBQyxPQUFPLENBQUMsa0JBQUksQ0FBQyxLQUFLLEVBQUUsSUFBSSxDQUFDLENBQUM7WUFDdkMsQ0FBQyxDQUFDLENBQUE7U0FDTDtJQUNMLENBQUM7Q0FDSjtBQTFCRCw2QkEwQkMifQ==","assetPath":"Assets/Zepeto
+    sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiTlBDTWFuYWdlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIk5QQ01hbmFnZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQSxpREFBc0Q7QUFDdEQsNkVBQWlHO0FBQ2pHLDZDQUF3QztBQUN4Qyx5REFBc0Q7QUFFdEQsTUFBcUIsVUFBVyxTQUFRLHFDQUFxQjtJQUE3RDs7UUFFSSxnQkFBZ0I7UUFDVSxpQkFBWSxHQUFnQixFQUFFLENBQUM7UUFDakQsU0FBSSxHQUFzQixFQUFFLENBQUM7SUFzQnpDLENBQUM7SUFwQkcsaUJBQWlCO0lBQ1YsV0FBVztRQUNkLElBQUksQ0FBQyxRQUFRLEVBQUUsQ0FBQztJQUNwQixDQUFDO0lBRUQsZ0JBQWdCO0lBQ1IsUUFBUTtRQUNaLEtBQUksTUFBTSxHQUFHLElBQUksSUFBSSxDQUFDLFlBQVksRUFBRTtZQUNoQyxNQUFNLFNBQVMsR0FBRyxJQUFJLHVDQUFTLEVBQUUsQ0FBQztZQUNsQyxTQUFTLENBQUMsUUFBUSxHQUFHLEdBQUcsQ0FBQyxRQUFRLENBQUM7WUFDbEMsU0FBUyxDQUFDLFFBQVEsR0FBRyxHQUFHLENBQUMsUUFBUSxDQUFDO1lBRWxDLHlCQUF5QjtZQUN6QixvREFBc0IsQ0FBQyxnQkFBZ0IsQ0FBQyxtQkFBSyxDQUFDLEtBQUssRUFBRSxTQUFTLEVBQUUsQ0FBQyxTQUEwQixFQUFFLEVBQUU7Z0JBQzNGLElBQUksQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLFNBQVMsQ0FBQyxDQUFDO2dCQUMxQixNQUFNLFFBQVEsR0FBRyxTQUFTLENBQUMsY0FBYyxDQUFDO2dCQUMxQyxRQUFRLENBQUMsT0FBTyxDQUFDLGtCQUFJLENBQUMsS0FBSyxFQUFFLElBQUksQ0FBQyxDQUFDO1lBQ3ZDLENBQUMsQ0FBQyxDQUFBO1NBQ0w7SUFDTCxDQUFDO0NBQ0o7QUExQkQsNkJBMEJDIn0=","assetPath":"Assets/Zepeto
     Multiplay Component/ZepetoScript/SamdasuScript/NPCManager.ts","manifest":{"properties":[{"assembly":"UnityEngine.CoreModule","name":"npcPosisions","type":"UnityEngine.Transform[]","isArray":true,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]}],"name":"NPCManager","description":"","hasAnimatorMove":false},"isCompiled":true}'
   typescriptHash: c620697a9ba0bfa531a91a99f31145da
   onlyWriteTrigger: 0

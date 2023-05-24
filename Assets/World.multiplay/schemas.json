@@ -6,7 +6,7 @@
 "SyncTransform" : {"Id" : "string","position" : "sVector3","localPosition" : "sVector3","rotation" : "sQuaternion","scale" : "sVector3","status" : "number","sendTime" : "float64"},
 "PlayerAdditionalValue" : {"additionalWalkSpeed" : "number","additionalRunSpeed" : "number","additionalJumpPower" : "number"},
 "EquipData" : {"key" : "string","sessionId" : "string","itemName" : "string","prevItemName" : "string","bone" : "number","prevBone" : "number"},
-"ZepetoAnimationParam" : {"State" : "number","MoveState" : "number","JumpState" : "number","LandingState" : "number","MotionSpeed" : "number","FallSpeed" : "number","Acceleration" : "number","MoveProgress" : "number","IsSit" : "boolean","SamdasuState" : "number","inHandRight" : "boolean","inHandLeft" : "boolean"},
+"ZepetoAnimationParam" : {"State" : "number","MoveState" : "number","JumpState" : "number","LandingState" : "number","MotionSpeed" : "number","FallSpeed" : "number","Acceleration" : "number","MoveProgress" : "number","isSit" : "boolean","SamdasuState" : "number","isHold" : "boolean"},
 "Samdasu" : {"SamdasuState" : "number","TrashCount" : "number","Score" : "number","Rank" : "number","Stickers" : {"array" : "Sticker"},"Stamps" : {"array" : "Stamp"}},
 "Sticker" : {"name" : "string","count" : "number"},
 "Stamp" : {"name" : "string","isClear" : "boolean"},

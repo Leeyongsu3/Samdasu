@@ -19,18 +19,23 @@ ScriptedImporter:
   WrapperFilters: []
   wrapperOutputDirectory: Generated
   compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
-    { value: true });\r\nconst UnityEngine_1 = require(\"UnityEngine\");\r\nconst
-    UnityEngine_UI_1 = require(\"UnityEngine.UI\");\r\nconst ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst
-    GameManager_1 = require(\"../Managers/GameManager\");\r\nconst TypeManager_1
-    = require(\"../Managers/TypeManager\");\r\nconst OXManager_1 = require(\"./OXManager\");\r\nclass
-    OXClearController extends ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    Start()
-    {\r\n        /* Set OX Manager */\r\n        if (!this.returnPos)\r\n           
+    { value: true });\r\nconst __UnityEngine__ = require(\"UnityEngine\");\r\nconst
+    UnityEngine_1 = require(\"UnityEngine\");\r\nconst ZEPETO_Character_Controller_1
+    = require(\"ZEPETO.Character.Controller\");\r\nconst ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst
+    SyncIndexManager_1 = require(\"../Common/SyncIndexManager\");\r\nconst GameManager_1
+    = require(\"../Managers/GameManager\");\r\nconst TypeManager_1 = require(\"../Managers/TypeManager\");\r\nconst
+    OXManager_1 = require(\"./OXManager\");\r\nclass OXClearController extends ZEPETO_Script_1.ZepetoScriptBehaviour
+    {\r\n    Start() {\r\n        /* Set OX Manager */\r\n        if (!this.returnPos)\r\n           
     this.returnPos = this.transform.parent;\r\n        this.manager = this.returnPos.GetComponent($typeof(OXManager_1.default));\r\n   
-    }\r\n    OnTriggerEnter(collider) {\r\n        if (this.manager.isComplete) {\r\n           
-    console.log(` <<<<<<<< COMPLETE >>>>>>>> `);\r\n            this.manager.OnClearOXZone();\r\n           
-    GameManager_1.default.instance.ClearStampMission(TypeManager_1.StampType.STAMP_OX_QUIZ);\r\n       
+    }\r\n    OnTriggerEnter(collider) {\r\n        if (!ZEPETO_Character_Controller_1.ZepetoPlayers.instance.LocalPlayer)\r\n           
+    return;\r\n        const character = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.LocalPlayer.zepetoPlayer.character.gameObject;\r\n       
+    if (__UnityEngine__.Object.op_Equality(collider.gameObject, character))\r\n           
+    return;\r\n        if (this.manager.isComplete) {\r\n            console.log(`
+    <<<<<<<< COMPLETE >>>>>>>> `);\r\n            this.manager.OnClearOXZone();\r\n           
+    /* Samdasu Drink Stamp Check */\r\n            const quizStamp = SyncIndexManager_1.default.STAMPS.get(TypeManager_1.StampType.STAMP_OX_QUIZ);\r\n           
+    if (!quizStamp.isClear)\r\n                GameManager_1.default.instance.ClearStampMission(TypeManager_1.StampType.STAMP_OX_QUIZ);\r\n       
     }\r\n        else {\r\n            console.log(` >>>>>>>> NO <<<<<<<< `);\r\n       
-    }\r\n    }\r\n}\r\nexports.default = OXClearController;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiT1hDbGVhckNvbnRyb2xsZXIuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJPWENsZWFyQ29udHJvbGxlci50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOztBQUFBLDZDQUEyRTtBQUMzRSxtREFBd0M7QUFDeEMsaURBQXFEO0FBQ3JELHlEQUFrRDtBQUNsRCx5REFBb0Q7QUFDcEQsMkNBQW9DO0FBRXBDLE1BQXFCLGlCQUFrQixTQUFRLHFDQUFxQjtJQU9oRSxLQUFLO1FBQ0Qsb0JBQW9CO1FBQ3BCLElBQUcsQ0FBQyxJQUFJLENBQUMsU0FBUztZQUFFLElBQUksQ0FBQyxTQUFTLEdBQUcsSUFBSSxDQUFDLFNBQVMsQ0FBQyxNQUFNLENBQUM7UUFDM0QsSUFBSSxDQUFDLE9BQU8sR0FBRyxJQUFJLENBQUMsU0FBUyxDQUFDLFlBQVksU0FBQyxtQkFBUyxFQUFHLENBQUM7SUFDNUQsQ0FBQztJQUVELGNBQWMsQ0FBQyxRQUFtQjtRQUM5QixJQUFHLElBQUksQ0FBQyxPQUFPLENBQUMsVUFBVSxFQUFFO1lBQ3hCLE9BQU8sQ0FBQyxHQUFHLENBQUMsOEJBQThCLENBQUMsQ0FBQztZQUM1QyxJQUFJLENBQUMsT0FBTyxDQUFDLGFBQWEsRUFBRSxDQUFDO1lBQzdCLHFCQUFXLENBQUMsUUFBUSxDQUFDLGlCQUFpQixDQUFDLHVCQUFTLENBQUMsYUFBYSxDQUFDLENBQUM7U0FDbkU7YUFBTTtZQUNILE9BQU8sQ0FBQyxHQUFHLENBQUMsd0JBQXdCLENBQUMsQ0FBQztTQUN6QztJQUNMLENBQUM7Q0FDSjtBQXRCRCxvQ0FzQkMifQ==","assetPath":"Assets/Zepeto
+    }\r\n    }\r\n}\r\nexports.default = OXClearController;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiT1hDbGVhckNvbnRyb2xsZXIuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJPWENsZWFyQ29udHJvbGxlci50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7QUFBQSw2Q0FBOEQ7QUFDOUQsNkVBQTREO0FBQzVELGlEQUFxRDtBQUNyRCxpRUFBMEQ7QUFDMUQseURBQWtEO0FBQ2xELHlEQUFvRDtBQUNwRCwyQ0FBb0M7QUFFcEMsTUFBcUIsaUJBQWtCLFNBQVEscUNBQXFCO0lBT2hFLEtBQUs7UUFDRCxvQkFBb0I7UUFDcEIsSUFBRyxDQUFDLElBQUksQ0FBQyxTQUFTO1lBQUUsSUFBSSxDQUFDLFNBQVMsR0FBRyxJQUFJLENBQUMsU0FBUyxDQUFDLE1BQU0sQ0FBQztRQUMzRCxJQUFJLENBQUMsT0FBTyxHQUFHLElBQUksQ0FBQyxTQUFTLENBQUMsWUFBWSxTQUFDLG1CQUFTLEVBQUcsQ0FBQztJQUM1RCxDQUFDO0lBRUQsY0FBYyxDQUFDLFFBQW1CO1FBQzlCLElBQUcsQ0FBQywyQ0FBYSxDQUFDLFFBQVEsQ0FBQyxXQUFXO1lBQUUsT0FBTztRQUUvQyxNQUFNLFNBQVMsR0FBRywyQ0FBYSxDQUFDLFFBQVEsQ0FBQyxXQUFXLENBQUMsWUFBWSxDQUFDLFNBQVMsQ0FBQyxVQUFVLENBQUM7UUFDdkYsMkJBWWtoVCxXQUFZLENBWjNoVCxRQUFRLENBQUMsVUFBVSxFQUFJLFNBQVM7WUFBRSxPQUFPO1FBQzVDLElBQUcsSUFBSSxDQUFDLE9BQU8sQ0FBQyxVQUFVLEVBQUU7WUFDeEIsT0FBTyxDQUFDLEdBQUcsQ0FBQyw4QkFBOEIsQ0FBQyxDQUFDO1lBQzVDLElBQUksQ0FBQyxPQUFPLENBQUMsYUFBYSxFQUFFLENBQUM7WUFFN0IsK0JBQStCO1lBQy9CLE1BQU0sU0FBUyxHQUFHLDBCQUFnQixDQUFDLE1BQU0sQ0FBQyxHQUFHLENBQUMsdUJBQVMsQ0FBQyxhQUFhLENBQUMsQ0FBQztZQUN2RSxJQUFHLENBQUMsU0FBUyxDQUFDLE9BQU87Z0JBQUUscUJBQVcsQ0FBQyxRQUFRLENBQUMsaUJBQWlCLENBQUMsdUJBQVMsQ0FBQyxhQUFhLENBQUMsQ0FBQztTQUMxRjthQUFNO1lBQ0gsT0FBTyxDQUFDLEdBQUcsQ0FBQyx3QkFBd0IsQ0FBQyxDQUFDO1NBQ3pDO0lBQ0wsQ0FBQztDQUNKO0FBN0JELG9DQTZCQyJ9","assetPath":"Assets/Zepeto
     Multiplay Component/ZepetoScript/SamdasuScript/OXClearController.ts","manifest":{"properties":[{"assembly":"UnityEngine.CoreModule","name":"targetUI","type":"UnityEngine.GameObject","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]}],"name":"OXClearController","description":"","hasAnimatorMove":false},"isCompiled":true}'
-  typescriptHash: f931cc87f621e1618f60497823dda674
+  typescriptHash: 35db5d826348133f879441816633d7d0
   onlyWriteTrigger: 0

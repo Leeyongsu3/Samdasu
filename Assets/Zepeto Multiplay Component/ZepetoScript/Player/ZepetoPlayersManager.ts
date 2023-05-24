@@ -145,7 +145,7 @@ export default class ZepetoPlayersManager extends ZepetoScriptBehaviour {
             console.log(`OnJoinPlayer 4`);
             const isLocal = this._room.SessionId === player.sessionId;
             ZepetoPlayers.instance.CreatePlayerWithUserId(sessionId, player.zepetoUserId, spawnInfo, isLocal);
-            console.log(`OnJoinPlayer 5`);
+            console.log(`OnJoinPlayer 5 ${this._room.SessionId} === ${player.sessionId} ${isLocal}`);
         }
     }
 
