@@ -983,7 +983,7 @@ export default class UIManager extends ZepetoScriptBehaviour {
     }
 
     /* Change Language */
-    private Localizing(lag:Language) {
+    public Localizing(lag:Language) {
         SyncIndexManager.language = lag;
         if(lag == Language.KR) {
             for(const kr of this.krObjects) kr.SetActive(true);

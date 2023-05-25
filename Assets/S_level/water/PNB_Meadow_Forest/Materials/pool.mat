@@ -133,9 +133,9 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _BumpScale: 1
-    - _CausticDepthFade: 17.61
-    - _CausticScale: 52.8
-    - _CausticSpeed: 1
+    - _CausticDepthFade: 0
+    - _CausticScale: 0
+    - _CausticSpeed: 0
     - _ColourNoiseScale1: 0.019
     - _Cutoff: 0.5
     - _Depth: 5
@@ -169,12 +169,12 @@ Material:
     - _NormalTiling2: 0.1
     - _ODM: 0.02
     - _OcclusionStrength: 1
-    - _Opacity: 0.735
+    - _Opacity: 0.833
     - _OpacityFalloff: 4.66
-    - _OpacityMin: 0.761
+    - _OpacityMin: 1
     - _OverallFalloff: 0.22
     - _Parallax: 0.02
-    - _ReflectionPower: 0.057
+    - _ReflectionPower: 0.022
     - _RippleSpeed: 0.138
     - _ShallowFalloff: -0.32
     - _Smoothness: 8.8

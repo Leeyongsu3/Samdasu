@@ -133,9 +133,9 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _BumpScale: 1
-    - _CausticDepthFade: 17.61
-    - _CausticScale: 52.8
-    - _CausticSpeed: 1
+    - _CausticDepthFade: 0
+    - _CausticScale: 0
+    - _CausticSpeed: 0
     - _ColourNoiseScale1: 0.019
     - _Cutoff: 0.5
     - _Depth: 5
@@ -174,12 +174,12 @@ Material:
     - _OpacityMin: 1
     - _OverallFalloff: 0.22
     - _Parallax: 0.02
-    - _ReflectionPower: 0.057
+    - _ReflectionPower: 0.016
     - _RippleSpeed: 0.138
     - _ShallowFalloff: -0.32
     - _Smoothness: 8.8
     - _SmoothnessTextureChannel: 0
-    - _Specular: 0
+    - _Specular: 0.288
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _Tiling: 0.36
@@ -246,14 +246,14 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Color3: {r: 0.2924528, g: 0.2924528, b: 0.2924528, a: 0}
     - _Color4: {r: 0.2924528, g: 0.2924528, b: 0.2924528, a: 0}
-    - _DeepColour: {r: 0.22432362, g: 0.5098926, b: 0.6698113, a: 1}
+    - _DeepColour: {r: 0.38892844, g: 0.6953671, b: 0.8679245, a: 1}
     - _DepthGlowColour: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _FoamColor: {r: 1, g: 1, b: 1, a: 1}
     - _FoamColor1: {r: 0.5215687, g: 0.8980392, b: 0.8470588, a: 0}
     - _FoamEmitColour: {r: 0, g: 0, b: 0, a: 0}
-    - _ShallowColour: {r: 0.12246352, g: 0.5225135, b: 0.6037736, a: 0}
-    - _VeryDeepColour: {r: 0.08627451, g: 0.28972197, b: 0.34901962, a: 1}
+    - _ShallowColour: {r: 0.24679601, g: 0.706462, b: 0.8867924, a: 0}
+    - _VeryDeepColour: {r: 0.20572266, g: 0.54975677, b: 0.6509434, a: 1}
     - _WaterDeepColor: {r: 0.1254902, g: 0.34117648, b: 0.15583292, a: 0}
     - _WaterDeepColor1: {r: 0.04705882, g: 0.3098039, b: 0.1960784, a: 0}
     - _WaterReallyDeepColor: {r: 0.1459713, g: 0.20784314, b: 0.11764706, a: 1}

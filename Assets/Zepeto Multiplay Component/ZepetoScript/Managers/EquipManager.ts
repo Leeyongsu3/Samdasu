@@ -7,7 +7,7 @@ import { ZepetoScriptBehaviour } from 'ZEPETO.Script'
 import { ZepetoWorldMultiplay } from 'ZEPETO.World';
 import SyncIndexManager from '../Common/SyncIndexManager';
 import GameManager from './GameManager';
-import { Datas, MESSAGE, UnequipButtonType } from './TypeManager';
+import { Anim, Datas, MESSAGE, UnequipButtonType } from './TypeManager';
 import UIManager from './UIManager';
 
 export default class EquipManager extends ZepetoScriptBehaviour {
@@ -115,6 +115,7 @@ export default class EquipManager extends ZepetoScriptBehaviour {
                 switch(equipData.itemName) {
                     case this.samdasuPet.name :
                         SyncIndexManager.SamdasuPetInHand = false;
+                        anim.SetBool(Anim.isHold, false);
                         break;
                     case this.cake.name :
                         SyncIndexManager.CakeInHead = false;

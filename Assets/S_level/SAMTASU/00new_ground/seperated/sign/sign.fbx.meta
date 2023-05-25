@@ -2,7 +2,10 @@ fileFormatVersion: 2
 guid: 69a37a7a3a0a34e4ca8ade9ee21c05e3
 ModelImporter:
   serializedVersion: 20200
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      74: 1827226128182048838
+    second: Take 001
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -30,10 +33,10 @@ ModelImporter:
       name: Material #84
     second: {fileID: 2100000, guid: 313bd5d4563ba0741bc85eb1185d93af, type: 2}
   materials:
-    materialImportMode: 2
+    materialImportMode: 1
     materialName: 0
     materialSearch: 1
-    materialLocation: 0
+    materialLocation: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0

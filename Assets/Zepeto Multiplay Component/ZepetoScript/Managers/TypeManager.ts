@@ -217,6 +217,14 @@ export enum RenderPhotoMode {
     Default, Edit_Mode, Result_Mode,
 }
 
+/* OX Type Datas */
+export enum OXType {
+    OX_WALL = "wall",
+    OX_SUCCESSED = "Successed",
+    OX_FAILED = "Failed",
+    OX_CLEAR = "Clear",
+}
+
 /* OX Quiz Datas */
 export interface OXData {
     controller:OXController,

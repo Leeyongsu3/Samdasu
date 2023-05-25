@@ -21,27 +21,44 @@ ScriptedImporter:
   compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
     { value: true });\r\nconst UnityEngine_1 = require(\"UnityEngine\");\r\nconst
     ZEPETO_Character_Controller_1 = require(\"ZEPETO.Character.Controller\");\r\nconst
-    ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst OXController_1 = require(\"./OXController\");\r\nclass
-    OXManager extends ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    constructor()
-    {\r\n        super(...arguments);\r\n        /* Managers Properties */\r\n       
-    this.datas = [];\r\n    }\r\n    Start() {\r\n        for (const trans of this.transform.GetComponentsInChildren($typeof(UnityEngine_1.Transform)))
-    {\r\n            const con = trans.GetComponent($typeof(OXController_1.default));\r\n           
-    if (con) {\r\n                const data = { controller: con, isPassed: false,
-    };\r\n                this.datas.push(data);\r\n            }\r\n        }\r\n   
-    }\r\n    /** Controller Call **/\r\n    /* Passed OX Block */\r\n    OnOXPassed(controller)
-    {\r\n        for (const data of this.datas) {\r\n            if (ZEPETO_Script_1.ZepetoScriptBehaviour.op_Equality(data.controller,
-    controller)) {\r\n                data.isPassed = true;\r\n                break;\r\n           
-    }\r\n        }\r\n    }\r\n    /* Fail Object Script */\r\n    OnTouchedFailObject()
-    {\r\n        const character = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.LocalPlayer.zepetoPlayer.character;\r\n       
+    ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst ZEPETO_World_1 = require(\"ZEPETO.World\");\r\nconst
+    SyncIndexManager_1 = require(\"../Common/SyncIndexManager\");\r\nconst GameManager_1
+    = require(\"../Managers/GameManager\");\r\nconst TypeManager_1 = require(\"../Managers/TypeManager\");\r\nconst
+    OXClearController_1 = require(\"./OXClearController\");\r\nconst OXController_1
+    = require(\"./OXController\");\r\nclass OXManager extends ZEPETO_Script_1.ZepetoScriptBehaviour
+    {\r\n    constructor() {\r\n        super(...arguments);\r\n        /* Managers
+    Properties */\r\n        this.datas = [];\r\n    }\r\n    RemoteStart() {\r\n       
+    for (const trans of this.transform.GetComponentsInChildren($typeof(UnityEngine_1.Transform)))
+    {\r\n            if (trans.name.includes(TypeManager_1.OXType.OX_WALL)) {\r\n               
+    /* OX Wall */\r\n                console.log(trans.name);\r\n               
+    const con = trans.GetComponent($typeof(OXController_1.default));\r\n               
+    if (con) {\r\n                    const data = { controller: con, isPassed: false,
+    };\r\n                    this.datas.push(data);\r\n                    con.RemoteStart(this);\r\n               
+    }\r\n                else {\r\n                    /* OX Clear Wall */\r\n                   
+    trans.gameObject.SetActive(true);\r\n                }\r\n            }\r\n           
+    else if (trans.name.includes(TypeManager_1.OXType.OX_SUCCESSED)) {\r\n               
+    /* OX Successed */\r\n                console.log(trans.name);\r\n               
+    trans.gameObject.SetActive(false);\r\n            }\r\n            else if (trans.name.includes(TypeManager_1.OXType.OX_CLEAR))
+    {\r\n                /* OX Clear */\r\n                console.log(trans.name);\r\n               
+    const con = trans.GetComponent($typeof(OXClearController_1.default));\r\n               
+    if (con) {\r\n                    con.RemoteStart(this);\r\n                }\r\n           
+    }\r\n        }\r\n    }\r\n    /** Controller Call **/\r\n    /* Passed OX Block
+    */\r\n    OnOXPassed(controller) {\r\n        for (const data of this.datas)
+    {\r\n            if (ZEPETO_Script_1.ZepetoScriptBehaviour.op_Equality(data.controller,
+    controller)) {\r\n                data.isPassed = true;\r\n                console.log(data.isPassed);\r\n               
+    break;\r\n            }\r\n        }\r\n    }\r\n    /* Fail Object Script */\r\n   
+    OnTouchedFailObject() {\r\n        const character = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.LocalPlayer.zepetoPlayer.character;\r\n       
     character.Teleport(this.transform.position, this.transform.rotation);\r\n       
     for (const data of this.datas) {\r\n            data.controller.Reset();\r\n       
     }\r\n    }\r\n    /* Clear OX Zone */\r\n    OnClearOXZone() {\r\n        for
     (const data of this.datas) {\r\n            data.controller.OnMissionClear();\r\n       
-    }\r\n    }\r\n    /* Is Complete? */\r\n    get isComplete() {\r\n        if
-    (!this.datas || this.datas.length == 0)\r\n            return false;\r\n       
-    for (const data of this.datas) {\r\n            if (!data.isPassed) {\r\n               
+    }\r\n        /* Samdasu Drink Stamp Check */\r\n        const quizStamp = SyncIndexManager_1.default.STAMPS.get(TypeManager_1.StampType.STAMP_OX_QUIZ);\r\n       
+    if (!quizStamp.isClear)\r\n            GameManager_1.default.instance.ClearStampMission(TypeManager_1.StampType.STAMP_OX_QUIZ);\r\n   
+    }\r\n    /* Is Complete? */\r\n    get isComplete() {\r\n        if (!this.datas
+    || this.datas.length == 0)\r\n            return false;\r\n        for (const
+    data of this.datas) {\r\n            if (!data.isPassed) {\r\n               
     return false;\r\n            }\r\n        }\r\n        return true;\r\n    }\r\n}\r\nexports.default
-    = OXManager;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiT1hNYW5hZ2VyLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiT1hNYW5hZ2VyLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7O0FBQUEsNkNBQW9EO0FBQ3BELDZFQUE0RDtBQUU1RCxpREFBcUQ7QUFHckQsaURBQTBDO0FBRTFDLE1BQXFCLFNBQVUsU0FBUSxxQ0FBcUI7SUFBNUQ7O1FBRUkseUJBQXlCO1FBQ2pCLFVBQUssR0FBWSxFQUFFLENBQUM7SUFpRGhDLENBQUM7SUEvQ0csS0FBSztRQUNELEtBQUksTUFBTSxLQUFLLElBQUksSUFBSSxDQUFDLFNBQVMsQ0FBQyx1QkFBdUIsU0FBQyx1QkFBUyxJQUFLO1lBQ3BFLE1BQU0sR0FBRyxHQUFHLEtBQUssQ0FBQyxZQUFZLFNBQUMsc0JBQVksRUFBRyxDQUFDO1lBQy9DLElBQUcsR0FBRyxFQUFFO2dCQUNKLE1BQU0sSUFBSSxHQUFVLEVBQUUsVUFBVSxFQUFDLEdBQUcsRUFBRSxRQUFRLEVBQUMsS0FBSyxHQUFHLENBQUM7Z0JBQ3hELElBQUksQ0FBQyxLQUFLLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQyxDQUFDO2FBQ3pCO1NBQ0o7SUFDTCxDQUFDO0lBRUQsdUJBQXVCO0lBQ3ZCLHFCQUFxQjtJQUNkLFVBQVUsQ0FBQyxVQUF1QjtRQUNyQyxLQUFJLE1BQU0sSUFBSSxJQUFJLElBQUksQ0FBQyxLQUFLLEVBQUU7WUFDMUIsSUF4QkgscUNBQXFCLENBeUQ0K0osV0FBWSxDQWpDdmdLLElBQUksQ0FBQyxVQUFVLEVBQUksVUFBVSxHQUFFO2dCQUM5QixJQUFJLENBQUMsUUFBUSxHQUFHLElBQUksQ0FBQztnQkFDckIsTUFBTTthQUNUO1NBQ0o7SUFDTCxDQUFDO0lBRUQsd0JBQXdCO0lBQ2pCLG1CQUFtQjtRQUN0QixNQUFNLFNBQVMsR0FBRywyQ0FBYSxDQUFDLFFBQVEsQ0FBQyxXQUFXLENBQUMsWUFBWSxDQUFDLFNBQVMsQ0FBQztRQUM1RSxTQUFTLENBQUMsUUFBUSxDQUFDLElBQUksQ0FBQyxTQUFTLENBQUMsUUFBUSxFQUFFLElBQUksQ0FBQyxTQUFTLENBQUMsUUFBUSxDQUFDLENBQUM7UUFDckUsS0FBSSxNQUFNLElBQUksSUFBSSxJQUFJLENBQUMsS0FBSyxFQUFFO1lBQzFCLElBQUksQ0FBQyxVQUFVLENBQUMsS0FBSyxFQUFFLENBQUM7U0FDM0I7SUFDTCxDQUFDO0lBRUQsbUJBQW1CO0lBQ1osYUFBYTtRQUNoQixLQUFJLE1BQU0sSUFBSSxJQUFJLElBQUksQ0FBQyxLQUFLLEVBQUU7WUFDMUIsSUFBSSxDQUFDLFVBQVUsQ0FBQyxjQUFjLEVBQUUsQ0FBQztTQUNwQztJQUNMLENBQUM7SUFFRCxrQkFBa0I7SUFDbEIsSUFBVyxVQUFVO1FBQ2pCLElBQUcsQ0FBQyxJQUFJLENBQUMsS0FBSyxJQUFJLElBQUksQ0FBQyxLQUFLLENBQUMsTUFBTSxJQUFJLENBQUM7WUFBRSxPQUFPLEtBQUssQ0FBQztRQUN2RCxLQUFJLE1BQU0sSUFBSSxJQUFJLElBQUksQ0FBQyxLQUFLLEVBQUU7WUFDMUIsSUFBRyxDQUFDLElBQUksQ0FBQyxRQUFRLEVBQUU7Z0JBQ2YsT0FBTyxLQUFLLENBQUM7YUFDaEI7U0FDSjtRQUNELE9BQU8sSUFBSSxDQUFDO0lBQ2hCLENBQUM7Q0FDSjtBQXBERCw0QkFvREMifQ==","assetPath":"Assets/Zepeto
+    = OXManager;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiT1hNYW5hZ2VyLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiT1hNYW5hZ2VyLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7O0FBQUEsNkNBQW9EO0FBQ3BELDZFQUE0RDtBQUU1RCxpREFBcUQ7QUFDckQsK0NBQW9EO0FBQ3BELGlFQUEwRDtBQUMxRCx5REFBa0Q7QUFDbEQseURBQW9FO0FBQ3BFLDJEQUFvRDtBQUNwRCxpREFBMEM7QUFFMUMsTUFBcUIsU0FBVSxTQUFRLHFDQUFxQjtJQUE1RDs7UUFFSSx5QkFBeUI7UUFDakIsVUFBSyxHQUFZLEVBQUUsQ0FBQztJQTJFaEMsQ0FBQztJQXpFVSxXQUFXO1FBQ2QsS0FBSSxNQUFNLEtBQUssSUFBSSxJQUFJLENBQUMsU0FBUyxDQUFDLHVCQUF1QixTQUFDLHVCQUFTLElBQUs7WUFDcEUsSUFBRyxLQUFLLENBQUMsSUFBSSxDQUFDLFFBQVEsQ0FBQyxvQkFBTSxDQUFDLE9BQU8sQ0FBQyxFQUFFO2dCQUNwQyxhQUFhO2dCQUNiLE9BQU8sQ0FBQyxHQUFHLENBQUMsS0FBSyxDQUFDLElBQUksQ0FBQyxDQUFDO2dCQUN4QixNQUFNLEdBQUcsR0FBRyxLQUFLLENBQUMsWUFBWSxTQUFDLHNCQUFZLEVBQUcsQ0FBQztnQkFDL0MsSUFBRyxHQUFHLEVBQUU7b0JBQ0osTUFBTSxJQUFJLEdBQVUsRUFBRSxVQUFVLEVBQUMsR0FBRyxFQUFFLFFBQVEsRUFBQyxLQUFLLEdBQUcsQ0FBQztvQkFDeEQsSUFBSSxDQUFDLEtBQUssQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLENBQUM7b0JBQ3RCLEdBQUcsQ0FBQyxXQUFXLENBQUMsSUFBSSxDQUFDLENBQUM7aUJBQ3pCO3FCQUFNO29CQUNILG1CQUFtQjtvQkFDbkIsS0FBSyxDQUFDLFVBQVUsQ0FBQyxTQUFTLENBQUMsSUFBSSxDQUFDLENBQUM7aUJBQ3BDO2FBRUo7aUJBQU0sSUFBRyxLQUFLLENBQUMsSUFBSSxDQUFDLFFBQVEsQ0FBQyxvQkFBTSxDQUFD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","assetPath":"Assets/Zepeto
     Multiplay Component/ZepetoScript/SamdasuScript/OXManager.ts","manifest":{"properties":[],"name":"OXManager","description":"","hasAnimatorMove":false},"isCompiled":true}'
-  typescriptHash: fa44a55bcdb0423c713cf75d23916a4b
+  typescriptHash: 72f2315ea2054d0346eb05b2eb844f31
   onlyWriteTrigger: 0

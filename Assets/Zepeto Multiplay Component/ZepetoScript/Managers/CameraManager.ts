@@ -36,7 +36,7 @@ export default class CameraManager extends ZepetoScriptBehaviour {
         // ButtonUp일때 ButtonDown과 Button를 무시한다
         // 빈 공간에 터치 후에 드래그상태에서 버튼 위에서 ButtonUp을 할 때만 작동된다!!!!
         if(Input.GetMouseButtonDown(0)) {
-            console.log(`Input Down`);
+            // console.log(`Input Down`);
             
             const ray = ZepetoPlayers.instance.ZepetoCamera.camera.ScreenPointToRay(Input.mousePosition);
             const hitInfo = $ref<RaycastHit>();
@@ -50,14 +50,14 @@ export default class CameraManager extends ZepetoScriptBehaviour {
         //     console.log(`Input BUTTON !!!`);
 
         } else if(this.hitValue && Input.GetMouseButtonUp(0)) {
-            console.log(`Input Up`);
+            // console.log(`Input Up`);
             const ray = ZepetoPlayers.instance.ZepetoCamera.camera.ScreenPointToRay(Input.mousePosition);
             const hitInfo = $ref<RaycastHit>();
-            console.log(`Input Up 0 ${this.hitValue} ${hitInfo.value} `);
+            // console.log(`Input Up 0 ${this.hitValue} ${hitInfo.value} `);
             if(Physics.SphereCast(ray, 0.5, hitInfo, Mathf.Infinity, this.layer_btn)) {
-                console.log(`Input Up 1 ${this.hitValue} ${hitInfo.value.transform.gameObject} ${this.hitValue == hitInfo.value.transform.gameObject}`);
+                // console.log(`Input Up 1 ${this.hitValue} ${hitInfo.value.transform.gameObject} ${this.hitValue == hitInfo.value.transform.gameObject}`);
                 if(this.hitValue == hitInfo.value.transform.gameObject) {
-                    console.log(`Input Up 2`);
+                    // console.log(`Input Up 2`);
                     GameManager.instance.SwitchButtonScript(hitInfo.value.transform);
                 }
             }

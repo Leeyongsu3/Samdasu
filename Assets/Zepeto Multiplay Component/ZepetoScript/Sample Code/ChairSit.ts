@@ -16,12 +16,14 @@ export default class ChairSit extends ZepetoScriptBehaviour {
     public get Id(): string { return this.chairId; }
     private isSit:bool = false;
     private boxCol:BoxCollider;
+    private remoteStarted:boolean = false;
     @SerializeField() private buttonObject:GameObject;
 
     public RemoteStart(id:string) {
         this.chairId = id;
         this.boxCol = this.transform.GetComponent<BoxCollider>();
         if(!this.buttonObject) this.buttonObject = this.transform.GetChild(2).gameObject;
+        this.remoteStarted = true;
     }
     
     /* Button on off */

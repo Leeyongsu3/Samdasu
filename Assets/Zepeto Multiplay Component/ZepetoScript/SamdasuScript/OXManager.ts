@@ -3,7 +3,10 @@ import { ZepetoPlayers } from 'ZEPETO.Character.Controller';
 import { Room } from 'ZEPETO.Multiplay';
 import { ZepetoScriptBehaviour } from 'ZEPETO.Script'
 import { ZepetoWorldMultiplay } from 'ZEPETO.World';
-import { OXData } from '../Managers/TypeManager';
+import SyncIndexManager from '../Common/SyncIndexManager';
+import GameManager from '../Managers/GameManager';
+import { OXData, OXType, StampType } from '../Managers/TypeManager';
+import OXClearController from './OXClearController';
 import OXController from './OXController';
 
 export default class OXManager extends ZepetoScriptBehaviour {
@@ -11,12 +14,33 @@ export default class OXManager extends ZepetoScriptBehaviour {
     /* Managers Properties */
     private datas:OXData[] = [];
 
-    Start() {
+    public RemoteStart() {
         for(const trans of this.transform.GetComponentsInChildren<Transform>()) {
-            const con = trans.GetComponent<OXController>();
-            if(con) {
-                const data:OXData = { controller:con, isPassed:false, };
-                this.datas.push(data);
+            if(trans.name.includes(OXType.OX_WALL)) {
+                /* OX Wall */
+                console.log(trans.name);
+                const con = trans.GetComponent<OXController>();
+                if(con) {
+                    const data:OXData = { controller:con, isPassed:false, };
+                    this.datas.push(data);
+                    con.RemoteStart(this);
+                } else {
+                    /* OX Clear Wall */
+                    trans.gameObject.SetActive(true);
+                }
+
+            } else if(trans.name.includes(OXType.OX_SUCCESSED)) {
+                /* OX Successed */
+                console.log(trans.name);
+                trans.gameObject.SetActive(false);
+
+            } else if(trans.name.includes(OXType.OX_CLEAR)) {
+                /* OX Clear */
+                console.log(trans.name);
+                const con = trans.GetComponent<OXClearController>();
+                if(con) {
+                    con.RemoteStart(this);
+                }
             }
         }
     }
@@ -27,6 +51,7 @@ export default class OXManager extends ZepetoScriptBehaviour {
         for(const data of this.datas) {
             if(data.controller == controller) {
                 data.isPassed = true;
+                console.log(data.isPassed);
                 break;
             }
         }
@@ -46,6 +71,10 @@ export default class OXManager extends ZepetoScriptBehaviour {
         for(const data of this.datas) {
             data.controller.OnMissionClear();
         }
+        
+        /* Samdasu Drink Stamp Check */
+        const quizStamp = SyncIndexManager.STAMPS.get(StampType.STAMP_OX_QUIZ);
+        if(!quizStamp.isClear) GameManager.instance.ClearStampMission(StampType.STAMP_OX_QUIZ);
     }
 
     /* Is Complete? */

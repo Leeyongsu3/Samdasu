@@ -4,6 +4,7 @@ import { ZepetoPlayers } from 'ZEPETO.Character.Controller';
 import { ZepetoScriptBehaviour } from 'ZEPETO.Script'
 import SyncIndexManager from '../Common/SyncIndexManager';
 import { Anim, Language } from '../Managers/TypeManager';
+import UIManager from '../Managers/UIManager';
 import OXManager from './OXManager';
 
 export default class OXController extends ZepetoScriptBehaviour {
@@ -19,15 +20,17 @@ export default class OXController extends ZepetoScriptBehaviour {
     private manager:OXManager;
     private onFailAnim:Animator;
     
-    Start() {
+    public RemoteStart(manager:OXManager) {
         /* Set OX Manager */
-        this.manager = this.transform.parent.GetComponent<OXManager>();
+        this.manager = manager;
         
         /* Set Properties */
         this.block = this.transform.GetChild(0).GetComponent<BoxCollider>();
         const slide_Images = this.targetUI.transform.GetChild(0);
-        this.o_button = this.targetUI.transform.GetChild(1).GetComponent<Button>();
-        this.x_button = this.targetUI.transform.GetChild(2).GetComponent<Button>();
+        const kr_Button = this.targetUI.transform.GetChild(1).GetComponent<Button>();
+        const en_Button = this.targetUI.transform.GetChild(2).GetComponent<Button>();
+        this.o_button = this.targetUI.transform.GetChild(3).GetComponent<Button>();
+        this.x_button = this.targetUI.transform.GetChild(4).GetComponent<Button>();
         this.targetFailed.SetActive(false);
         this.targetSuccessed.SetActive(false);
         this.onFailAnim = this.targetFailed.GetComponent<Animator>();
@@ -37,6 +40,8 @@ export default class OXController extends ZepetoScriptBehaviour {
         const en = slide_Images.GetChild(1);
         kr.gameObject.SetActive(true);
         en.gameObject.SetActive(false);
+        kr_Button.onClick.AddListener( () => this.LocalizingGlobal(Language.KR));
+        en_Button.onClick.AddListener( () => this.LocalizingGlobal(Language.EN));
         
         /* Set ButtonScript */
         if(this.answer) {
@@ -110,6 +115,11 @@ export default class OXController extends ZepetoScriptBehaviour {
     }
 
     /* Change Language */
+    private LocalizingGlobal(language:Language) {
+        SyncIndexManager.language = language;
+        UIManager.instance.Localizing(language);
+        this.Localizing();
+    }
     private Localizing() {
         const slide_Images = this.targetUI.transform.GetChild(0);
         const kr = slide_Images.GetChild(0);

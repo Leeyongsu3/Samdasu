@@ -83,8 +83,10 @@ export default class LeaderBoardManager extends ZepetoScriptBehaviour {
             ZepetoWorldHelper.GetUserInfo(mems, (info: Users[]) => {
                 console.log(`[LeaderBoard] success GetUserInfo `);
                 for (const data of info) {
+                    console.log(`data.zepetoId ${data.zepetoId} ===> ${data.zepetoId == null}, ${data.zepetoId == "null"}`);
+                    
                     if(data.zepetoId) ids.push(this.ProcessingId(data.zepetoId))
-                    else ids.push(this.ProcessingId(data.name))
+                    // else ids.push(this.ProcessingId(data.name))
                 }
 
                 /* Update Rank Text */

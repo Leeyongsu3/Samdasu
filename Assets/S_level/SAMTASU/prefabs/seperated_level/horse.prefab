@@ -17,7 +17,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 1
+  m_StaticEditorFlags: 5
   m_IsActive: 1
 --- !u!4 &3621790304410368682
 Transform:
@@ -110,7 +110,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4
   m_IsActive: 1
 --- !u!4 &5446368869087031417
 Transform:
@@ -141,13 +141,13 @@ GameObject:
   - component: {fileID: 4422617811511869693}
   - component: {fileID: 1034307259829686976}
   - component: {fileID: 805794710188309737}
-  - component: {fileID: 2189153284013629890}
+  - component: {fileID: 4826305912691424758}
   m_Layer: 0
   m_Name: horse
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 1
+  m_StaticEditorFlags: 5
   m_IsActive: 1
 --- !u!4 &4422617811511869693
 Transform:
@@ -212,8 +212,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &2189153284013629890
-BoxCollider:
+--- !u!64 &4826305912691424758
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -222,9 +222,10 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 4, y: 7.2000003, z: 10.059133}
-  m_Center: {x: 0, y: -1.5851426, z: 5.029573}
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 5703929531111152841, guid: 6a9ff20be678b4a4d8a35a2eef52ac32, type: 3}
 --- !u!1 &7241582507806337219
 GameObject:
   m_ObjectHideFlags: 0
@@ -241,7 +242,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4
   m_IsActive: 0
 --- !u!4 &485551806295638346
 Transform:
@@ -317,13 +318,13 @@ GameObject:
   - component: {fileID: 4049053482601236703}
   - component: {fileID: 4269012259260784101}
   - component: {fileID: 2775144349615630506}
-  - component: {fileID: 2440060404770441070}
+  - component: {fileID: 8383268967989215155}
   m_Layer: 0
   m_Name: horse (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 1
+  m_StaticEditorFlags: 5
   m_IsActive: 1
 --- !u!4 &4049053482601236703
 Transform:
@@ -388,8 +389,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &2440060404770441070
-BoxCollider:
+--- !u!64 &8383268967989215155
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -398,6 +399,7 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 4, y: 7.2000017, z: 10.059133}
-  m_Center: {x: -0.000000047240935, y: -1.585143, z: 5.029573}
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 5703929531111152841, guid: 6a9ff20be678b4a4d8a35a2eef52ac32, type: 3}

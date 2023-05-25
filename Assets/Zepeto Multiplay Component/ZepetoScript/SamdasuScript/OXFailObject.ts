@@ -6,6 +6,7 @@ import OXManager from './OXManager';
 export default class OXFailObject extends ZepetoScriptBehaviour {
 
     OnTriggerEnter(collider : Collider) {
+        if(!ZepetoPlayers.instance.LocalPlayer) return;
         const character = ZepetoPlayers.instance.LocalPlayer.zepetoPlayer.character.gameObject;
         if(collider.gameObject == character) {
             const manager = this.GetManager();

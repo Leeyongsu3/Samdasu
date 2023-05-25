@@ -91,7 +91,7 @@ Material:
     - _BrightPower: 4.28
     - _BumpScale: 1
     - _Cull: 2
-    - _Cutoff: 0.435
+    - _Cutoff: 0.305
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _EnableExternalAlpha: 0
@@ -129,7 +129,7 @@ Material:
     - _WorldYPosition: 1.5
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0.88559806, g: 0.9716981, b: 0.81127626, a: 1}
+    - _Color: {r: 0.87742996, g: 1, b: 0.7688679, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _HueVariation: {r: 1, g: 0.5, b: 0, a: 0.1}

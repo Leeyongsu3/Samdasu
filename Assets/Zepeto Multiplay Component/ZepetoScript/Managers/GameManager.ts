@@ -10,6 +10,7 @@ import PlayerSync from '../Player/PlayerSync';
 import HorseRideManager from '../SamdasuScript/HorseRideManager';
 import MGRManager from '../SamdasuScript/MGRManager';
 import NPCManager from '../SamdasuScript/NPCManager';
+import OXManager from '../SamdasuScript/OXManager';
 import RenderCameraController from '../SamdasuScript/RenderCameraController';
 import TrashManager from '../SamdasuScript/TrashManager';
 import TreeKingManager from '../SamdasuScript/TreeKingManager';
@@ -20,7 +21,7 @@ import AnimatorSyncHelper from '../Transform/AnimatorSyncHelper';
 import TransformSyncHelper from '../Transform/TransformSyncHelper';
 import EquipManager from './EquipManager';
 import LeaderBoardManager from './LeaderBoardManager';
-import { Anim, ButtonType, CameraMode, Datas, EffectType, ERROR, LandStamp, LoadingType, MESSAGE, SamdasuState, SendName, StampType, SyncChair, SyncRide } from './TypeManager';
+import { Anim, ButtonType, CameraMode, Datas, EffectType, ERROR, LandStamp, LoadingType, MESSAGE, SamdasuState, SendName, StampType, SyncChair, SyncRide, UnequipButtonType } from './TypeManager';
 import UIManager from './UIManager';
 import VisibleManager from './VisibleManager';
 
@@ -59,6 +60,7 @@ export default class GameManager extends ZepetoScriptBehaviour {
     @SerializeField() private _trashManager: Transform;
     @SerializeField() private _mgrManager: Transform;
     @SerializeField() private _npcManager: Transform;
+    @SerializeField() private _oxManager: Transform;
     private leaderboardManager: LeaderBoardManager;
     private horseRideManager: HorseRideManager;
     // private treeKingManager: TreeKingManager;
@@ -66,6 +68,7 @@ export default class GameManager extends ZepetoScriptBehaviour {
     private trashManager: TrashManager;
     private mgrManager: MGRManager;
     private npcManager: NPCManager;
+    private oxManager: OXManager;
     
     @Header("Controllers")
     @SerializeField() private _renderCameraController: Transform;
@@ -233,6 +236,13 @@ export default class GameManager extends ZepetoScriptBehaviour {
         npcManager.RemoteStart();
         console.log(`[GameManager] NPCManager loaded success`);
 
+        const oxManager = this._oxManager.GetComponent<OXManager>();
+        if(oxManager) this.oxManager = oxManager;
+        else this.oxManager = GameObject.FindObjectOfType<OXManager>();
+        this._oxManager = null;
+        oxManager.RemoteStart();
+        console.log(`[GameManager] OXManager loaded success`);
+
         /* Get Controllers */
         const renderCameraController = this._renderCameraController.GetComponent<RenderCameraController>();
         if(renderCameraController) this.renderCameraController = renderCameraController;
@@ -270,6 +280,8 @@ export default class GameManager extends ZepetoScriptBehaviour {
                     this.syncChairs.sort();
                     for(const chair of this.syncChairs) {
                         SyncIndexManager.SyncChairIndex++;
+                        console.log(`chair ${SyncIndexManager.SyncChairIndex}`);
+                        
                         chair.RemoteStart(SyncIndexManager.SyncChairIndex.toString());
                         chair.localSessionId = this.room.SessionId;
                     }
@@ -754,6 +766,8 @@ export default class GameManager extends ZepetoScriptBehaviour {
             /* Unequip Pick Item */
             this.Unequip(HumanBodyBones.LeftHand, this.samdasuPetInWorld.name);
             this.Unequip(HumanBodyBones.RightHand, Datas.Balloon);
+            UIManager.instance.UnequipButtonVisibler(UnequipButtonType.LeftHand, false);
+            UIManager.instance.UnequipButtonVisibler(UnequipButtonType.RightHand, false);
         }
 
         /* Animation Play */
