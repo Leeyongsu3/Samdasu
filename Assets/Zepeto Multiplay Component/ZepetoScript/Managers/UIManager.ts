@@ -283,8 +283,6 @@ export default class UIManager extends ZepetoScriptBehaviour {
 
         nextButton.onClick.AddListener(() => {
             index = this.ChangeSlide(index, this.npcTrashUI.gameObject, kr, en);
-            console.log(`index : ${index}`);
-            
             if(index == 1) {
                 nextButton.gameObject.SetActive(false);
                 helpButton.gameObject.SetActive(true);
@@ -300,6 +298,7 @@ export default class UIManager extends ZepetoScriptBehaviour {
                 choice_Images.gameObject.SetActive(true);
                 for(const btn of npcButtons) btn.RemoteStartLooking();
                 this.openUI = null;
+                GameManager.instance.onTrashGamePlay();
             }
         });
 

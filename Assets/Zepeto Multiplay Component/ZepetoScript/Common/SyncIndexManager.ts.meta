@@ -24,10 +24,11 @@ ScriptedImporter:
     extends ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n}\r\nexports.default = SyncIndexManager;\r\n/**
     This is used to give a unique ID to synchronization objects that do not have
     a separate ID. */\r\nSyncIndexManager.SyncIndex = 0;\r\nSyncIndexManager.SyncChairIndex
-    = 0;\r\nSyncIndexManager.language = TypeManager_1.Language.KR;\r\n/* Samdasu
-    */\r\nSyncIndexManager.Rank = 0;\r\nSyncIndexManager.Score = 0;\r\nSyncIndexManager.TrashCount
+    = 0;\r\n/* UI Manager */\r\nSyncIndexManager.language = TypeManager_1.Language.KR;\r\n/*
+    Camera Manager */\r\nSyncIndexManager.CameraMode = TypeManager_1.CameraMode.TPS;\r\n/*
+    Samdasu */\r\nSyncIndexManager.Rank = 0;\r\nSyncIndexManager.Score = 0;\r\nSyncIndexManager.TrashCount
     = 0;\r\nSyncIndexManager.Carbin_Id = 0;\r\nSyncIndexManager.MGR_Id = 0;\r\nSyncIndexManager.STAMPS
-    = new Map();\r\nSyncIndexManager.STICKERS = new Map();\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiU3luY0luZGV4TWFuYWdlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIlN5bmNJbmRleE1hbmFnZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQSxpREFBcUQ7QUFDckQseURBQW1FO0FBRW5FLE1BQXFCLGdCQUFpQixTQUFRLHFDQUFxQjs7QUFBbkUsbUNBc0JDO0FBckJHLGtHQUFrRztBQUNwRiwwQkFBUyxHQUFVLENBQUMsQ0FBQztBQUNyQiwrQkFBYyxHQUFVLENBQUMsQ0FBQztBQUMxQix5QkFBUSxHQUFZLHNCQUFRLENBQUMsRUFBRSxDQUFDO0FBUTlDLGFBQWE7QUFDQyxxQkFBSSxHQUFVLENBQUMsQ0FBQztBQUNoQixzQkFBSyxHQUFVLENBQUMsQ0FBQztBQUNqQiwyQkFBVSxHQUFVLENBQUMsQ0FBQztBQUV0QiwwQkFBUyxHQUFVLENBQUMsQ0FBQztBQUNyQix1QkFBTSxHQUFVLENBQUMsQ0FBQztBQUVsQix1QkFBTSxHQUFzQixJQUFJLEdBQUcsRUFBaUIsQ0FBQztBQUNyRCx5QkFBUSxHQUF3QixJQUFJLEdBQUcsRUFBbUIsQ0FBQyJ9","assetPath":"Assets/Zepeto
+    = new Map();\r\nSyncIndexManager.STICKERS = new Map();\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiU3luY0luZGV4TWFuYWdlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIlN5bmNJbmRleE1hbmFnZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQSxpREFBcUQ7QUFDckQseURBQStFO0FBRS9FLE1BQXFCLGdCQUFpQixTQUFRLHFDQUFxQjs7QUFBbkUsbUNBMkJDO0FBMUJHLGtHQUFrRztBQUNwRiwwQkFBUyxHQUFVLENBQUMsQ0FBQztBQUNyQiwrQkFBYyxHQUFVLENBQUMsQ0FBQztBQUV4QyxnQkFBZ0I7QUFDRix5QkFBUSxHQUFZLHNCQUFRLENBQUMsRUFBRSxDQUFDO0FBUTlDLG9CQUFvQjtBQUNOLDJCQUFVLEdBQWMsd0JBQVUsQ0FBQyxHQUFHLENBQUM7QUFFckQsYUFBYTtBQUNDLHFCQUFJLEdBQVUsQ0FBQyxDQUFDO0FBQ2hCLHNCQUFLLEdBQVUsQ0FBQyxDQUFDO0FBQ2pCLDJCQUFVLEdBQVUsQ0FBQyxDQUFDO0FBRXRCLDBCQUFTLEdBQVUsQ0FBQyxDQUFDO0FBQ3JCLHVCQUFNLEdBQVUsQ0FBQyxDQUFDO0FBRWxCLHVCQUFNLEdBQXNCLElBQUksR0FBRyxFQUFpQixDQUFDO0FBQ3JELHlCQUFRLEdBQXdCLElBQUksR0FBRyxFQUFtQixDQUFDIn0=","assetPath":"Assets/Zepeto
     Multiplay Component/ZepetoScript/Common/SyncIndexManager.ts","manifest":{"properties":[],"name":"SyncIndexManager","description":"","hasAnimatorMove":false},"isCompiled":true}'
-  typescriptHash: 15d31a4e23d566f5f3b61b4017f06077
+  typescriptHash: f74291711510b3e92007ceacf0946316
   onlyWriteTrigger: 0

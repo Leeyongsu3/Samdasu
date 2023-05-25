@@ -1,9 +1,10 @@
-import { Camera, GameObject, Input, LayerMask, Mathf, Physics, RaycastHit, Transform } from 'UnityEngine';
+import { Camera, GameObject, Input, LayerMask, Mathf, Physics, Quaternion, RaycastHit, Transform, Vector3 } from 'UnityEngine';
 import { ZepetoPlayers } from 'ZEPETO.Character.Controller';
 import { ZepetoScriptBehaviour } from 'ZEPETO.Script'
 import { ZepetoWorldMultiplay } from 'ZEPETO.World';
+import SyncIndexManager from '../Common/SyncIndexManager';
 import GameManager from './GameManager';
-import { Datas } from './TypeManager';
+import { CameraMode, Datas } from './TypeManager';
 
 export default class CameraManager extends ZepetoScriptBehaviour {
 
@@ -26,6 +27,19 @@ export default class CameraManager extends ZepetoScriptBehaviour {
             const hasPlayer = ZepetoPlayers.instance.HasPlayer(this.multiplay.Room.SessionId);
             if (hasPlayer) {
                 this.Raycasting();
+                if(SyncIndexManager.CameraMode == CameraMode.FPS) {
+                    //// camera to character
+                    // const character = ZepetoPlayers.instance.GetPlayer(this.multiplay.Room.SessionId).character.transform;
+                    // const lookAxisRot = Quaternion.LookRotation(this.transform.parent.forward);
+                    // const projRot = Vector3.ProjectOnPlane(lookAxisRot.eulerAngles, Vector3.right);
+                    // character.rotation = Quaternion.Euler(projRot);
+                    
+                    //// character to camera
+                    // const character = ZepetoPlayers.instance.GetPlayer(this.multiplay.Room.SessionId).character.transform;
+                    // const lookAxisRot = Quaternion.LookRotation(character.forward);
+                    // const projRot = Vector3.ProjectOnPlane(lookAxisRot.eulerAngles, Vector3.right);
+                    // this.transform.parent.rotation = Quaternion.Euler(projRot);
+                }
             }
         }
     }

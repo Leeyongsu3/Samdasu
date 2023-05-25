@@ -161,6 +161,7 @@ export default class RenderCameraController extends ZepetoScriptBehaviour {
 
         exitButton.onClick.AddListener(() => {
             this.RenderPhotoModeChanger(RenderPhotoMode.Default);
+            this.SetTouchItem(null);
         });
 
         // returnButton.onClick.AddListener(() => {
@@ -186,8 +187,7 @@ export default class RenderCameraController extends ZepetoScriptBehaviour {
         /* Button Scripts */
         closeButton.onClick.AddListener(() => {
             this.RenderPhotoModeChanger(RenderPhotoMode.Default);
-            controlSliderPanel.gameObject.SetActive(false);
-            this.touchItemData = null;
+            this.SetTouchItem(null);
         });
 
         renderButton.onClick.AddListener(() => {
@@ -196,12 +196,13 @@ export default class RenderCameraController extends ZepetoScriptBehaviour {
 
         clearButton.onClick.AddListener(() => {
             this.ReturnAllInstantiateSticker();
+            this.SetTouchItem(null);
         });
 
         resetButton.onClick.AddListener(() => {
             if(this.touchItemData) {
-                this.touchItemData.transform.localScale = Vector3.one;
                 this.touchItemData.transform.rotation = Quaternion.identity;
+                this.touchItemData.transform.localScale = Vector3.one;
                 this.touchItemData.scale_suporter = 1;
                 this.touchItemData.rot_suporter = 0;
                 this.scaleSlider.value = 1;
@@ -214,8 +215,7 @@ export default class RenderCameraController extends ZepetoScriptBehaviour {
         });
 
         releaseButton.onClick.AddListener(() => {
-            controlSliderPanel.gameObject.SetActive(false);
-            this.touchItemData = null;
+            this.SetTouchItem(null);
         });
 
         /* Sliders */
@@ -365,6 +365,7 @@ export default class RenderCameraController extends ZepetoScriptBehaviour {
         clone.name = info.button.name;
         clone.transform.position = new Vector3(editCanvas.position.x, editCanvas.position.y, 3);
         clone.transform.rotation = Quaternion.identity;
+        clone.transform.localScale = Vector3.one;
         clone.SetActive(true);
 
         /* Button Count Update */
@@ -390,6 +391,7 @@ export default class RenderCameraController extends ZepetoScriptBehaviour {
             instance.transform.parent = this.stickerPool;
             instance.transform.position = this.stickerPool.position;
             instance.transform.rotation = Quaternion.identity;
+            instance.transform.localScale = Vector3.one;
             instance.SetActive(false);
 
             /* Button Count Update */
@@ -398,11 +400,7 @@ export default class RenderCameraController extends ZepetoScriptBehaviour {
             /* Reset TouchItem Value */
             data.scale_suporter = 1;
             data.rot_suporter = 0;
-            const controlSliderPanel = this.editCanvas.transform.GetChild(3);
-            controlSliderPanel.gameObject.SetActive(false);
-            this.scaleSlider.value = 1;
-            this.rotSlider.value = 0;
-            this.touchItemData = null;
+            this.SetTouchItem(null);
             return;
         }
     }
@@ -416,6 +414,7 @@ export default class RenderCameraController extends ZepetoScriptBehaviour {
                     instance.transform.parent = this.stickerPool;
                     instance.transform.position = this.stickerPool.position;
                     instance.transform.rotation = Quaternion.identity;
+                    instance.transform.localScale = Vector3.one;
                     instance.SetActive(false);
                 }
             }
@@ -444,6 +443,7 @@ export default class RenderCameraController extends ZepetoScriptBehaviour {
             this.scaleSlider.value = renderItemData.scale_suporter;
 
         } else {
+            /* Set Slider Value Default */
             controlSliderPanel.gameObject.SetActive(false);
             this.scaleSlider.value = 1;
             this.rotSlider.value = 0;

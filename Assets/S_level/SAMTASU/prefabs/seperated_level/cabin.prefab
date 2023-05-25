@@ -175,7 +175,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2033961683701640468}
   - component: {fileID: 6857919751591922992}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: TeleportPoint
   m_TagString: TeleportPoint
   m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}

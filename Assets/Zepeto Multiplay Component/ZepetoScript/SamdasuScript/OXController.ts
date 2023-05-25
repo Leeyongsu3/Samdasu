@@ -1,5 +1,5 @@
 import { Animator, BoxCollider, Collider, GameObject, Transform } from 'UnityEngine';
-import { Button } from 'UnityEngine.UI';
+import { Button, Image } from 'UnityEngine.UI';
 import { ZepetoPlayers } from 'ZEPETO.Character.Controller';
 import { ZepetoScriptBehaviour } from 'ZEPETO.Script'
 import SyncIndexManager from '../Common/SyncIndexManager';
@@ -122,16 +122,22 @@ export default class OXController extends ZepetoScriptBehaviour {
     }
     private Localizing() {
         const slide_Images = this.targetUI.transform.GetChild(0);
+        const kr_Button = this.targetUI.transform.GetChild(1).GetComponent<Image>();
+        const en_Button = this.targetUI.transform.GetChild(2).GetComponent<Image>();
         const kr = slide_Images.GetChild(0);
         const en = slide_Images.GetChild(1);
 
         if(SyncIndexManager.language == Language.KR) {
             kr.gameObject.SetActive(true);
             en.gameObject.SetActive(false);
+            kr_Button.sprite = this.manager.krButtonImage_Pushed;
+            en_Button.sprite = this.manager.enButtonImage;
 
         } else if(SyncIndexManager.language == Language.EN) {
             kr.gameObject.SetActive(false);
             en.gameObject.SetActive(true);
+            kr_Button.sprite = this.manager.krButtonImage;
+            en_Button.sprite = this.manager.enButtonImage_Pushed;
         }
     }
 }

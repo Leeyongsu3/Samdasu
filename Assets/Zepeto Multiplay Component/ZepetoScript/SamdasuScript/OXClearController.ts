@@ -17,9 +17,7 @@ export default class OXClearController extends ZepetoScriptBehaviour {
     OnTriggerEnter(collider : Collider) {
         if(!ZepetoPlayers.instance.LocalPlayer) return;
         const character = ZepetoPlayers.instance.LocalPlayer.zepetoPlayer.character.gameObject;
-        console.log(`OnTriggerEnter 0`);
-        if(collider.gameObject == character) return;
-        console.log(`OnTriggerEnter 1`);
+        if(collider.gameObject != character) return;
         if(this.manager.isComplete) {
             console.log(` <<<<<<<< COMPLETE >>>>>>>> `);
             this.manager.OnClearOXZone();

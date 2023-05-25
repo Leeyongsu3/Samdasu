@@ -280,8 +280,6 @@ export default class GameManager extends ZepetoScriptBehaviour {
                     this.syncChairs.sort();
                     for(const chair of this.syncChairs) {
                         SyncIndexManager.SyncChairIndex++;
-                        console.log(`chair ${SyncIndexManager.SyncChairIndex}`);
-                        
                         chair.RemoteStart(SyncIndexManager.SyncChairIndex.toString());
                         chair.localSessionId = this.room.SessionId;
                     }
@@ -304,6 +302,7 @@ export default class GameManager extends ZepetoScriptBehaviour {
     private ChangeCameraMode(cameraMode:CameraMode) {
         /* Get Camera Data */
         const cam = ZepetoPlayers.instance.ZepetoCamera;
+        SyncIndexManager.CameraMode = cameraMode;
 
         /* Set Camera Mode */
         switch (+cameraMode) {

@@ -1,4 +1,4 @@
-import { GameObject, Transform } from 'UnityEngine';
+import { GameObject, Sprite, Transform } from 'UnityEngine';
 import { ZepetoPlayers } from 'ZEPETO.Character.Controller';
 import { Room } from 'ZEPETO.Multiplay';
 import { ZepetoScriptBehaviour } from 'ZEPETO.Script'
@@ -14,29 +14,34 @@ export default class OXManager extends ZepetoScriptBehaviour {
     /* Managers Properties */
     private datas:OXData[] = [];
 
+    @Header("Change Images")
+    @SerializeField() private _krButtonImage: Sprite;
+    @SerializeField() private _enButtonImage: Sprite;
+    @SerializeField() private _krButtonImage_Pushed: Sprite;
+    @SerializeField() private _enButtonImage_Pushed: Sprite;
+    public get krButtonImage() { return this._krButtonImage }
+    public get enButtonImage() { return this._enButtonImage }
+    public get krButtonImage_Pushed() { return this._krButtonImage_Pushed }
+    public get enButtonImage_Pushed() { return this._enButtonImage_Pushed }
+
+
     public RemoteStart() {
         for(const trans of this.transform.GetComponentsInChildren<Transform>()) {
             if(trans.name.includes(OXType.OX_WALL)) {
                 /* OX Wall */
-                console.log(trans.name);
                 const con = trans.GetComponent<OXController>();
                 if(con) {
                     const data:OXData = { controller:con, isPassed:false, };
                     this.datas.push(data);
                     con.RemoteStart(this);
-                } else {
-                    /* OX Clear Wall */
-                    trans.gameObject.SetActive(true);
                 }
 
             } else if(trans.name.includes(OXType.OX_SUCCESSED)) {
                 /* OX Successed */
-                console.log(trans.name);
                 trans.gameObject.SetActive(false);
 
             } else if(trans.name.includes(OXType.OX_CLEAR)) {
                 /* OX Clear */
-                console.log(trans.name);
                 const con = trans.GetComponent<OXClearController>();
                 if(con) {
                     con.RemoteStart(this);

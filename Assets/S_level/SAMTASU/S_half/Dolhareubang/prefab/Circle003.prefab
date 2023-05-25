@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 2026050528501240829}
   - component: {fileID: 5098166301893997536}
   - component: {fileID: 8561792931129646273}
+  - component: {fileID: 1343602265229398064}
+  - component: {fileID: 5718148616586146007}
   m_Layer: 0
   m_Name: Circle003
   m_TagString: Untagged
@@ -81,3 +83,29 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &1343602265229398064
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2511971406872453149}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.008858187, y: 0.008858187, z: 0.017270781}
+  m_Center: {x: -0.000110992245, y: -0.0015734031, z: 0.007524662}
+--- !u!65 &5718148616586146007
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2511971406872453149}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.008858192, y: 0.008858193, z: 0.017270787}
+  m_Center: {x: -0.00011111149, y: -0.0015734052, z: 0.0075246645}
