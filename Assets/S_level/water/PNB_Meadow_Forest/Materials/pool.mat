@@ -169,7 +169,7 @@ Material:
     - _NormalTiling2: 0.1
     - _ODM: 0.02
     - _OcclusionStrength: 1
-    - _Opacity: 0.833
+    - _Opacity: 0.652
     - _OpacityFalloff: 4.66
     - _OpacityMin: 1
     - _OverallFalloff: 0.22
