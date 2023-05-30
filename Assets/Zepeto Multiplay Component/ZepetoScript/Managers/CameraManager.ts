@@ -60,18 +60,18 @@ export default class CameraManager extends ZepetoScriptBehaviour {
                 this.hitValue = null;
             }
 
-        // } else if(Input.GetMouseButton(0)) {
-        //     console.log(`Input BUTTON !!!`);
+        } else if(this.hitValue && Input.GetMouseButton(0)) {
+            console.log(`Input BUTTON !!!`);
 
         } else if(this.hitValue && Input.GetMouseButtonUp(0)) {
-            // console.log(`Input Up`);
+            console.log(`Input Up`);
             const ray = ZepetoPlayers.instance.ZepetoCamera.camera.ScreenPointToRay(Input.mousePosition);
             const hitInfo = $ref<RaycastHit>();
-            // console.log(`Input Up 0 ${this.hitValue} ${hitInfo.value} `);
+            console.log(`Input Up 0 ${this.hitValue} ${hitInfo.value} `);
             if(Physics.SphereCast(ray, 0.5, hitInfo, Mathf.Infinity, this.layer_btn)) {
-                // console.log(`Input Up 1 ${this.hitValue} ${hitInfo.value.transform.gameObject} ${this.hitValue == hitInfo.value.transform.gameObject}`);
+                console.log(`Input Up 1 ${this.hitValue} ${hitInfo.value.transform.gameObject} ${this.hitValue == hitInfo.value.transform.gameObject}`);
                 if(this.hitValue == hitInfo.value.transform.gameObject) {
-                    // console.log(`Input Up 2`);
+                    console.log(`Input Up 2`);
                     GameManager.instance.SwitchButtonScript(hitInfo.value.transform);
                 }
             }

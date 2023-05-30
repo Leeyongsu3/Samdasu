@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5572629377010448773}
   - component: {fileID: 8964358907584766589}
+  - component: {fileID: 4221002925923944482}
   m_Layer: 0
   m_Name: ZepetoCamera
   m_TagString: Untagged
@@ -74,3 +75,11 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!81 &4221002925923944482
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5806182858035002866}
+  m_Enabled: 1

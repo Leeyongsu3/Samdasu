@@ -47,8 +47,8 @@ export default class GameManager extends ZepetoScriptBehaviour {
     private doTWeenSyncs: DOTWeenSyncHelper[] = [];
     private syncChairs: ChairSit[] = [];
     private player: Player;
+    private camLocalPos: Vector3;
     private joyCon:UIZepetoPlayerControl;
-    private _syncPlayers: PlayerSync[] = [];
 
     /* Samdasu Field */
     @Header("* Samdasus Field")
@@ -81,10 +81,10 @@ export default class GameManager extends ZepetoScriptBehaviour {
     @Header("Return Points")
     @SerializeField() private wheelReturnPoint: Transform;
     @SerializeField() private mgrReturnPoint: Transform;
+
     @Header("Others")
     @SerializeField() private trashFoolGroup: Transform;
     @SerializeField() private samdasuPetInWorld: GameObject;
-
     public get samdasuName(): string { return this.samdasuPetInWorld.name }
     private halfStamp_MGR: boolean = false;
     private halfStamp_Wheel: boolean = false; 
@@ -179,6 +179,7 @@ export default class GameManager extends ZepetoScriptBehaviour {
             SyncIndexManager.SyncIndex++;
             trans.RemoteStart(SyncIndexManager.SyncIndex.toString());
         }
+        console.log(`[GameManager] TransformSyncHelper connected success`);
 
         this.doTWeenSyncs = GameObject.FindObjectsOfType<DOTWeenSyncHelper>();
         this.doTWeenSyncs.sort();
@@ -302,6 +303,13 @@ export default class GameManager extends ZepetoScriptBehaviour {
     private ChangeCameraMode(cameraMode:CameraMode) {
         /* Get Camera Data */
         const cam = ZepetoPlayers.instance.ZepetoCamera;
+        const character = ZepetoPlayers.instance.GetPlayer(this.room.SessionId).character.transform;
+        if(SyncIndexManager.CameraMode == CameraMode.TPS) {
+            this.camLocalPos = cam.camera.transform.position;
+            const dir = Vector3.Distance(character.position, this.camLocalPos);
+            console.log(dir);
+            
+        }
         SyncIndexManager.CameraMode = cameraMode;
 
         /* Set Camera Mode */
@@ -316,6 +324,9 @@ export default class GameManager extends ZepetoScriptBehaviour {
                 cam.additionalOffset = Vector3.zero;
                 cam.additionalMaxZoomDistance = 0;
                 cam.additionalMinZoomDistance = 0;
+                cam.camera.transform.localPosition = this.camLocalPos;
+                console.log(` return local ${this.camLocalPos.x}, ${this.camLocalPos.y}, ${this.camLocalPos.z}`);
+                console.log(` return local ${cam.transform.localPosition.x}, ${cam.transform.localPosition.y}, ${cam.transform.localPosition.z}`);
                 break;
         }
     }
@@ -747,6 +758,15 @@ export default class GameManager extends ZepetoScriptBehaviour {
         if(samdasuState == SamdasuState.NONE) {
             /* Animation Play */
             this.PlayAnimation(SamdasuState.NONE, false);
+            animator.SetBool(Anim.isHold, false);
+            SyncIndexManager.BalloonInHand = false;
+            SyncIndexManager.SamdasuPetInHand = false;
+
+            /* Unequip Pick Item */
+            this.Unequip(HumanBodyBones.LeftHand, this.samdasuPetInWorld.name);
+            this.Unequip(HumanBodyBones.RightHand, Datas.Balloon);
+            UIManager.instance.UnequipButtonVisibler(UnequipButtonType.LeftHand, false);
+            UIManager.instance.UnequipButtonVisibler(UnequipButtonType.RightHand, false);
     
             /* Horse Ride Button Visibler */
             UIManager.instance.HorseRideButtonVisibler(this.IsCanRide());
@@ -759,14 +779,17 @@ export default class GameManager extends ZepetoScriptBehaviour {
     
         animator.SetBool(Anim.isHold, isHold);
         if(samdasuState != SamdasuState.Samdasu_Drink && samdasuState != SamdasuState.Pick_Item) {
-            SyncIndexManager.BalloonInHand = false;
-            SyncIndexManager.SamdasuPetInHand = false;
-
             /* Unequip Pick Item */
-            this.Unequip(HumanBodyBones.LeftHand, this.samdasuPetInWorld.name);
-            this.Unequip(HumanBodyBones.RightHand, Datas.Balloon);
-            UIManager.instance.UnequipButtonVisibler(UnequipButtonType.LeftHand, false);
-            UIManager.instance.UnequipButtonVisibler(UnequipButtonType.RightHand, false);
+            if(SyncIndexManager.BalloonInHand) {
+                SyncIndexManager.BalloonInHand = false;
+                this.Unequip(HumanBodyBones.LeftHand, this.samdasuPetInWorld.name);
+                UIManager.instance.UnequipButtonVisibler(UnequipButtonType.LeftHand, false);
+            }
+            if(SyncIndexManager.SamdasuPetInHand) {
+                SyncIndexManager.SamdasuPetInHand = false;
+                this.Unequip(HumanBodyBones.RightHand, Datas.Balloon);
+                UIManager.instance.UnequipButtonVisibler(UnequipButtonType.RightHand, false);
+            }
         }
 
         /* Animation Play */

@@ -13,6 +13,7 @@ export default class OXManager extends ZepetoScriptBehaviour {
 
     /* Managers Properties */
     private datas:OXData[] = [];
+    private clearWall: GameObject;
 
     @Header("Change Images")
     @SerializeField() private _krButtonImage: Sprite;
@@ -24,7 +25,7 @@ export default class OXManager extends ZepetoScriptBehaviour {
     public get krButtonImage_Pushed() { return this._krButtonImage_Pushed }
     public get enButtonImage_Pushed() { return this._enButtonImage_Pushed }
 
-
+    /* GameManager */
     public RemoteStart() {
         for(const trans of this.transform.GetComponentsInChildren<Transform>()) {
             if(trans.name.includes(OXType.OX_WALL)) {
@@ -45,6 +46,9 @@ export default class OXManager extends ZepetoScriptBehaviour {
                 const con = trans.GetComponent<OXClearController>();
                 if(con) {
                     con.RemoteStart(this);
+                } else {
+                    trans.gameObject.SetActive(true);
+                    this.clearWall = trans.gameObject;
                 }
             }
         }
@@ -76,6 +80,9 @@ export default class OXManager extends ZepetoScriptBehaviour {
         for(const data of this.datas) {
             data.controller.OnMissionClear();
         }
+        console.log(this.clearWall, this.clearWall.activeSelf);
+        
+        this.clearWall.SetActive(false);
         
         /* Samdasu Drink Stamp Check */
         const quizStamp = SyncIndexManager.STAMPS.get(StampType.STAMP_OX_QUIZ);

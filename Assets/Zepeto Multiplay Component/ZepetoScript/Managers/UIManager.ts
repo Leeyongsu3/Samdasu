@@ -753,16 +753,17 @@ export default class UIManager extends ZepetoScriptBehaviour {
             if(!this.isHorseRide) {
                 // Ride ON
                 this.room.Send(MESSAGE.Ride_Horse, null);
+                
+                /* Stamp Check */
+                const horseStamp = SyncIndexManager.STAMPS.get(StampType.STAMP_HORSE);
+                if(!horseStamp.isClear) GameManager.instance.ClearStampMission(StampType.STAMP_HORSE);
+                
             } else {
                 // Ride OFF
                 const data = new RoomData();
                 data.Add(SendName.SamdasuState, MESSAGE.Ride_Horse);
                 data.Add(SendName.isComplete, true);
                 this.room.Send(MESSAGE.Ride_OFF, data.GetObject());
-                
-                /* Stamp Check */
-                const horseStamp = SyncIndexManager.STAMPS.get(StampType.STAMP_HORSE);
-                if(!horseStamp.isClear) GameManager.instance.ClearStampMission(StampType.STAMP_HORSE);
             }
         });
         

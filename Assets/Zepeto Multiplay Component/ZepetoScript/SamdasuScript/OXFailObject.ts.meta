@@ -23,14 +23,15 @@ ScriptedImporter:
     ZEPETO_Character_Controller_1 = require(\"ZEPETO.Character.Controller\");\r\nconst
     ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst OXManager_1 = require(\"./OXManager\");\r\nclass
     OXFailObject extends ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    OnTriggerEnter(collider)
-    {\r\n        const character = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.LocalPlayer.zepetoPlayer.character.gameObject;\r\n       
+    {\r\n        if (!ZEPETO_Character_Controller_1.ZepetoPlayers.instance.LocalPlayer)\r\n           
+    return;\r\n        const character = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.LocalPlayer.zepetoPlayer.character.gameObject;\r\n       
     if (__UnityEngine__.Object.op_Equality(collider.gameObject, character)) {\r\n           
     const manager = this.GetManager();\r\n            manager.OnTouchedFailObject();\r\n       
     }\r\n    }\r\n    GetManager() {\r\n        const managerObject = this.transform.parent.parent.parent;\r\n       
     let manager = managerObject.GetComponent($typeof(OXManager_1.default));\r\n       
     if (manager)\r\n            return manager;\r\n        else\r\n            return
     managerObject.parent.GetComponent($typeof(OXManager_1.default));\r\n    }\r\n}\r\nexports.default
-    = OXFailObject;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiT1hGYWlsT2JqZWN0LmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiT1hGYWlsT2JqZWN0LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7OztBQUNBLDZFQUE0RDtBQUM1RCxpREFBcUQ7QUFDckQsMkNBQW9DO0FBRXBDLE1BQXFCLFlBQWEsU0FBUSxxQ0FBcUI7SUFFM0QsY0FBYyxDQUFDLFFBQW1CO1FBQzlCLE1BQU0sU0FBUyxHQUFHLDJDQUFhLENBQUMsUUFBUSxDQUFDLFdBQVcsQ0FBQyxZQUFZLENBQUMsU0FBUyxDQUFDLFVBQVUsQ0FBQztRQUN2RiwyQkFheXNVLFdBQVksQ0FibHRVLFFBQVEsQ0FBQyxVQUFVLEVBQUksU0FBUyxHQUFFO1lBQ2pDLE1BQU0sT0FBTyxHQUFHLElBQUksQ0FBQyxVQUFVLEVBQUUsQ0FBQztZQUNsQyxPQUFPLENBQUMsbUJBQW1CLEVBQUUsQ0FBQztTQUNqQztJQUNMLENBQUM7SUFFTyxVQUFVO1FBQ2QsTUFBTSxhQUFhLEdBQUcsSUFBSSxDQUFDLFNBQVMsQ0FBQyxNQUFNLENBQUMsTUFBTSxDQUFDLE1BQU0sQ0FBQztRQUMxRCxJQUFJLE9BQU8sR0FBRyxhQUFhLENBQUMsWUFBWSxTQUFDLG1CQUFTLEVBQUcsQ0FBQztRQUN0RCxJQUFHLE9BQU87WUFBRSxPQUFPLE9BQU8sQ0FBQzs7WUFDdEIsT0FBTyxhQUFhLENBQUMsTUFBTSxDQUFDLFlBQVksU0FBQyxtQkFBUyxHQUFJO0lBQy9ELENBQUM7Q0FFSjtBQWpCRCwrQkFpQkMifQ==","assetPath":"Assets/Zepeto
+    = OXFailObject;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiT1hGYWlsT2JqZWN0LmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiT1hGYWlsT2JqZWN0LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7OztBQUNBLDZFQUE0RDtBQUM1RCxpREFBcUQ7QUFDckQsMkNBQW9DO0FBRXBDLE1BQXFCLFlBQWEsU0FBUSxxQ0FBcUI7SUFFM0QsY0FBYyxDQUFDLFFBQW1CO1FBQzlCLElBQUcsQ0FBQywyQ0FBYSxDQUFDLFFBQVEsQ0FBQyxXQUFXO1lBQUUsT0FBTztRQUMvQyxNQUFNLFNBQVMsR0FBRywyQ0FBYSxDQUFDLFFBQVEsQ0FBQyxXQUFXLENBQUMsWUFBWSxDQUFDLFNBQVMsQ0FBQyxVQUFVLENBQUM7UUFDdkYsMkJBYWdwVSxXQUFZLENBYnpwVSxRQUFRLENBQUMsVUFBVSxFQUFJLFNBQVMsR0FBRTtZQUNqQyxNQUFNLE9BQU8sR0FBRyxJQUFJLENBQUMsVUFBVSxFQUFFLENBQUM7WUFDbEMsT0FBTyxDQUFDLG1CQUFtQixFQUFFLENBQUM7U0FDakM7SUFDTCxDQUFDO0lBRU8sVUFBVTtRQUNkLE1BQU0sYUFBYSxHQUFHLElBQUksQ0FBQyxTQUFTLENBQUMsTUFBTSxDQUFDLE1BQU0sQ0FBQyxNQUFNLENBQUM7UUFDMUQsSUFBSSxPQUFPLEdBQUcsYUFBYSxDQUFDLFlBQVksU0FBQyxtQkFBUyxFQUFHLENBQUM7UUFDdEQsSUFBRyxPQUFPO1lBQUUsT0FBTyxPQUFPLENBQUM7O1lBQ3RCLE9BQU8sYUFBYSxDQUFDLE1BQU0sQ0FBQyxZQUFZLFNBQUMsbUJBQVMsR0FBSTtJQUMvRCxDQUFDO0NBRUo7QUFsQkQsK0JBa0JDIn0=","assetPath":"Assets/Zepeto
     Multiplay Component/ZepetoScript/SamdasuScript/OXFailObject.ts","manifest":{"properties":[],"name":"OXFailObject","description":"","hasAnimatorMove":false},"isCompiled":true}'
-  typescriptHash: 54a01e898ca65d771fc3f834de24dbfa
+  typescriptHash: 76e162c5b848bb4e1919a57601e4f767
   onlyWriteTrigger: 0
