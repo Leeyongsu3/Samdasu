@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Samdasu25.unity
-    guid: fc131a0baeeb53f4f833416fed98f73f
+    path: Assets/Scenes/Demo Core 2.unity
+    guid: 105baf08aff46a74390d234f48570f16
   m_configObjects: {}

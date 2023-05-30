@@ -110,21 +110,20 @@ export default class EquipManager extends ZepetoScriptBehaviour {
         for(const trans of prevBone.GetComponentsInChildren<Transform>()) {
             if(trans.name == prevName) {
                 GameObject.Destroy(trans.gameObject);
-
                 
                 switch(equipData.itemName) {
                     case this.samdasuPet.name :
-                        SyncIndexManager.SamdasuPetInHand = false;
+                        if(this.room.SessionId == equipData.sessionId) SyncIndexManager.SamdasuPetInHand = false; // isLocal
                         anim.SetBool(Anim.isHold, false);
                         break;
                     case this.cake.name :
-                        SyncIndexManager.CakeInHead = false;
+                        if(this.room.SessionId == equipData.sessionId) SyncIndexManager.CakeInHead = false; // isLocal
                         break;
                     case Datas.Balloon :
                     case Datas.Balloon_A :
                     case Datas.Balloon_B :
                     case Datas.Balloon_C :
-                        SyncIndexManager.BalloonInHand = false;
+                        if(this.room.SessionId == equipData.sessionId) SyncIndexManager.BalloonInHand = false; // isLocal
                         break;
                 }
             }
@@ -147,7 +146,7 @@ export default class EquipManager extends ZepetoScriptBehaviour {
         const bone = anim.GetBoneTransform(equipData.bone);
         const equip = GameObject.Instantiate(this.samdasuPet, bone) as GameObject;
         equip.name = equipData.itemName;
-        SyncIndexManager.SamdasuPetInHand = true;
+        if(this.room.SessionId == equipData.sessionId) SyncIndexManager.SamdasuPetInHand = true; // isLocal
 
         /* Animation */
         GameManager.instance.onPlayerDrink();
@@ -164,7 +163,7 @@ export default class EquipManager extends ZepetoScriptBehaviour {
                 const bone = anim.GetBoneTransform(equipData.bone);
                 const equip = GameObject.Instantiate(balloon, bone) as GameObject;
                 equip.name = equipData.itemName;
-                SyncIndexManager.BalloonInHand = true;
+                if(this.room.SessionId == equipData.sessionId) SyncIndexManager.BalloonInHand = true; // isLocal
                 
                 /* Button Visible */
                 if(this.room.SessionId == equipData.sessionId) UIManager.instance.UnequipButtonVisibler(UnequipButtonType.LeftHand, true);
@@ -179,7 +178,7 @@ export default class EquipManager extends ZepetoScriptBehaviour {
         const bone = anim.GetBoneTransform(equipData.bone);
         const equip = GameObject.Instantiate(this.cake, bone) as GameObject;
         equip.name = equipData.itemName;
-        SyncIndexManager.CakeInHead = true;
+        if(this.room.SessionId == equipData.sessionId) SyncIndexManager.CakeInHead = true; // isLocal
                 
         /* Button Visible */
         // if(this.room.SessionId == equipData.sessionId) UIManager.instance.UnequipButtonVisibler(UnequipButtonType.Head, true);

@@ -46,7 +46,7 @@ export default class LeaderBoardManager extends ZepetoScriptBehaviour {
 
     /* Update Local Player's Score */
     public UpdateScore() {
-        LeaderboardAPI.SetScore(RankData.TrashScoreId, SyncIndexManager.Score, (result:SetScoreResponse) => {
+        LeaderboardAPI.SetScore(RankData.TrashScoreId, 100, (result:SetScoreResponse) => {
             this.UpdateRankData();
         }, (error:string) => {
             console.error(` UpdateScore error : ${error} `);
@@ -65,43 +65,43 @@ export default class LeaderBoardManager extends ZepetoScriptBehaviour {
                 ui.text_Score.text = RankData.Zero;
             }
             
-            // /* Get Player Datas */
-            // const mems:string[] = [];
-            // const ids:string[] = [];
-            // if (result.rankInfo.rankList) {
-            //     for (let i=0; i < result.rankInfo.rankList.length; i++) {
-            //         if(9 < i) {
-            //             break;
-            //         } else {
-            //             const data = result.rankInfo.rankList.get_Item(i);
-            //             mems.push(data.member);
-            //         }
-            //     }
-            // }
+            /* Get Player Datas */
+            const mems:string[] = [];
+            const ids:string[] = [];
+            if (result.rankInfo.rankList) {
+                for (let i=0; i < result.rankInfo.rankList.length; i++) {
+                    if(9 < i) {
+                        break;
+                    } else {
+                        const data = result.rankInfo.rankList.get_Item(i);
+                        mems.push(data.member);
+                    }
+                }
+            }
 
-            // /* Get Player ID */
-            // ZepetoWorldHelper.GetUserInfo(mems, (info: Users[]) => {
-            //     console.log(`[LeaderBoard] success GetUserInfo `);
-            //     for (const data of info) {
-            //         console.log(`data.zepetoId ${data.zepetoId} ===> ${data.zepetoId == null}, ${data.zepetoId == "null"}`);
+            /* Get Player ID */
+            ZepetoWorldHelper.GetUserInfo(mems, (info: Users[]) => {
+                console.log(`[LeaderBoard] success GetUserInfo `);
+                for (const data of info) {
+                    console.log(`data.zepetoId ${data.zepetoId} ===> ${data.zepetoId == null}, ${data.zepetoId == "null"}`);
                     
-            //         if(data.zepetoId) ids.push(this.ProcessingId(data.zepetoId))
-            //         // else ids.push(this.ProcessingId(data.name))
-            //     }
+                    if(data.zepetoId) ids.push(this.ProcessingId(data.zepetoId))
+                    // else ids.push(this.ProcessingId(data.name))
+                }
 
-            //     /* Update Rank Text */
-            //     if (result.rankInfo.rankList) {
-            //         for (let i=0; i < result.rankInfo.rankList.length; i++) {
-            //             if(9 < i) break;
-            //             const data = result.rankInfo.rankList.get_Item(i);
-            //             const ui = this.rankUIs[i];
-            //             ui.text_Id.text = ids[i];
-            //             ui.text_Score.text = data.score.toString();
-            //         }
-            //     }
-            // }, (error) => {
-            //     return console.log(error);
-            // });
+                /* Update Rank Text */
+                if (result.rankInfo.rankList) {
+                    for (let i=0; i < result.rankInfo.rankList.length; i++) {
+                        if(9 < i) break;
+                        const data = result.rankInfo.rankList.get_Item(i);
+                        const ui = this.rankUIs[i];
+                        ui.text_Id.text = ids[i];
+                        ui.text_Score.text = data.score.toString();
+                    }
+                }
+            }, (error) => {
+                return console.log(error);
+            });
         }, (error: string) => {
             console.error(error);
         });

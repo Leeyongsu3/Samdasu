@@ -11,7 +11,8 @@ export default class CameraManager extends ZepetoScriptBehaviour {
     /* Properties */
     private layer_btn : number;
     public multiplay : ZepetoWorldMultiplay;
-    private hitValue: GameObject; 
+    private hitValue: GameObject;
+    private isRaycasting: boolean = false;
 
     Start() {
         if(!this.multiplay)
@@ -45,30 +46,32 @@ export default class CameraManager extends ZepetoScriptBehaviour {
     }
 
     Raycasting() {
+        if(this.isRaycasting) return;
+        this.isRaycasting = true;
         // iphone 이슈
         // 아이폰은 왠지는 모르겟지만
         // ButtonUp일때 ButtonDown과 Button를 무시한다
         // 빈 공간에 터치 후에 드래그상태에서 버튼 위에서 ButtonUp을 할 때만 작동된다!!!!
+        const ray = ZepetoPlayers.instance.ZepetoCamera.camera.ScreenPointToRay(Input.mousePosition);
+        const hitInfo = $ref<RaycastHit>();
         if(Input.GetMouseButtonDown(0)) {
-            // console.log(`Input Down`);
-            
-            const ray = ZepetoPlayers.instance.ZepetoCamera.camera.ScreenPointToRay(Input.mousePosition);
-            const hitInfo = $ref<RaycastHit>();
             if(Physics.SphereCast(ray, 0.5, hitInfo, Mathf.Infinity, this.layer_btn)) {
                 this.hitValue = hitInfo.value.transform.gameObject;
+                console.log(`Input Set ${this.hitValue}`);
             } else {
                 this.hitValue = null;
             }
 
         } else if(this.hitValue && Input.GetMouseButton(0)) {
-            console.log(`Input BUTTON !!!`);
+            if(Physics.SphereCast(ray, 0.5, hitInfo, Mathf.Infinity, this.layer_btn)) {
+                console.log(`Input BUTTON !!!`);
+            } else {
+                console.log(`Input NULL !!!`);
+            }
 
         } else if(this.hitValue && Input.GetMouseButtonUp(0)) {
-            console.log(`Input Up`);
-            const ray = ZepetoPlayers.instance.ZepetoCamera.camera.ScreenPointToRay(Input.mousePosition);
-            const hitInfo = $ref<RaycastHit>();
             console.log(`Input Up 0 ${this.hitValue} ${hitInfo.value} `);
-            if(Physics.SphereCast(ray, 0.5, hitInfo, Mathf.Infinity, this.layer_btn)) {
+            if(Physics.Raycast(ray, hitInfo, Mathf.Infinity, this.layer_btn)) {
                 console.log(`Input Up 1 ${this.hitValue} ${hitInfo.value.transform.gameObject} ${this.hitValue == hitInfo.value.transform.gameObject}`);
                 if(this.hitValue == hitInfo.value.transform.gameObject) {
                     console.log(`Input Up 2`);
@@ -77,6 +80,42 @@ export default class CameraManager extends ZepetoScriptBehaviour {
             }
             this.hitValue = null;
         }
+        // if(Input.GetMouseButtonDown(0)) {
+        //     // console.log(`Input Down`);
+            
+        //     const ray = ZepetoPlayers.instance.ZepetoCamera.camera.ScreenPointToRay(Input.mousePosition);
+        //     const hitInfo = $ref<RaycastHit>();
+        //     if(Physics.SphereCast(ray, 0.5, hitInfo, Mathf.Infinity, this.layer_btn)) {
+        //         this.hitValue = hitInfo.value.transform.gameObject;
+        //         console.log(`Input Set ${this.hitValue}`);
+        //     } else {
+        //         this.hitValue = null;
+        //     }
+
+        // } else if(this.hitValue && Input.GetMouseButton(0)) {
+        //     const ray = ZepetoPlayers.instance.ZepetoCamera.camera.ScreenPointToRay(Input.mousePosition);
+        //     const hitInfoUp = $ref<RaycastHit>();
+        //     if(Physics.SphereCast(ray, 0.5, hitInfo, Mathf.Infinity, this.layer_btn)) {
+        //         console.log(`Input BUTTON !!!`);
+        //     } else {
+        //         console.log(`Input NULL !!!`);
+        //     }
+
+        // } else if(this.hitValue && Input.GetMouseButtonUp(0)) {
+        //     console.log(`Input Up`);
+        //     const ray = ZepetoPlayers.instance.ZepetoCamera.camera.ScreenPointToRay(Input.mousePosition);
+        //     const hitInfoUp = $ref<RaycastHit>();
+        //     console.log(`Input Up 0 ${this.hitValue} ${hitInfoUp.value} `);
+        //     if(Physics.Raycast(ray, hitInfoUp, Mathf.Infinity, this.layer_btn)) {
+        //         console.log(`Input Up 1 ${this.hitValue} ${hitInfoUp.value.transform.gameObject} ${this.hitValue == hitInfoUp.value.transform.gameObject}`);
+        //         if(this.hitValue == hitInfoUp.value.transform.gameObject) {
+        //             console.log(`Input Up 2`);
+        //             GameManager.instance.SwitchButtonScript(hitInfoUp.value.transform);
+        //         }
+        //     }
+        //     this.hitValue = null;
+        // }
+        this.isRaycasting = false;
         // if(Input.GetMouseButtonUp(0)) {
         //     console.log(`Input Up`);
         //     const ray = ZepetoPlayers.instance.ZepetoCamera.camera.ScreenPointToRay(Input.mousePosition);
