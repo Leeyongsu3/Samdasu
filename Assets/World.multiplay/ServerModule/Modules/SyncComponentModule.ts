@@ -7,6 +7,7 @@ export default class SyncComponentModule extends IModule {
     private sessionIdQueue: string[] = [];
     private instantiateObjCaches : InstantiateObj[] = [];
     private masterClient: Function = (): SandboxPlayer | undefined => this.server.loadPlayer(this.sessionIdQueue[0]);
+    private waitFlume:boolean = false;
 
     async OnCreate() {
         /**Zepeto Player Sync**/
@@ -253,6 +254,16 @@ export default class SyncComponentModule extends IModule {
         
         this.server.onMessage(MESSAGE.MGR_Play, (client, message) => {
             this.server.broadcast(MESSAGE.MGR_Play, message);
+        });
+        
+        this.server.onMessage(MESSAGE.FlumeRide, (client, message) => {
+            if(this.waitFlume && message.NeedTo_wait) return;
+            this.waitFlume = message.NeedTo_wait;
+            const data = {
+                OwnerSessionId: client.sessionId,
+                NeedTo_wait: message.NeedTo_wait,
+            };
+            this.server.broadcast(MESSAGE.FlumeRide, data);
         });
         /** Samdasu END **/
 
@@ -614,6 +625,7 @@ enum MESSAGE {
     Ride_MGR = "Ride_MGR",
     Ride_OFF = "Ride_OFF",
     MGR_Play = "MGR_Play",
+    FlumeRide = "FlumeRide",
 }
 
 /** Samdasu **/

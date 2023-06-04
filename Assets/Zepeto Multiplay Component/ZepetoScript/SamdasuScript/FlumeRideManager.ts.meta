@@ -1,0 +1,57 @@
+fileFormatVersion: 2
+guid: b6a72e7e0e369044a81fa098f1b80641
+importerOverride: ZEPETO.Script.Compiler:ZEPETO.Script:TypescriptAssetImporter
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: -1123457745, guid: 54cf806323ffe4418a4ce4cc63fe6b9d, type: 3}
+  isAssemblyDeclarations: 0
+  assembly: 
+  generateAllTypes: 1
+  types: []
+  generateWrapper: 0
+  overrideWrapperTypes: 0
+  wrapperTypes: []
+  WrapperFilters: []
+  wrapperOutputDirectory: Generated
+  compiledResult: '{"source":"\"use strict\";\r\nObject.defineProperty(exports, \"__esModule\",
+    { value: true });\r\nconst UnityEngine_1 = require(\"UnityEngine\");\r\nconst
+    ZEPETO_Character_Controller_1 = require(\"ZEPETO.Character.Controller\");\r\nconst
+    ZEPETO_Script_1 = require(\"ZEPETO.Script\");\r\nconst GameManager_1 = require(\"../Managers/GameManager\");\r\nconst
+    TypeManager_1 = require(\"../Managers/TypeManager\");\r\nclass FlumeRideManager
+    extends ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    get localSessionId() {
+    return this._localSessionId; }\r\n    set localSessionId(value) {\r\n       
+    if (this._localSessionId == null && value) {\r\n            this._localSessionId
+    = value;\r\n        }\r\n    }\r\n    /* Button Control */\r\n    WaitRide(ownerSessionId,
+    isWait) {\r\n        this.buttonObject.SetActive(!isWait);\r\n        if (isWait)
+    {\r\n            this.RideFlumeRide(ownerSessionId);\r\n        }\r\n    }\r\n   
+    /* Ride FlumeRide */\r\n    RideFlumeRide(ownerSessionId) {\r\n        /* Get
+    Player */\r\n        const character = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.GetPlayer(ownerSessionId).character;\r\n       
+    /* Controller OFF */\r\n        const characterController = character.transform.GetComponent($typeof(UnityEngine_1.CharacterController));\r\n       
+    characterController.enabled = false;\r\n        if (this.localSessionId == ownerSessionId)\r\n           
+    GameManager_1.default.instance.LocalPlayerControllerSet(false);\r\n        /*
+    Ride Slide Board */\r\n        const board = UnityEngine_1.GameObject.Instantiate(this.board,
+    this.transformSupporter);\r\n        character.Teleport(board.transform.position,
+    UnityEngine_1.Quaternion.Euler(0, 180, 0));\r\n        character.transform.SetParent(board.transform);\r\n       
+    GameManager_1.default.instance.CharacterShadowVisibler(ownerSessionId, false);\r\n       
+    /* Play Board Animation */\r\n        const boardAnim = board.GetComponent($typeof(UnityEngine_1.Animator));\r\n       
+    boardAnim.SetTrigger(TypeManager_1.Anim.BoardSlide);\r\n        this.StartCoroutine(this.RideOffFlumeRide(ownerSessionId,
+    board));\r\n    }\r\n    /* Ride OFF FlumeRide */\r\n    *RideOffFlumeRide(ownerSessionId,
+    board) {\r\n        /* Get Player */\r\n        const character = ZEPETO_Character_Controller_1.ZepetoPlayers.instance.GetPlayer(ownerSessionId).character;\r\n       
+    if (!this.wait)\r\n            this.wait = new UnityEngine_1.WaitForSeconds(5);\r\n       
+    yield this.wait;\r\n        /* Controller ON */\r\n        const characterController
+    = character.transform.GetComponent($typeof(UnityEngine_1.CharacterController));\r\n       
+    characterController.enabled = true;\r\n        if (this.localSessionId == ownerSessionId)\r\n           
+    GameManager_1.default.instance.LocalPlayerControllerSet(true);\r\n        /*
+    Ride OFF Slide Board */\r\n        character.Teleport(this.poolPoint.transform.position,
+    UnityEngine_1.Quaternion.identity);\r\n        character.transform.SetParent(null);\r\n       
+    GameManager_1.default.instance.CharacterShadowVisibler(ownerSessionId, true);\r\n       
+    /* Board Destroy */\r\n        UnityEngine_1.GameObject.Destroy(board);\r\n   
+    }\r\n}\r\nexports.default = FlumeRideManager;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiRmx1bWVSaWRlTWFuYWdlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIkZsdW1lUmlkZU1hbmFnZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQSw2Q0FBK0c7QUFDL0csNkVBQTREO0FBQzVELGlEQUFxRDtBQUNyRCx5REFBa0Q7QUFDbEQseURBQStDO0FBRS9DLE1BQXFCLGdCQUFpQixTQUFRLHFDQUFxQjtJQU8vRCxJQUFXLGNBQWMsS0FBYSxPQUFPLElBQUksQ0FBQyxlQUFlLENBQUMsQ0FBQyxDQUFDO0lBQ3BFLElBQVcsY0FBYyxDQUFDLEtBQWE7UUFDbkMsSUFBRyxJQUFJLENBQUMsZUFBZSxJQUFJLElBQUksSUFBSSxLQUFLLEVBQUU7WUFDdEMsSUFBSSxDQUFDLGVBQWUsR0FBRyxLQUFLLENBQUM7U0FDaEM7SUFDTCxDQUFDO0lBR0Qsb0JBQW9CO0lBQ2IsUUFBUSxDQUFDLGNBQXFCLEVBQUUsTUFBYztRQUNqRCxJQUFJLENBQUMsWUFBWSxDQUFDLFNBQVMsQ0FBQyxDQUFDLE1BQU0sQ0FBQyxDQUFDO1FBQ3JDLElBQUcsTUFBTSxFQUFFO1lBQ1AsSUFBSSxDQUFDLGFBQWEsQ0FBQyxjQUFjLENBQUMsQ0FBQztTQUN0QztJQUNMLENBQUM7SUFFRCxvQkFBb0I7SUFDWixhQUFhLENBQUMsY0FBcUI7UUFDdkMsZ0JBQWdCO1FBQ2hCLE1BQU0sU0FBUyxHQUFHLDJDQUFhLENBQUMsUUFBUSxDQUFDLFNBQVMsQ0FBQyxjQUFjLENBQUMsQ0FBQyxTQUFTLENBQUM7UUFFN0Usb0JBQW9CO1FBQ3BCLE1BQU0sbUJBQW1CLEdBQUcsU0FBUyxDQUFDLFNBQVMsQ0FBQyxZQUFZLFNBQUMsaUNBQW1CLEVBQUcsQ0FBQztRQUNwRixtQkFBbUIsQ0FBQyxPQUFPLEdBQUcsS0FBSyxDQUFDO1FBQ3BDLElBQUcsSUFBSSxDQUFDLGNBQWMsSUFBSSxjQUFjO1lBQUUscUJBQVcsQ0FBQyxRQUFRLENBQUMsd0JBQXdCLENBQUMsS0FBSyxDQUFDLENBQUM7UUFFL0Ysc0JBQXNCO1FBQ3RCLE1BQU0sS0FBSyxHQUFHLHdCQUFVLENBQUMsV0FBVyxDQUFDLElBQUksQ0FBQyxLQUFLLEVBQUUsSUFBSSxDQUFDLGtCQUFrQixDQUFlLENBQUM7UUFDeEYsU0FBUyxDQUFDLFFBQVEsQ0FBQyxLQUFLLENBQUMsU0FBUyxDQUFDLFFBQVEsRUFBRSx3QkFBVSxDQUFDLEtBQUssQ0FBQyxDQUFDLEVBQUUsR0FBRyxFQUFFLENBQUMsQ0FBQyxDQUFDLENBQUM7UUFDMUUsU0FBUyxDQUFDLFNBQVMsQ0FBQyxTQUFTLENBQUMsS0FBSyxDQUFDLFNBQVMsQ0FBQyxDQUFDO1FBQy9DLHFCQUFXLENBQUMsUUFBUSxDQUFDLHVCQUF1QixDQUFDLGNBQWMsRUFBRSxLQUFLLENBQUMsQ0FBQztRQUVwRSwwQkFBMEI7UUFDMUIsTUFBTSxTQUFTLEdBQUcsS0FBSyxDQUFDLFlBQVksU0FBQyxzQkFBUSxFQUFHLENBQUM7UUFDakQsU0FBUyxDQUFDLFVBQVUsQ0FBQyxrQkFBSSxDQUFDLFVBQVUsQ0FBQyxDQUFDO1FBRXRDLElBQUksQ0FBQyxjQUFjLENBQUMsSUFBSSxDQUFDLGdCQUFnQixDQUFDLGNBQWMsRUFBRSxLQUFLLENBQUMsQ0FBQyxDQUFDO0lBQ3RFLENBQUM7SUFFRCx3QkFBd0I7SUFDaEIsQ0FBRSxnQkFBZ0IsQ0FBQyxjQUFxQixFQUFFLEtBQWdCO1FBQzlELGdCQUFnQjtRQUNoQixNQUFNLFNBQVMsR0FBRywyQ0FBYSxDQUFDLFFBQVEsQ0FBQyxTQUFTLENBQUMsY0FBYyxDQUFDLENBQUMsU0FBUyxDQUFDO1FBRTdFLElBQUcsQ0FBQyxJQUFJLENBQUMsSUFBSTtZQUFFLElBQUksQ0FBQyxJQUFJLEdBQUcsSUFBSSw0QkFBYyxDQUFDLENBQUMsQ0FBQyxDQUFDO1FBQ2pELE1BQU0sSUFBSSxDQUFDLElBQUksQ0FBQztRQUVoQixtQkFBbUI7UUFDbkIsTUFBTSxtQkFBbUIsR0FBRyxTQUFTLENBQUMsU0FBUyxDQUFDLFlBQVksU0FBQyxpQ0FBbUIsRUFBRyxDQUFDO1FBQ3BGLG1CQUFtQixDQUFDLE9BQU8sR0FBRyxJQUFJLENBQUM7UUFDbkMsSUFBRyxJQUFJLENBQUMsY0FBYyxJQUFJLGNBQWM7WUFBRSxxQkFBVyxDQUFDLFFBQVEsQ0FBQyx3QkFBd0IsQ0FBQyxJQUFJLENBQUMsQ0FBQztRQUU5RiwwQkFBMEI7UUFDMUIsU0FBUyxDQUFDLFFBQVEsQ0FBQyxJQUFJLENBQUMsU0FBUyxDQUFDLFNBQVMsQ0FBQyxRQUFRLEVBQUUsd0JBQVUsQ0FBQyxRQUFRLENBQUMsQ0FBQztRQUMzRSxTQUFTLENBQUMsU0FBUyxDQUFDLFNBQVMsQ0FBQyxJQUFJLENBQUMsQ0FBQztRQUNwQyxxQkFBVyxDQUFDLFFBQVEsQ0FBQyx1QkFBdUIsQ0FBQyxjQUFjLEVBQUUsSUFBSSxDQUFDLENBQUM7UUFFbkUsbUJBQW1CO1FBQ25CLHdCQUFVLENBQUMsT0FBTyxDQUFDLEtBQUssQ0FBQyxDQUFDO0lBQzlCLENBQUM7Q0FDSjtBQW5FRCxtQ0FtRUMifQ==","assetPath":"Assets/Zepeto
+    Multiplay Component/ZepetoScript/SamdasuScript/FlumeRideManager.ts","manifest":{"properties":[{"assembly":"UnityEngine.CoreModule","name":"buttonObject","type":"UnityEngine.GameObject","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"transformSupporter","type":"UnityEngine.Transform","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"board","type":"UnityEngine.GameObject","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"poolPoint","type":"UnityEngine.Transform","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]}],"name":"FlumeRideManager","description":"","hasAnimatorMove":false},"isCompiled":true}'
+  typescriptHash: 8afdd2099b0508a9f1cfd9be160e014d
+  onlyWriteTrigger: 0

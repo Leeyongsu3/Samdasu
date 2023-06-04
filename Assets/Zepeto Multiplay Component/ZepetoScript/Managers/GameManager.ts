@@ -7,6 +7,7 @@ import { ZepetoWorldMultiplay } from 'ZEPETO.World';
 import SyncIndexManager from '../Common/SyncIndexManager';
 import DOTWeenSyncHelper from '../DOTween/DOTWeenSyncHelper';
 import PlayerSync from '../Player/PlayerSync';
+import FlumeRideManager from '../SamdasuScript/FlumeRideManager';
 import HorseRideManager from '../SamdasuScript/HorseRideManager';
 import MGRManager from '../SamdasuScript/MGRManager';
 import NPCManager from '../SamdasuScript/NPCManager';
@@ -55,6 +56,7 @@ export default class GameManager extends ZepetoScriptBehaviour {
     @Header("Managers")
     @SerializeField() private _leaderboardManager: Transform;
     @SerializeField() private _horseRideManager: Transform;
+    @SerializeField() private _flumeRideManager: Transform;
     // @SerializeField() private _treeKingManager: Transform;
     @SerializeField() private _visibleManager: Transform;
     @SerializeField() private _trashManager: Transform;
@@ -63,6 +65,7 @@ export default class GameManager extends ZepetoScriptBehaviour {
     @SerializeField() private _oxManager: Transform;
     private leaderboardManager: LeaderBoardManager;
     private horseRideManager: HorseRideManager;
+    private flumeRideManager: FlumeRideManager;
     // private treeKingManager: TreeKingManager;
     private visibleManager: VisibleManager;
     private trashManager: TrashManager;
@@ -163,6 +166,10 @@ export default class GameManager extends ZepetoScriptBehaviour {
 
             this.room.AddMessageHandler(MESSAGE.Visible, (message:any) => {
                 this.visibleManager.TargetControl(message.name, message.isVisible);
+            });
+
+            this.room.AddMessageHandler(MESSAGE.FlumeRide, (message:any) => {
+                this.flumeRideManager.WaitRide(message.OwnerSessionId, message.NeedTo_wait);
             });
         }
         this.StartCoroutine(this.StartLoading());
@@ -275,6 +282,13 @@ export default class GameManager extends ZepetoScriptBehaviour {
                     /* Remote Start */
                     UIManager.instance.RemoteStart();
                     console.log(`[GameManager] UIManager loaded success`);
+
+                    const flumeRideManager = this._flumeRideManager.GetComponent<FlumeRideManager>();
+                    if(flumeRideManager) this.flumeRideManager = flumeRideManager;
+                    else this.flumeRideManager = GameObject.FindObjectOfType<FlumeRideManager>();
+                    this._flumeRideManager = null;
+                    flumeRideManager.localSessionId = this.room.SessionId;
+                    console.log(`[GameManager] FlumeRideManager loaded success`);
 
                     /* Sync Chair Init */
                     this.syncChairs = GameObject.FindObjectsOfType<ChairSit>();
@@ -428,6 +442,10 @@ export default class GameManager extends ZepetoScriptBehaviour {
                 data.Add(SendName.isVisible, !target.gameObject.activeSelf);
                 this.room.Send(MESSAGE.Visible, data.GetObject());
                 break;
+                
+            case ButtonType.FlumeRide:
+                this.StartCoroutine(this.FlumeRide());
+                break;
 
             default :
                 console.error(`타입이 설정되지 않은 버튼이 있습니다. ${btn.name}-${ButtonType[buttonType]}`)
@@ -539,11 +557,9 @@ export default class GameManager extends ZepetoScriptBehaviour {
         /* Player Play Animation */
         const character = ZepetoPlayers.instance.GetPlayer(this.room.SessionId).character;
         const characterController = character.transform.GetComponent<CharacterController>();
-        if(!this.joyCon) this.joyCon = ZepetoPlayers.instance.gameObject.GetComponentInChildren<UIZepetoPlayerControl>();
 
         /* Controller OFF */
-        this.joyCon.gameObject.SetActive(false);
-        ZepetoPlayers.instance.controllerData.inputAsset.Disable();
+        this.LocalPlayerControllerSet(false);
 
         /* Player State Set */
         this.SetSamdasuState(SamdasuState.Samdasu_Drink, true);
@@ -556,10 +572,8 @@ export default class GameManager extends ZepetoScriptBehaviour {
         this.SetSamdasuState(SamdasuState.Pick_Item, true, true);
         
         /* Controller ON */
-        this.joyCon.gameObject.SetActive(true);
-        ZepetoPlayers.instance.controllerData.inputAsset.Enable();
+        this.LocalPlayerControllerSet(true);
         characterController.enabled = true;
-        // destory samdasu in the hand
 
         /* Samdasu Drink Stamp Check */
         const waterStamp = SyncIndexManager.STAMPS.get(StampType.STAMP_WATER);
@@ -594,10 +608,8 @@ export default class GameManager extends ZepetoScriptBehaviour {
             this.SetSamdasuState(SamdasuState.Ride_MGR, true);
     
             /* Controller OFF */
-            if(!this.joyCon) this.joyCon = ZepetoPlayers.instance.gameObject.GetComponentInChildren<UIZepetoPlayerControl>();
-            this.joyCon.gameObject.SetActive(false);
+            this.LocalPlayerControllerSet(false);
             const characterController = character.transform.GetComponent<CharacterController>();
-            ZepetoPlayers.instance.controllerData.inputAsset.Disable();
             characterController.enabled = false;
     
             /* Local Player Ride Off UI */
@@ -636,10 +648,8 @@ export default class GameManager extends ZepetoScriptBehaviour {
             this.SetSamdasuState(SamdasuState.Ride_MGR, false);
             
             /* Controller ON */
-            if(!this.joyCon) this.joyCon = ZepetoPlayers.instance.gameObject.GetComponentInChildren<UIZepetoPlayerControl>();
-            this.joyCon.gameObject.SetActive(true);
+            this.LocalPlayerControllerSet(true);
             const characterController = character.transform.GetComponent<CharacterController>();
-            ZepetoPlayers.instance.controllerData.inputAsset.Enable();
             characterController.enabled = true;
     
             /* Local Player Get Stamp */
@@ -742,10 +752,26 @@ export default class GameManager extends ZepetoScriptBehaviour {
     }
 
     /* Character Shadow Visibler */
-    private CharacterShadowVisibler(sessionId:string, visible:boolean) {
+    public CharacterShadowVisibler(sessionId:string, visible:boolean) {
         const character = ZepetoPlayers.instance.GetPlayer(sessionId).character.transform;
         const shadow = character.GetChild(0).GetChild(2);
         shadow.gameObject.SetActive(visible);
+    }
+
+    /* Local Player Controller Set */
+    public LocalPlayerControllerSet(isEnable:boolean) {
+        const character = ZepetoPlayers.instance.GetPlayer(this.room.SessionId).character;
+        if(!this.joyCon) this.joyCon = ZepetoPlayers.instance.gameObject.GetComponentInChildren<UIZepetoPlayerControl>();
+
+        /* Controller OFF */
+        if(isEnable) {
+            this.joyCon.gameObject.SetActive(true);
+            ZepetoPlayers.instance.controllerData.inputAsset.Enable();
+
+        } else {
+            this.joyCon.gameObject.SetActive(false);
+            ZepetoPlayers.instance.controllerData.inputAsset.Disable();
+        }
     }
 
     /** Local Player Animation **/
@@ -834,5 +860,26 @@ export default class GameManager extends ZepetoScriptBehaviour {
             }
         }
         return true;
+    }
+
+    private * FlumeRide() {
+        /* Send Ride Wait */
+        const data = new RoomData();
+        data.Add(SendName.NeedTo_wait, true);
+        this.room.Send(MESSAGE.FlumeRide, data.GetObject());
+
+        /* Player State Set */
+        // this.SetSamdasuState(SamdasuState.Samdasu_Drink, true);
+
+        /* Player Stop Animation */
+        yield new WaitForSeconds(3);
+
+        /* Player State Set Return */
+        // this.SetSamdasuState(SamdasuState.Pick_Item, true, true);
+        
+        /* Send Ride Wait */
+        const dataWait = new RoomData();
+        dataWait.Add(SendName.NeedTo_wait, false);
+        this.room.Send(MESSAGE.FlumeRide, dataWait.GetObject());
     }
 }

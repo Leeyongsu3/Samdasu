@@ -32,6 +32,7 @@ export enum MESSAGE {
     // Samdasu_Drink = "Samdasu_Drink",
     MGR_Play = "MGR_Play",
     Play_Effect = "Play_Effect",
+    FlumeRide = "FlumeRide",
 }
 
 /* Server Connect Messages Room Datas Name */
@@ -58,6 +59,7 @@ export enum SendName {
     isPlay = "isPlay",
     effectType = "effectType",
     isVisible = "isVisible",
+    NeedTo_wait = "NeedTo_wait",
 }
 
 /* Player Speed Datas Name */
@@ -83,6 +85,7 @@ export enum SamdasuState {
     Ride_MGR = 30,
     Pick_Item = 40, Samdasu_Drink = 41,
     Swim = 50,
+    Ride_Flume = 60,
 }
 
 
@@ -97,6 +100,7 @@ export enum ButtonType {
     Chair,
     EquipHead, EquipRightHand, EquipLeftHand, EquipBody,
     Visible,//
+    FlumeRide,
 }
 
 /* Camera Mode Data */
@@ -335,6 +339,9 @@ export enum Anim {
 
     // NPC Animation
     isNPC = "isNPC",
+
+    // Flume Ride
+    BoardSlide = "BoardSlide",
 }
 
 /* Chair Sit Datas */

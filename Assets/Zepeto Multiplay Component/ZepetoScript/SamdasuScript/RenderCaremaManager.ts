@@ -92,8 +92,8 @@ export default class RenderCaremaManager extends ZepetoScriptBehaviour {
                 const hitInfo = $ref<RaycastHit>();
                 if(Physics.SphereCast(ray, 0.5, hitInfo, Mathf.Infinity, this.layer_Frame)) {
                     console.log(`Render UP SphereCast`);
-                    // this.touchPoint = new Vector3(hitInfo.value.point.x, hitInfo.value.point.y, hitInfo.value.point.z);
-                    // this.touchItem.position = this.touchPoint;
+                    this.touchPoint = new Vector3(hitInfo.value.point.x, hitInfo.value.point.y, hitInfo.value.point.z);
+                    this.touchItem.position = this.touchPoint;
                 }
                 this.isHold = false;
             }

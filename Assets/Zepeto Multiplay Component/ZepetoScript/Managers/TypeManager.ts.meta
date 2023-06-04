@@ -39,11 +39,11 @@ ScriptedImporter:
     = \"Add_Point\";\r\n    MESSAGE[\"Ride_Horse\"] = \"Ride_Horse\";\r\n    MESSAGE[\"Ride_Wheel\"]
     = \"Ride_Wheel\";\r\n    MESSAGE[\"Ride_MGR\"] = \"Ride_MGR\";\r\n    MESSAGE[\"Ride_OFF\"]
     = \"Ride_OFF\";\r\n    // Samdasu_Drink = \"Samdasu_Drink\",\r\n    MESSAGE[\"MGR_Play\"]
-    = \"MGR_Play\";\r\n    MESSAGE[\"Play_Effect\"] = \"Play_Effect\";\r\n})(MESSAGE
-    = exports.MESSAGE || (exports.MESSAGE = {}));\r\n/* Server Connect Messages Room
-    Datas Name */\r\nvar SendName;\r\n(function (SendName) {\r\n    // Default\r\n   
-    SendName[\"isSit\"] = \"isSit\";\r\n    SendName[\"chairId\"] = \"chairId\";\r\n   
-    SendName[\"gestureName\"] = \"gestureName\";\r\n    SendName[\"animationParam\"]
+    = \"MGR_Play\";\r\n    MESSAGE[\"Play_Effect\"] = \"Play_Effect\";\r\n    MESSAGE[\"FlumeRide\"]
+    = \"FlumeRide\";\r\n})(MESSAGE = exports.MESSAGE || (exports.MESSAGE = {}));\r\n/*
+    Server Connect Messages Room Datas Name */\r\nvar SendName;\r\n(function (SendName)
+    {\r\n    // Default\r\n    SendName[\"isSit\"] = \"isSit\";\r\n    SendName[\"chairId\"]
+    = \"chairId\";\r\n    SendName[\"gestureName\"] = \"gestureName\";\r\n    SendName[\"animationParam\"]
     = \"animationParam\";\r\n    SendName[\"playerAdditionalValue\"] = \"playerAdditionalValue\";\r\n   
     // Samdasu\r\n    SendName[\"SamdasuState\"] = \"SamdasuState\";\r\n    SendName[\"isComplete\"]
     = \"isComplete\";\r\n    SendName[\"trashCount\"] = \"trashCount\";\r\n    SendName[\"Selected_A\"]
@@ -52,50 +52,53 @@ ScriptedImporter:
     = \"name\";\r\n    SendName[\"isClear\"] = \"isClear\";\r\n    SendName[\"stamp\"]
     = \"stamp\";\r\n    SendName[\"attach\"] = \"attach\";\r\n    SendName[\"isPlay\"]
     = \"isPlay\";\r\n    SendName[\"effectType\"] = \"effectType\";\r\n    SendName[\"isVisible\"]
-    = \"isVisible\";\r\n})(SendName = exports.SendName || (exports.SendName = {}));\r\n/*
-    Player Speed Datas Name */\r\nvar PlayerMove;\r\n(function (PlayerMove) {\r\n   
-    PlayerMove[\"additionalWalkSpeed\"] = \"additionalWalkSpeed\";\r\n    PlayerMove[\"additionalRunSpeed\"]
-    = \"additionalRunSpeed\";\r\n    PlayerMove[\"additionalJumpPower\"] = \"additionalJumpPower\";\r\n})(PlayerMove
+    = \"isVisible\";\r\n    SendName[\"NeedTo_wait\"] = \"NeedTo_wait\";\r\n})(SendName
+    = exports.SendName || (exports.SendName = {}));\r\n/* Player Speed Datas Name
+    */\r\nvar PlayerMove;\r\n(function (PlayerMove) {\r\n    PlayerMove[\"additionalWalkSpeed\"]
+    = \"additionalWalkSpeed\";\r\n    PlayerMove[\"additionalRunSpeed\"] = \"additionalRunSpeed\";\r\n   
+    PlayerMove[\"additionalJumpPower\"] = \"additionalJumpPower\";\r\n})(PlayerMove
     = exports.PlayerMove || (exports.PlayerMove = {}));\r\n/* Samdasu State Data
     */\r\nvar SamdasuState;\r\n(function (SamdasuState) {\r\n    SamdasuState[SamdasuState[\"NONE\"]
     = 0] = \"NONE\";\r\n    SamdasuState[SamdasuState[\"Ride_Horse\"] = 10] = \"Ride_Horse\";\r\n   
     SamdasuState[SamdasuState[\"Ride_Wheel\"] = 20] = \"Ride_Wheel\";\r\n    SamdasuState[SamdasuState[\"Ride_MGR\"]
     = 30] = \"Ride_MGR\";\r\n    SamdasuState[SamdasuState[\"Pick_Item\"] = 40] =
     \"Pick_Item\";\r\n    SamdasuState[SamdasuState[\"Samdasu_Drink\"] = 41] = \"Samdasu_Drink\";\r\n   
-    SamdasuState[SamdasuState[\"Swim\"] = 50] = \"Swim\";\r\n})(SamdasuState = exports.SamdasuState
-    || (exports.SamdasuState = {}));\r\n////////////////////////////////////////////////
-    About Game Manager\r\n/* Sprite World Button */\r\nvar ButtonType;\r\n(function
-    (ButtonType) {\r\n    ButtonType[ButtonType[\"NONE\"] = -1] = \"NONE\";\r\n   
-    ButtonType[ButtonType[\"Trash\"] = 20] = \"Trash\";\r\n    ButtonType[ButtonType[\"Add_Horse\"]
-    = 21] = \"Add_Horse\";\r\n    ButtonType[ButtonType[\"Ride_Wheel\"] = 22] = \"Ride_Wheel\";\r\n   
-    ButtonType[ButtonType[\"Ride_MGR\"] = 23] = \"Ride_MGR\";\r\n    ButtonType[ButtonType[\"Samdasu_Pick\"]
-    = 24] = \"Samdasu_Pick\";\r\n    ButtonType[ButtonType[\"Balloon_Pick\"] = 27]
-    = \"Balloon_Pick\";\r\n    ButtonType[ButtonType[\"NPC_Hanlabong\"] = 30] = \"NPC_Hanlabong\";\r\n   
-    ButtonType[ButtonType[\"NPC_Trash\"] = 31] = \"NPC_Trash\";\r\n    ButtonType[ButtonType[\"NPC_Render\"]
-    = 32] = \"NPC_Render\";\r\n    ButtonType[ButtonType[\"NPC_Cake\"] = 33] = \"NPC_Cake\";\r\n   
-    ButtonType[ButtonType[\"Chair\"] = 34] = \"Chair\";\r\n    ButtonType[ButtonType[\"EquipHead\"]
-    = 35] = \"EquipHead\";\r\n    ButtonType[ButtonType[\"EquipRightHand\"] = 36]
-    = \"EquipRightHand\";\r\n    ButtonType[ButtonType[\"EquipLeftHand\"] = 37] =
-    \"EquipLeftHand\";\r\n    ButtonType[ButtonType[\"EquipBody\"] = 38] = \"EquipBody\";\r\n   
-    ButtonType[ButtonType[\"Visible\"] = 39] = \"Visible\";\r\n})(ButtonType = exports.ButtonType
-    || (exports.ButtonType = {}));\r\n/* Camera Mode Data */\r\nvar CameraMode;\r\n(function
-    (CameraMode) {\r\n    CameraMode[CameraMode[\"FPS\"] = 0] = \"FPS\";\r\n    CameraMode[CameraMode[\"TPS\"]
-    = 1] = \"TPS\";\r\n})(CameraMode = exports.CameraMode || (exports.CameraMode
-    = {}));\r\n/* Camera Mode Data */\r\nvar EffectType;\r\n(function (EffectType)
-    {\r\n    EffectType[EffectType[\"NONE\"] = -1] = \"NONE\";\r\n    EffectType[EffectType[\"Firework\"]
-    = 1] = \"Firework\";\r\n})(EffectType = exports.EffectType || (exports.EffectType
-    = {}));\r\n//////////////////////////////////////////////// About UI Manager\r\n/*
-    Loading UI Data */\r\nvar LoadingType;\r\n(function (LoadingType) {\r\n    LoadingType[\"Start\"]
-    = \"UI_Loarding_Start\";\r\n    LoadingType[\"Teleport\"] = \"UI_Loarding_Teleport\";\r\n   
-    LoadingType[\"NONE\"] = \"\";\r\n})(LoadingType = exports.LoadingType || (exports.LoadingType
-    = {}));\r\nvar Language;\r\n(function (Language) {\r\n    Language[Language[\"EN\"]
-    = 0] = \"EN\";\r\n    Language[Language[\"KR\"] = 1] = \"KR\";\r\n})(Language
-    = exports.Language || (exports.Language = {}));\r\nvar StickerType;\r\n(function
-    (StickerType) {\r\n    StickerType[\"candle25\"] = \"candle25\";\r\n    StickerType[\"flower_red\"]
-    = \"flower_red\";\r\n    StickerType[\"mulbangul\"] = \"mulbangul\";\r\n    StickerType[\"backrockdam\"]
-    = \"backrockdam\";\r\n    StickerType[\"airplane\"] = \"airplane\";\r\n    StickerType[\"samdasu\"]
-    = \"samdasu\";\r\n    StickerType[\"songee\"] = \"songee\";\r\n    StickerType[\"flower_yellow\"]
-    = \"flower_yellow\";\r\n    StickerType[\"horse\"] = \"horse\";\r\n    StickerType[\"congraturation\"]
+    SamdasuState[SamdasuState[\"Swim\"] = 50] = \"Swim\";\r\n    SamdasuState[SamdasuState[\"Ride_Flume\"]
+    = 60] = \"Ride_Flume\";\r\n})(SamdasuState = exports.SamdasuState || (exports.SamdasuState
+    = {}));\r\n//////////////////////////////////////////////// About Game Manager\r\n/*
+    Sprite World Button */\r\nvar ButtonType;\r\n(function (ButtonType) {\r\n   
+    ButtonType[ButtonType[\"NONE\"] = -1] = \"NONE\";\r\n    ButtonType[ButtonType[\"Trash\"]
+    = 20] = \"Trash\";\r\n    ButtonType[ButtonType[\"Add_Horse\"] = 21] = \"Add_Horse\";\r\n   
+    ButtonType[ButtonType[\"Ride_Wheel\"] = 22] = \"Ride_Wheel\";\r\n    ButtonType[ButtonType[\"Ride_MGR\"]
+    = 23] = \"Ride_MGR\";\r\n    ButtonType[ButtonType[\"Samdasu_Pick\"] = 24] =
+    \"Samdasu_Pick\";\r\n    ButtonType[ButtonType[\"Balloon_Pick\"] = 27] = \"Balloon_Pick\";\r\n   
+    ButtonType[ButtonType[\"NPC_Hanlabong\"] = 30] = \"NPC_Hanlabong\";\r\n    ButtonType[ButtonType[\"NPC_Trash\"]
+    = 31] = \"NPC_Trash\";\r\n    ButtonType[ButtonType[\"NPC_Render\"] = 32] = \"NPC_Render\";\r\n   
+    ButtonType[ButtonType[\"NPC_Cake\"] = 33] = \"NPC_Cake\";\r\n    ButtonType[ButtonType[\"Chair\"]
+    = 34] = \"Chair\";\r\n    ButtonType[ButtonType[\"EquipHead\"] = 35] = \"EquipHead\";\r\n   
+    ButtonType[ButtonType[\"EquipRightHand\"] = 36] = \"EquipRightHand\";\r\n   
+    ButtonType[ButtonType[\"EquipLeftHand\"] = 37] = \"EquipLeftHand\";\r\n    ButtonType[ButtonType[\"EquipBody\"]
+    = 38] = \"EquipBody\";\r\n    ButtonType[ButtonType[\"Visible\"] = 39] = \"Visible\";\r\n   
+    ButtonType[ButtonType[\"FlumeRide\"] = 40] = \"FlumeRide\";\r\n})(ButtonType
+    = exports.ButtonType || (exports.ButtonType = {}));\r\n/* Camera Mode Data */\r\nvar
+    CameraMode;\r\n(function (CameraMode) {\r\n    CameraMode[CameraMode[\"FPS\"]
+    = 0] = \"FPS\";\r\n    CameraMode[CameraMode[\"TPS\"] = 1] = \"TPS\";\r\n})(CameraMode
+    = exports.CameraMode || (exports.CameraMode = {}));\r\n/* Camera Mode Data */\r\nvar
+    EffectType;\r\n(function (EffectType) {\r\n    EffectType[EffectType[\"NONE\"]
+    = -1] = \"NONE\";\r\n    EffectType[EffectType[\"Firework\"] = 1] = \"Firework\";\r\n})(EffectType
+    = exports.EffectType || (exports.EffectType = {}));\r\n////////////////////////////////////////////////
+    About UI Manager\r\n/* Loading UI Data */\r\nvar LoadingType;\r\n(function (LoadingType)
+    {\r\n    LoadingType[\"Start\"] = \"UI_Loarding_Start\";\r\n    LoadingType[\"Teleport\"]
+    = \"UI_Loarding_Teleport\";\r\n    LoadingType[\"NONE\"] = \"\";\r\n})(LoadingType
+    = exports.LoadingType || (exports.LoadingType = {}));\r\nvar Language;\r\n(function
+    (Language) {\r\n    Language[Language[\"EN\"] = 0] = \"EN\";\r\n    Language[Language[\"KR\"]
+    = 1] = \"KR\";\r\n})(Language = exports.Language || (exports.Language = {}));\r\nvar
+    StickerType;\r\n(function (StickerType) {\r\n    StickerType[\"candle25\"] =
+    \"candle25\";\r\n    StickerType[\"flower_red\"] = \"flower_red\";\r\n    StickerType[\"mulbangul\"]
+    = \"mulbangul\";\r\n    StickerType[\"backrockdam\"] = \"backrockdam\";\r\n   
+    StickerType[\"airplane\"] = \"airplane\";\r\n    StickerType[\"samdasu\"] = \"samdasu\";\r\n   
+    StickerType[\"songee\"] = \"songee\";\r\n    StickerType[\"flower_yellow\"] =
+    \"flower_yellow\";\r\n    StickerType[\"horse\"] = \"horse\";\r\n    StickerType[\"congraturation\"]
     = \"congraturation\";\r\n    StickerType[\"halbang\"] = \"halbang\";\r\n    StickerType[\"hanrabong\"]
     = \"hanrabong\";\r\n    StickerType[\"haenyeo\"] = \"haenyeo\";\r\n    StickerType[\"volcano\"]
     = \"volcano\";\r\n})(StickerType = exports.StickerType || (exports.StickerType
@@ -145,22 +148,22 @@ ScriptedImporter:
     = \"FallSpeed\";\r\n    Anim[\"Acceleration\"] = \"Acceleration\";\r\n    Anim[\"MoveProgress\"]
     = \"MoveProgress\";\r\n    Anim[\"isSit\"] = \"isSit\";\r\n    Anim[\"isHold\"]
     = \"isHold\";\r\n    // OX Quiz\r\n    Anim[\"Active\"] = \"Active\";\r\n   
-    // NPC Animation\r\n    Anim[\"isNPC\"] = \"isNPC\";\r\n})(Anim = exports.Anim
-    || (exports.Anim = {}));\r\n/* Default ScreenShot Render Result Toast Data */\r\nvar
-    TOAST_MESSAGE;\r\n(function (TOAST_MESSAGE) {\r\n    TOAST_MESSAGE[\"feedUploading\"]
-    = \"Uploading...\";\r\n    TOAST_MESSAGE[\"feedCompleted\"] = \"Done\";\r\n   
-    TOAST_MESSAGE[\"feedFailed\"] = \"Failed\";\r\n    TOAST_MESSAGE[\"screenShotSaveCompleted\"]
-    = \"Saved!\";\r\n})(TOAST_MESSAGE = exports.TOAST_MESSAGE || (exports.TOAST_MESSAGE
-    = {}));\r\n/* Default ScreenShot Render Result Layer Data */\r\nvar LAYER;\r\n(function
-    (LAYER) {\r\n    LAYER[LAYER[\"everything\"] = -1] = \"everything\";\r\n    LAYER[LAYER[\"nothing\"]
-    = 0] = \"nothing\";\r\n    LAYER[LAYER[\"UI\"] = 5] = \"UI\";\r\n})(LAYER = exports.LAYER
-    || (exports.LAYER = {}));\r\n/* Console Error */\r\nvar ERROR;\r\n(function (ERROR)
-    {\r\n    ERROR[\"NOT_ADDED_STIKERS\"] = \"NOT Added Stickers......\";\r\n   
-    ERROR[\"NOT_SELECTED_STICKERS\"] = \"NOT Selected...\";\r\n    ERROR[\"NOT_FOUND_ITEM\"]
-    = \"NOT FOUND ITEM....\";\r\n    ERROR[\"NOT_FOUND_HORSE\"] = \"NOT FOUND HORSE\";\r\n   
-    ERROR[\"NOT_MATCHED_OBJECT\"] = \"NOT MATCHED OBJECT....\";\r\n    ERROR[\"ITS_FULL_PLAYERS\"]
-    = \"IT''S FULL PLAYERS....\";\r\n})(ERROR = exports.ERROR || (exports.ERROR =
-    {}));\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiVHlwZU1hbmFnZXIuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJUeXBlTWFuYWdlci50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7QUFBQSw2Q0FBOEU7QUFDOUUsbURBQXFEO0FBQ3JELGlEQUFxRDtBQUNyRCxnRUFBeUQ7QUFHekQsTUFBcUIsV0FBVztDQUMvQjtBQURELDhCQUNDO0FBQ0QsbUVBQW1FO0FBRW5FLDRCQUE0QjtBQUM1QixJQUFZLE9BdUJYO0FBdkJELFdBQVksT0FBTztJQUNmLG9DQUF5QixDQUFBO0lBQ3pCLGdDQUFxQixDQUFBO0lBQ3JCLHdDQUE2QixDQUFBO0lBQzdCLG9DQUF5QixDQUFBO0lBQ3pCLDBCQUFlLENBQUE7SUFDZixzQ0FBMkIsQ0FBQTtJQUMzQiw4QkFBbUIsQ0FBQTtJQUNuQixzQkFBVyxDQUFBO0lBQ1gsOEJBQW1CLENBQUE7SUFFbkIsZUFBZTtJQUNmLHNDQUEyQixDQUFBO0lBQzNCLG9DQUF5QixDQUFBO0lBQ3pCLHNDQUEyQixDQUFBO0lBQzNCLGtDQUF1QixDQUFBO0lBQ3ZCLG9DQUF5QixDQUFBO0lBQ3pCLG9DQUF5QixDQUFBO0lBQ3pCLGdDQUFxQixDQUFBO0lBQ3JCLGdDQUFxQixDQUFBO0lBQ3JCLG1DQUFtQztJQUNuQyxnQ0FBcUIsQ0FBQTtJQUNyQixzQ0FBMkIsQ0FBQTtBQUMvQixDQUFDLEVBdkJXLE9BQU8sR0FBUCxlQUFPLEtBQVAsZUFBTyxRQXVCbEI7QUFFRCw2Q0FBNkM7QUFDN0MsSUFBWSxRQXVCWDtBQXZCRCxXQUFZLFFBQVE7SUFDaEIsVUFBVTtJQUNWLDJCQUFlLENBQUE7SUFDZiwrQkFBbUIsQ0FBQTtJQUNuQix1Q0FBMkIsQ0FBQTtJQUMzQiw2Q0FBaUMsQ0FBQTtJQUNqQywyREFBK0MsQ0FBQTtJQUUvQyxVQUFVO0lBQ1YseUNBQTZCLENBQUE7SUFDN0IscUNBQXlCLENBQUE7SUFDekIscUNBQXlCLENBQUE7SUFDekIscUNBQXlCLENBQUE7SUFDekIscUNBQXlCLENB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","assetPath":"Assets/Zepeto
+    // NPC Animation\r\n    Anim[\"isNPC\"] = \"isNPC\";\r\n    // Flume Ride\r\n   
+    Anim[\"BoardSlide\"] = \"BoardSlide\";\r\n})(Anim = exports.Anim || (exports.Anim
+    = {}));\r\n/* Default ScreenShot Render Result Toast Data */\r\nvar TOAST_MESSAGE;\r\n(function
+    (TOAST_MESSAGE) {\r\n    TOAST_MESSAGE[\"feedUploading\"] = \"Uploading...\";\r\n   
+    TOAST_MESSAGE[\"feedCompleted\"] = \"Done\";\r\n    TOAST_MESSAGE[\"feedFailed\"]
+    = \"Failed\";\r\n    TOAST_MESSAGE[\"screenShotSaveCompleted\"] = \"Saved!\";\r\n})(TOAST_MESSAGE
+    = exports.TOAST_MESSAGE || (exports.TOAST_MESSAGE = {}));\r\n/* Default ScreenShot
+    Render Result Layer Data */\r\nvar LAYER;\r\n(function (LAYER) {\r\n    LAYER[LAYER[\"everything\"]
+    = -1] = \"everything\";\r\n    LAYER[LAYER[\"nothing\"] = 0] = \"nothing\";\r\n   
+    LAYER[LAYER[\"UI\"] = 5] = \"UI\";\r\n})(LAYER = exports.LAYER || (exports.LAYER
+    = {}));\r\n/* Console Error */\r\nvar ERROR;\r\n(function (ERROR) {\r\n    ERROR[\"NOT_ADDED_STIKERS\"]
+    = \"NOT Added Stickers......\";\r\n    ERROR[\"NOT_SELECTED_STICKERS\"] = \"NOT
+    Selected...\";\r\n    ERROR[\"NOT_FOUND_ITEM\"] = \"NOT FOUND ITEM....\";\r\n   
+    ERROR[\"NOT_FOUND_HORSE\"] = \"NOT FOUND HORSE\";\r\n    ERROR[\"NOT_MATCHED_OBJECT\"]
+    = \"NOT MATCHED OBJECT....\";\r\n    ERROR[\"ITS_FULL_PLAYERS\"] = \"IT''S FULL
+    PLAYERS....\";\r\n})(ERROR = exports.ERROR || (exports.ERROR = {}));\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiVHlwZU1hbmFnZXIuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJUeXBlTWFuYWdlci50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7QUFBQSw2Q0FBOEU7QUFDOUUsbURBQXFEO0FBQ3JELGlEQUFxRDtBQUNyRCxnRUFBeUQ7QUFHekQsTUFBcUIsV0FBVztDQUMvQjtBQURELDhCQUNDO0FBQ0QsbUVBQW1FO0FBRW5FLDRCQUE0QjtBQUM1QixJQUFZLE9Bd0JYO0FBeEJELFdBQVksT0FBTztJQUNmLG9DQUF5QixDQUFBO0lBQ3pCLGdDQUFxQixDQUFBO0lBQ3JCLHdDQUE2QixDQUFBO0lBQzdCLG9DQUF5QixDQUFBO0lBQ3pCLDBCQUFlLENBQUE7SUFDZixzQ0FBMkIsQ0FBQTtJQUMzQiw4QkFBbUIsQ0FBQTtJQUNuQixzQkFBVyxDQUFBO0lBQ1gsOEJBQW1CLENBQUE7SUFFbkIsZUFBZTtJQUNmLHNDQUEyQixDQUFBO0lBQzNCLG9DQUF5QixDQUFBO0lBQ3pCLHNDQUEyQixDQUFBO0lBQzNCLGtDQUF1QixDQUFBO0lBQ3ZCLG9DQUF5QixDQUFBO0lBQ3pCLG9DQUF5QixDQUFBO0lBQ3pCLGdDQUFxQixDQUFBO0lBQ3JCLGdDQUFxQixDQUFBO0lBQ3JCLG1DQUFtQztJQUNuQyxnQ0FBcUIsQ0FBQTtJQUNyQixzQ0FBMkIsQ0FBQTtJQUMzQixrQ0FBdUIsQ0FBQTtBQUMzQixDQUFDLEVBeEJXLE9BQU8sR0FBUCxlQUFPLEtBQVAsZUFBTyxRQXdCbEI7QUFFRCw2Q0FBNkM7QUFDN0MsSUFBWSxRQXdCWDtBQXhCRCxXQUFZLFFBQVE7SUFDaEIsVUFBVTtJQUNWLDJCQUFlLENBQUE7SUFDZiwrQkFBbUIsQ0FBQTtJQUNuQix1Q0FBMkIsQ0FBQTtJQUMzQiw2Q0FBaUMsQ0FBQTtJQUNqQywyREFBK0MsQ0FBQTtJQUUvQyxVQUFVO0lBQ1YseUNBQTZCLENBQUE7SUFDN0IscUNBQXlCLENBQUE7SUFDekIscUNBQXlCLENBQUE7SUFDekIscUNBQXlCLENB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","assetPath":"Assets/Zepeto
     Multiplay Component/ZepetoScript/Managers/TypeManager.ts","manifest":{"properties":[],"name":"TypeManager","description":"","hasAnimatorMove":false},"isCompiled":true}'
-  typescriptHash: ba2081b8052090a61fc22e80092a2da1
+  typescriptHash: ac87353282ff14ab0cf4a57642282e2d
   onlyWriteTrigger: 0
