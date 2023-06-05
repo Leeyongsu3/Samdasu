@@ -85,7 +85,7 @@ export enum SamdasuState {
     Ride_MGR = 30,
     Pick_Item = 40, Samdasu_Drink = 41,
     Swim = 50,
-    Ride_Flume = 60,
+    Ride_FlumeRide = 60,
 }
 
 
@@ -99,7 +99,7 @@ export enum ButtonType {
     NPC_Hanlabong = 30, NPC_Trash = 31, NPC_Render = 32, NPC_Cake = 33,
     Chair,
     EquipHead, EquipRightHand, EquipLeftHand, EquipBody,
-    Visible,//
+    Visible,
     FlumeRide,
 }
 
@@ -340,7 +340,7 @@ export enum Anim {
     // NPC Animation
     isNPC = "isNPC",
 
-    // Flume Ride
+    // Board Animation
     BoardSlide = "BoardSlide",
 }
 

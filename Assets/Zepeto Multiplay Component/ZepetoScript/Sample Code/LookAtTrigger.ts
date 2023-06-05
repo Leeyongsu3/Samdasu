@@ -2,7 +2,7 @@ import { Collider, GameObject, Quaternion, SphereCollider, Transform, Vector3 } 
 import { ZepetoCharacter, ZepetoPlayers } from 'ZEPETO.Character.Controller';
 import { ZepetoScriptBehaviour } from 'ZEPETO.Script'
 import GameManager from '../Managers/GameManager';
-import { Datas } from '../Managers/TypeManager';
+import { ButtonType, Datas } from '../Managers/TypeManager';
 import ColliderInputSensor from '../SamdasuScript/ColliderInputSensor';
 import LookAt from './LookAt';
 
@@ -47,6 +47,9 @@ export default class LookAtTrigger extends ZepetoScriptBehaviour {
         /* Connect Cabin */
         if(!collider.gameObject.CompareTag(Datas.TeleportPoint)) return;
         this.lookAt.scriptTarget = collider.transform;
+        if(this.lookAt.buttonType == ButtonType.Ride_Wheel) {
+            GameManager.instance.targetCarbin = collider.transform;
+        }
         
         /* Find Player */
         if(collider.transform.childCount > 0) {

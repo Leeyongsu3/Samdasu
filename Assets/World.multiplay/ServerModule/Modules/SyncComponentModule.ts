@@ -7,7 +7,7 @@ export default class SyncComponentModule extends IModule {
     private sessionIdQueue: string[] = [];
     private instantiateObjCaches : InstantiateObj[] = [];
     private masterClient: Function = (): SandboxPlayer | undefined => this.server.loadPlayer(this.sessionIdQueue[0]);
-    private waitFlume:boolean = false;
+    private flumeWait:boolean = false;
 
     async OnCreate() {
         /**Zepeto Player Sync**/
@@ -255,16 +255,6 @@ export default class SyncComponentModule extends IModule {
         this.server.onMessage(MESSAGE.MGR_Play, (client, message) => {
             this.server.broadcast(MESSAGE.MGR_Play, message);
         });
-        
-        this.server.onMessage(MESSAGE.FlumeRide, (client, message) => {
-            if(this.waitFlume && message.NeedTo_wait) return;
-            this.waitFlume = message.NeedTo_wait;
-            const data = {
-                OwnerSessionId: client.sessionId,
-                NeedTo_wait: message.NeedTo_wait,
-            };
-            this.server.broadcast(MESSAGE.FlumeRide, data);
-        });
         /** Samdasu END **/
 
         this.server.onMessage(MESSAGE.Play_Effect, (client: SandboxPlayer, message) => {
@@ -327,6 +317,16 @@ export default class SyncComponentModule extends IModule {
             this.server.broadcast(MESSAGE.Visible, message);
             // this.server.state.visibleZones
         });
+        
+        this.server.onMessage(MESSAGE.FlumeRide, (client, message) => {
+            if(this.flumeWait && message.NeedTo_wait) return;
+            this.flumeWait = message.NeedTo_wait;
+            const datas = {
+                OwnerSessionId:client.sessionId,
+                NeedTo_wait:message.NeedTo_wait,
+            }
+            this.server.broadcast(MESSAGE.FlumeRide, datas);
+        });
 
         /** Racing Game **/
         let isStartGame:boolean = false;
@@ -378,7 +378,7 @@ export default class SyncComponentModule extends IModule {
 
         /* Trash Count */
         let trashCount = await storage.get("TrashCount") as number;
-        if (trashCount == null) trashCount = 100;
+        if (trashCount == null) trashCount = 0;
         console.log(`[OnJoin] ${client.sessionId}'s trash count : ${trashCount}`)
         player.samdasu.TrashCount = trashCount;
         await storage.set("TrashCount", trashCount);
@@ -534,7 +534,7 @@ export default class SyncComponentModule extends IModule {
     private ProcessingSticker(key:StickerType) {
         const sticker = new Sticker();
         sticker.name = key.toString();
-        sticker.count = 3;
+        sticker.count = 0;
         return sticker;
     }
 

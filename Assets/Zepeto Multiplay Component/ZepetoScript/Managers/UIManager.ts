@@ -98,6 +98,11 @@ export default class UIManager extends ZepetoScriptBehaviour {
         this._currentSamdasuState = value;
         const check = value != null && value != undefined;
         // this.buttonPanel.GetChild(4).gameObject.SetActive(check);
+        if(value == MESSAGE.Ride_MGR) {
+            this.cameraChangeButton.gameObject.SetActive(false);
+        } else if (!check) {
+            this.cameraChangeButton.gameObject.SetActive(true);
+        }
     }
 
     private Awake() {

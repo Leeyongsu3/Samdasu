@@ -119,7 +119,7 @@ MonoBehaviour:
     - {fileID: 0}
     values:
     - 
-    - '{"type":"System.String, mscorlib","value":"-1"}'
+    - '{"type":"System.Int32, mscorlib","value":"-1"}'
     unityArrayValues: []
     arrayValues: []
     script: {fileID: 4458252877524076426, guid: 5ee47fb9560ceaf498f8c2fc0bbb152c, type: 3}
@@ -183,9 +183,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   applyRootMotion: 0
   script:
-    keys: []
-    unityValues: []
-    values: []
+    keys:
+    - colliderInputSensor
+    unityValues:
+    - {fileID: 0}
+    values:
+    - 
     unityArrayValues: []
     arrayValues: []
     script: {fileID: 4458252877524076426, guid: 1b7f1f62b725f6b4b9773a8cbcca5a75, type: 3}

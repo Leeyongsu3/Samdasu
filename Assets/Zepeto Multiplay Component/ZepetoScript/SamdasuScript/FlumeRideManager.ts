@@ -46,7 +46,7 @@ export default class FlumeRideManager extends ZepetoScriptBehaviour {
         /* Play Board Animation */
         const boardAnim = board.GetComponent<Animator>();
         boardAnim.SetTrigger(Anim.BoardSlide);
-        if(this.localSessionId == ownerSessionId) GameManager.instance.SetSamdasuState(SamdasuState.Ride_Flume, true);
+        if(this.localSessionId == ownerSessionId) GameManager.instance.SetSamdasuState(SamdasuState.Ride_FlumeRide, true);
 
         this.StartCoroutine(this.RideOffFlumeRide(ownerSessionId, board));
     }

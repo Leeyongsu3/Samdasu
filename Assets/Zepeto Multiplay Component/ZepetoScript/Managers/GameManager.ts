@@ -48,7 +48,6 @@ export default class GameManager extends ZepetoScriptBehaviour {
     private doTWeenSyncs: DOTWeenSyncHelper[] = [];
     private syncChairs: ChairSit[] = [];
     private player: Player;
-    private camLocalPos: Vector3;
     private joyCon:UIZepetoPlayerControl;
 
     /* Samdasu Field */
@@ -79,7 +78,9 @@ export default class GameManager extends ZepetoScriptBehaviour {
     private renderCameraController: RenderCameraController;
     private zoneTriggerController: ZoneTriggerController;
 
-    private targetCarbin:Transform;
+    private _targetCarbin: Transform;
+    public get targetCarbin(): Transform { return this._targetCarbin; }
+    public set targetCarbin(value: Transform) { this._targetCarbin = value; }
 
     @Header("Return Points")
     @SerializeField() private wheelReturnPoint: Transform;
@@ -317,13 +318,6 @@ export default class GameManager extends ZepetoScriptBehaviour {
     private ChangeCameraMode(cameraMode:CameraMode) {
         /* Get Camera Data */
         const cam = ZepetoPlayers.instance.ZepetoCamera;
-        const character = ZepetoPlayers.instance.GetPlayer(this.room.SessionId).character.transform;
-        if(SyncIndexManager.CameraMode == CameraMode.TPS) {
-            this.camLocalPos = cam.camera.transform.position;
-            const dir = Vector3.Distance(character.position, this.camLocalPos);
-            console.log(dir);
-            
-        }
         SyncIndexManager.CameraMode = cameraMode;
 
         /* Set Camera Mode */
@@ -338,9 +332,6 @@ export default class GameManager extends ZepetoScriptBehaviour {
                 cam.additionalOffset = Vector3.zero;
                 cam.additionalMaxZoomDistance = 0;
                 cam.additionalMinZoomDistance = 0;
-                cam.camera.transform.localPosition = this.camLocalPos;
-                console.log(` return local ${this.camLocalPos.x}, ${this.camLocalPos.y}, ${this.camLocalPos.z}`);
-                console.log(` return local ${cam.transform.localPosition.x}, ${cam.transform.localPosition.y}, ${cam.transform.localPosition.z}`);
                 break;
         }
     }
@@ -378,7 +369,7 @@ export default class GameManager extends ZepetoScriptBehaviour {
             case ButtonType.Ride_Wheel:
                 lookAt.RemoteStopLooking();
                 if(!target) return;
-                this.targetCarbin = target;
+                // this.targetCarbin = target;
 
                 /* Carbin Invisible */
                 // const mesh = target.parent.GetComponent<MeshRenderer>();
@@ -574,6 +565,7 @@ export default class GameManager extends ZepetoScriptBehaviour {
         /* Controller ON */
         this.LocalPlayerControllerSet(true);
         characterController.enabled = true;
+        // destory samdasu in the hand
 
         /* Samdasu Drink Stamp Check */
         const waterStamp = SyncIndexManager.STAMPS.get(StampType.STAMP_WATER);
@@ -862,6 +854,7 @@ export default class GameManager extends ZepetoScriptBehaviour {
         return true;
     }
 
+    /* Waiting FlumeRide */
     private * FlumeRide() {
         /* Send Ride Wait */
         const data = new RoomData();
@@ -869,13 +862,13 @@ export default class GameManager extends ZepetoScriptBehaviour {
         this.room.Send(MESSAGE.FlumeRide, data.GetObject());
 
         /* Player State Set */
-        // this.SetSamdasuState(SamdasuState.Samdasu_Drink, true);
+        this.SetSamdasuState(SamdasuState.Ride_FlumeRide, true);
 
         /* Player Stop Animation */
         yield new WaitForSeconds(3);
 
         /* Player State Set Return */
-        // this.SetSamdasuState(SamdasuState.Pick_Item, true, true);
+        this.SetSamdasuState(SamdasuState.Ride_FlumeRide, true, true);
         
         /* Send Ride Wait */
         const dataWait = new RoomData();

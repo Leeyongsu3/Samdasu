@@ -43,6 +43,8 @@ export default class PlayerSync extends ZepetoScriptBehaviour {
             this.player.OnChange += (ChangeValue) => this.OnChangedPlayer();
             //If this is not a local character, do not use State Machine.
             this.zepetoPlayer.character.StateMachine.Stop();
+            // console.log(`otherPlayers SamdasuState : ${SamdasuState[this.player.animationParam.SamdasuState]}`);
+            
         }
         
         /* Samdasu */
