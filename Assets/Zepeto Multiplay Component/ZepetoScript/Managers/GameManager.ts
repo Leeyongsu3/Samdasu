@@ -439,6 +439,7 @@ export default class GameManager extends ZepetoScriptBehaviour {
                 break;
 
             default :
+                this.StartCoroutine(this.FlumeRide());
                 console.error(`타입이 설정되지 않은 버튼이 있습니다. ${btn.name}-${ButtonType[buttonType]}`)
                 break;
         }
