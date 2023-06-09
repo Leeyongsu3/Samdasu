@@ -47,14 +47,12 @@ export default class LookAtTrigger extends ZepetoScriptBehaviour {
         /* Connect Cabin */
         if(!collider.gameObject.CompareTag(Datas.TeleportPoint)) return;
         this.lookAt.scriptTarget = collider.transform;
-        if(this.lookAt.buttonType == ButtonType.Ride_Wheel) {
-            GameManager.instance.targetCarbin = collider.transform;
-        }
+        GameManager.instance.targetCarbin = collider.transform;
         
-        /* Find Player */
-        if(collider.transform.childCount > 0) {
-            const collider_character = collider.transform.GetChild(0).GetComponent<ZepetoCharacter>();
-            GameManager.instance.RemoteRideOffWheel(collider_character);
+        /* Find Player and RideOff */
+        for(let i=0; i<collider.transform.childCount; i++) {
+            const collider_character = collider.transform.GetChild(i).GetComponent<ZepetoCharacter>();
+            if(collider_character) GameManager.instance.RemoteRideOffWheel(collider_character);
         }
     }
 

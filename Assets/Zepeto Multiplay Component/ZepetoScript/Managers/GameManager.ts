@@ -638,10 +638,6 @@ export default class GameManager extends ZepetoScriptBehaviour {
 
             /* Play MGR */
             this.mgrManager.isTriggerOn = true;
-        } else {
-            const helper = character.GetComponent<TransformSyncHelper>();
-            helper.SyncRotation = false;
-            helper.SyncPosition = false;
         }
     }
 
@@ -684,10 +680,6 @@ export default class GameManager extends ZepetoScriptBehaviour {
             if(isComplete) {
                 this.CheckLandStamp(LandStamp.HALF_STAMP_MGR);
             }
-        } else {
-            const helper = character.GetComponent<TransformSyncHelper>();
-            helper.SyncRotation = true;
-            helper.SyncPosition = true;
         }
     }
 

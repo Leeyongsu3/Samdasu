@@ -1,4 +1,5 @@
 import { AnimationClip, Animator, GameObject, Mathf, Quaternion, Random, Time, Transform, Vector3 } from 'UnityEngine';
+import { ZepetoPlayers } from 'ZEPETO.Character.Controller';
 import { ZepetoScriptBehaviour } from 'ZEPETO.Script'
 import SyncIndexManager from '../Common/SyncIndexManager';
 import GameManager from '../Managers/GameManager';
@@ -243,6 +244,12 @@ export default class MGRManager extends ZepetoScriptBehaviour {
         
         /* Player Ride Off */
         if(newVal) {
+            for(const sessionId of this.ridePlayers) {
+                const character = ZepetoPlayers.instance.GetPlayer(sessionId).character;
+                const helper = character.GetComponent<TransformSyncHelper>();
+                helper.SyncRotation = false;
+                helper.SyncPosition = false;
+            }
             this.anim.SetTrigger(Anim.Play);
             this.isTriggerOn = false;
             this.time = 0;
@@ -250,6 +257,10 @@ export default class MGRManager extends ZepetoScriptBehaviour {
         } else {
             for(const sessionId of this.ridePlayers) {
                 GameManager.instance.RemoteRideOffMerryGoRound(sessionId);
+                const character = ZepetoPlayers.instance.GetPlayer(sessionId).character;
+                const helper = character.GetComponent<TransformSyncHelper>();
+                helper.SyncRotation = true;
+                helper.SyncPosition = true;
             }
             this.ridePlayers = [];
             for(const rideData of this.rideTargets) {
