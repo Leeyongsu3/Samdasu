@@ -35,6 +35,7 @@ export default class UIController extends ZepetoScriptBehaviour {
 
     /* Gesture */
     @Header("Gesture")
+    public psButton: Button;
     public gestureButton: Button;
     public gestureExitButton: Button;
     public gestureListView: GameObject;
@@ -137,6 +138,7 @@ export default class UIController extends ZepetoScriptBehaviour {
                 this.backgroundCanvas.worldCamera = this.screenShotModeManager.GetSelfieCamera();
                 this.screenShotModeManager.SetSelfieCameraMode();
                 this.gestureButton.gameObject.SetActive(false);
+                this.psButton.gameObject.SetActive(false);
                 this.gestureListView.gameObject.SetActive(false);
                 this.isThirdPersonView = false;
             } else {
@@ -144,6 +146,7 @@ export default class UIController extends ZepetoScriptBehaviour {
                 this.backgroundCanvas.worldCamera = this.screenShotModeManager.GetZepetoCamera();
                 this.screenShotModeManager.SetZepetoCameraMode();
                 this.gestureButton.gameObject.SetActive(true);
+                this.psButton.gameObject.SetActive(true);
                 this.isThirdPersonView = true;
             }
         });
@@ -172,6 +175,7 @@ export default class UIController extends ZepetoScriptBehaviour {
             this.screenShotModeButton.gameObject.SetActive(true);
             this.screenShotPanel.gameObject.SetActive(false);
             this.gestureButton.gameObject.SetActive(true);
+            this.psButton.gameObject.SetActive(true);
             this.screenShotModeManager.ExitScreenShotMode(this.isThirdPersonView);
         });
 
@@ -184,6 +188,8 @@ export default class UIController extends ZepetoScriptBehaviour {
             this.screenShotResultPanel.gameObject.SetActive(true);
             // Activating the Screenshot Feed Button
             this.createFeedButton.gameObject.SetActive(true);
+            this.gestureButton.gameObject.SetActive(false);
+            this.psButton.gameObject.SetActive(false);
         });
 
         /** Screenshot Result 
@@ -214,6 +220,8 @@ export default class UIController extends ZepetoScriptBehaviour {
         this.screenShotResultExitButton.onClick.AddListener(() => {
             this.screenShotResultBackground.gameObject.SetActive(false);
             this.screenShotResultPanel.gameObject.SetActive(false);
+            this.gestureButton.gameObject.SetActive(true);
+            this.psButton.gameObject.SetActive(true);
         });
 
         /** Gesture 

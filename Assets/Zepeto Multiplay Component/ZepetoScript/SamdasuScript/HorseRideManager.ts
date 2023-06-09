@@ -1,4 +1,4 @@
-import { Animator, GameObject, Quaternion, Transform, Vector3 } from 'UnityEngine';
+import { Animator, Coroutine, GameObject, Quaternion, Transform, Vector3 } from 'UnityEngine';
 import { ZepetoPlayers } from 'ZEPETO.Character.Controller';
 import { ZepetoScriptBehaviour } from 'ZEPETO.Script'
 import GameManager from '../Managers/GameManager';
@@ -20,6 +20,17 @@ export default class HorseRideManager extends ZepetoScriptBehaviour {
         }
     }
 
+    /* GameManager */
+    public RemoteStart() {
+        for(let i=0; i<8; i++) {
+            const horse = this.InstantiateHorse();
+            horse.transform.SetParent(this.horsePoolGroup);
+            horse.transform.position = this.horsePoolGroup.position;
+            horse.transform.rotation = this.horsePoolGroup.rotation;
+            horse.SetActive(false);
+        }
+    }
+
     /* Async Player and Horse Animation */
     FixedUpdate() {
         if(!this.horseRiders) return;
@@ -29,12 +40,15 @@ export default class HorseRideManager extends ZepetoScriptBehaviour {
                 /* Return Horse */
                 const index = this.horseRiders.indexOf(rider);
                 this.horseRiders.splice(index, 1);
-                
+
+                console.log(`rider.horse ${rider.horse}`);
+                const indexH = this.horsePool.indexOf(rider.horse)
+                this.horsePool.splice(indexH, 1);
                 /* Input Horse Group */
-                rider.horse.transform.SetParent(this.horsePoolGroup);
-                rider.horse.transform.position = this.horsePoolGroup.position;
-                rider.horse.transform.rotation = this.horsePoolGroup.rotation;
-                rider.horse.SetActive(false);
+                // rider.horse.transform.SetParent(this.horsePoolGroup);
+                // rider.horse.transform.position = this.horsePoolGroup.position;
+                // rider.horse.transform.rotation = this.horsePoolGroup.rotation;
+                // rider.horse.SetActive(false);
                 continue;
             }
 

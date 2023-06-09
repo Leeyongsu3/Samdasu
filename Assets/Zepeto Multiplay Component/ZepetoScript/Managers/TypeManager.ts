@@ -336,6 +336,7 @@ export enum Anim {
     MoveProgress = "MoveProgress",
     isSit = "isSit",
     isHold = "isHold",
+    Play = "Play",
     
     // OX Quiz
     Active = "Active",

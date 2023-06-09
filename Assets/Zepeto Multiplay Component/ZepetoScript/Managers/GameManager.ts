@@ -135,13 +135,10 @@ export default class GameManager extends ZepetoScriptBehaviour {
             });
 
             /* Animation keyframe Sync */
-            // room.AddMessageHandler(MESSAGE.SyncObjectAnimation, (message:SyncAnim) => {
-            //     console.log(`MESSAGE.SyncObjectAnimation 0`);
-            //     if(!this.ferrisWheelManager) return;
-
-            //     console.log(`MESSAGE.SyncObjectAnimation 1`);
-            //     this.ferrisWheelManager.SyncAnimation(message);
-            // });
+            room.AddMessageHandler(MESSAGE.SyncObjectAnimation, (message:SyncAnim) => {
+                if(!this.ferrisWheelManager) return;
+                this.ferrisWheelManager.SyncAnimation(message);
+            });
 
             this.room.AddMessageHandler(MESSAGE.Leaderboard_Update, (message:any) => {
                 this.leaderboardManager.UpdateScore();
@@ -233,6 +230,7 @@ export default class GameManager extends ZepetoScriptBehaviour {
         if(horseRideManager) this.horseRideManager = horseRideManager;
         else this.horseRideManager = GameObject.FindObjectOfType<HorseRideManager>();
         this._horseRideManager = null;
+        horseRideManager.RemoteStart();
         console.log(`[GameManager] HorseRideManager loaded success`);
 
         // const treeKingManager = this._treeKingManager.GetComponent<TreeKingManager>();
@@ -252,6 +250,7 @@ export default class GameManager extends ZepetoScriptBehaviour {
         if(mgrManager) this.mgrManager = mgrManager;
         else this.mgrManager = GameObject.FindObjectOfType<MGRManager>();
         this._mgrManager = null;
+        mgrManager.RemoteStart();
         console.log(`[GameManager] MGRManager loaded success`);
 
         const npcManager = this._npcManager.GetComponent<NPCManager>();
@@ -304,8 +303,8 @@ export default class GameManager extends ZepetoScriptBehaviour {
                     if(ferrisWheelManager) this.ferrisWheelManager = ferrisWheelManager;
                     else this.ferrisWheelManager = GameObject.FindObjectOfType<FerrisWheelManager>();
                     this._ferrisWheelManager = null;
-                    // const clipLength = ferrisWheelManager.RemoteStart();
-                    // this.AnimationSyncRequest(clipLength);
+                    const clipLength = ferrisWheelManager.RemoteStart();
+                    this.AnimationSyncRequest(clipLength);
                     console.log(`[GameManager] FerrisWheelManager loaded success`);
 
                     const flumeRideManager = this._flumeRideManager.GetComponent<FlumeRideManager>();
@@ -393,14 +392,6 @@ export default class GameManager extends ZepetoScriptBehaviour {
             case ButtonType.Ride_Wheel:
                 lookAt.RemoteStopLooking();
                 if(!target) return;
-                // this.targetCarbin = target;
-
-                /* Carbin Invisible */
-                // const mesh = target.parent.GetComponent<MeshRenderer>();
-                // mesh.enabled = false;
-                
-                // const rideController = target.GetComponent<RideController>();
-                // if(!rideController || rideController.SamdasuState == SamdasuState.NONE) return;
                 this.room.Send(MESSAGE.Ride_Wheel, data.GetObject());
                 break;
 
@@ -644,6 +635,13 @@ export default class GameManager extends ZepetoScriptBehaviour {
     
             /* Local Player Ride Off UI */
             UIManager.instance.currentSamdasuState = MESSAGE.Ride_MGR;
+
+            /* Play MGR */
+            this.mgrManager.isTriggerOn = true;
+        } else {
+            const helper = character.GetComponent<TransformSyncHelper>();
+            helper.SyncRotation = false;
+            helper.SyncPosition = false;
         }
     }
 
@@ -681,11 +679,15 @@ export default class GameManager extends ZepetoScriptBehaviour {
             this.LocalPlayerControllerSet(true);
             const characterController = character.transform.GetComponent<CharacterController>();
             characterController.enabled = true;
-    
+
             /* Local Player Get Stamp */
             if(isComplete) {
                 this.CheckLandStamp(LandStamp.HALF_STAMP_MGR);
             }
+        } else {
+            const helper = character.GetComponent<TransformSyncHelper>();
+            helper.SyncRotation = true;
+            helper.SyncPosition = true;
         }
     }
 

@@ -6,6 +6,7 @@ import TransformSyncHelper from '../Transform/TransformSyncHelper';
 
 export default class FerrisWheelManager extends ZepetoScriptBehaviour {
 
+    // version 1
     // /* Ferris Wheel Property */
     // @SerializeField() private rotateSpeed:number = 5;
     // private cages: Transform[] = Array<Transform>();
@@ -47,6 +48,7 @@ export default class FerrisWheelManager extends ZepetoScriptBehaviour {
     //         this.transform.rotation.eulerAngles.z + z);
     // }
 
+    // version 2
     /* Ferris Wheel Property */
     @SerializeField() private clip:AnimationClip;
     private anim:Animator;
@@ -56,11 +58,8 @@ export default class FerrisWheelManager extends ZepetoScriptBehaviour {
     /* GameManager */
     public RemoteStart() {
         this.anim = this.GetComponent<Animator>();
-        console.log(this.clip);
         this.animName = this.clip.name;
-        console.log(this.animName);
         this.clipLength = this.clip.length * 1000;
-        console.log(this.clipLength);
         
         return this.clipLength;
     }

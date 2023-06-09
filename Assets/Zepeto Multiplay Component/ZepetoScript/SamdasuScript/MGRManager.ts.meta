@@ -24,49 +24,97 @@ ScriptedImporter:
     GameManager_1 = require(\"../Managers/GameManager\");\r\nconst TypeManager_1
     = require(\"../Managers/TypeManager\");\r\nconst TransformSyncHelper_1 = require(\"../Transform/TransformSyncHelper\");\r\nclass
     MGRManager extends ZEPETO_Script_1.ZepetoScriptBehaviour {\r\n    constructor()
-    {\r\n        super(...arguments);\r\n        /* Merry Go Round Property */\r\n       
-    this.rotateSpeed = 50;\r\n        this.coolTime = 15;\r\n        this.playTime
-    = 30;\r\n        this._isPlay = false;\r\n        this.timer = 0;\r\n       
-    this.currentSpeed = 0;\r\n        this.minSpeed = 3;\r\n    }\r\n    get isPlay()
-    { return this._isPlay; }\r\n    set isPlay(value) {\r\n        if (this._isPlay
-    != value)\r\n            this.OnIsPlayChanged(value);\r\n        this._isPlay
-    = value;\r\n    }\r\n    Start() {\r\n        /* Default Init */\r\n        this.m_tfHelper
-    = this.GetComponent($typeof(TransformSyncHelper_1.default));\r\n        this.m_tfHelper.rotateSpeed
-    = this.rotateSpeed;\r\n        /* MGR Set */\r\n        this.currentSpeed = 0;\r\n       
-    this.ridePlayers = [];\r\n        this.rideTargets = [];\r\n        for (const
-    trans of this.rideTarget.GetComponentsInChildren($typeof(UnityEngine_1.Transform)))
+    {\r\n        // version 1\r\n        // /* Merry Go Round Property */\r\n       
+    // @Header(\"Rotate Properties\")\r\n        // @SerializeField() private rotateSpeed:number
+    = 50;\r\n        // @SerializeField() private coolTime:number = 15;\r\n       
+    // @SerializeField() private playTime:number = 30;\r\n        // private _isPlay:
+    boolean = false;\r\n        // public get isPlay(): boolean { return this._isPlay;
+    }\r\n        // public set isPlay(value: boolean) {\r\n        //     if(this._isPlay
+    != value) this.OnIsPlayChanged(value);\r\n        //     this._isPlay = value;\r\n       
+    // }\r\n        // private timer:number = 0;\r\n        // private currentSpeed:number
+    = 0;\r\n        // private readonly minSpeed:number = 3;\r\n        super(...arguments);\r\n       
+    // @Header(\"Ride Properties\")\r\n        // @SerializeField() private buttonObject:GameObject;\r\n       
+    // @SerializeField() private rideTarget:Transform;\r\n        // private rideTargets:MGRRide[];\r\n       
+    // private ridePlayers:string[];\r\n        // /* Default Property */\r\n       
+    // private m_tfHelper:TransformSyncHelper;\r\n        // private Start() {\r\n       
+    //     /* Default Init */\r\n        //     this.m_tfHelper = this.GetComponent<TransformSyncHelper>();\r\n       
+    //     this.m_tfHelper.rotateSpeed = this.rotateSpeed;\r\n        //     /* MGR
+    Set */\r\n        //     this.currentSpeed = 0;\r\n        //     this.ridePlayers
+    = [];\r\n        //     this.rideTargets = [];\r\n        //     for(const trans
+    of this.rideTarget.GetComponentsInChildren<Transform>()) {\r\n        //        
+    if(trans.name == Datas.Horse) {\r\n        //             trans.name = `${Datas.Horse}_${SyncIndexManager.MGR_Id}`;\r\n       
+    //             const rideData:MGRRide = {\r\n        //                 transform:trans,\r\n       
+    //                 isRide:false,\r\n        //                 id:SyncIndexManager.MGR_Id++,\r\n       
+    //             };\r\n        //             this.rideTargets.push(rideData);\r\n       
+    //         }\r\n        //     }\r\n        // }\r\n        // private FixedUpdate()
+    {\r\n        //     /* Main Rotate */\r\n        //     if(!this.m_tfHelper.isOwner)
+    return;\r\n        //     if(this.isPlay) {\r\n        //         if(this.timer
+    < this.playTime && this.currentSpeed < this.rotateSpeed-1) {\r\n        //            
+    /* Rotate Start : Accel++ */\r\n        //             this.currentSpeed = Mathf.Lerp(this.currentSpeed,
+    this.rotateSpeed, Time.deltaTime / 2);\r\n        //         } else if(this.timer
+    < this.playTime && this.currentSpeed >= this.rotateSpeed-1) {\r\n        //            
+    /* Rotating */\r\n        //             this.timer += Time.deltaTime;\r\n       
+    //             this.currentSpeed = Mathf.Lerp(this.currentSpeed, this.rotateSpeed,
+    Time.deltaTime / 2);\r\n        //         } else if(this.timer > this.playTime
+    && this.currentSpeed > this.minSpeed) {\r\n        //             /* Rotate Stop
+    : Accel-- */\r\n        //             this.currentSpeed = Mathf.Lerp(this.currentSpeed,
+    0, Time.deltaTime / 2);\r\n        //             this.timer += Time.deltaTime;\r\n       
+    //         } else if(this.timer > this.playTime && this.currentSpeed <= this.minSpeed)
+    {\r\n        //             /* Rotate Stop : Accel-- */\r\n        //            
+    this.currentSpeed = Mathf.Lerp(this.currentSpeed, 0, Time.deltaTime);\r\n       
+    //             /* State Change */\r\n        //             GameManager.instance.MGRisPlay(false);\r\n       
+    //             // this.isPlay = false;\r\n        //         }\r\n        //        
+    /* Play Rotate */\r\n        //         const y = (this.currentSpeed * Time.deltaTime)
+    % 360;\r\n        //         this.transform.eulerAngles = new Vector3(\r\n       
+    //             this.transform.rotation.eulerAngles.x,\r\n        //            
+    this.transform.rotation.eulerAngles.y - y,\r\n        //             this.transform.rotation.eulerAngles.z);\r\n       
+    //     } else {\r\n        //         /* Stop Rotate */\r\n        //        
+    this.timer += Time.deltaTime;\r\n        //         this.currentSpeed = Mathf.Lerp(this.currentSpeed,
+    0, Time.deltaTime);\r\n        //         /* State Change */\r\n        //        
+    if(this.timer > this.coolTime) {\r\n        //             GameManager.instance.MGRisPlay(true);\r\n       
+    //             // this.isPlay = true;\r\n        //         }\r\n        //    
+    }\r\n        //     // this.m_tfHelper.rotateSpeed = this.currentSpeed;\r\n       
+    // }\r\n        // /* Get Ride Horse Target */\r\n        // public GetRideTarget(sessionId:string)
+    {\r\n        //     for(const rideData of this.rideTargets) {\r\n        //        
+    if(!rideData.isRide) {\r\n        //             rideData.isRide = true;\r\n       
+    //             this.ridePlayers.push(sessionId);\r\n        //             return
+    rideData.transform.GetChild(0);\r\n        //         }\r\n        //     }\r\n       
+    //     return null;\r\n        // }\r\n        // /* Remote Getout Player */\r\n       
+    // public RideOffPlayer(sessionId:string) {\r\n        //     const index = this.ridePlayers.indexOf(sessionId);\r\n       
+    //     if(index < 0) return false;\r\n        //     this.ridePlayers.splice(index,
+    1);\r\n        //     return true;\r\n        // }\r\n        // /* On IsPlayState
+    Change */\r\n        // private OnIsPlayChanged(newVal:boolean) {\r\n       
+    //     this.timer = 0;\r\n        //     this.buttonObject.SetActive(!newVal);\r\n       
+    //     /* Player Ride Off */\r\n        //     if(!newVal) {\r\n        //        
+    for(const sessionId of this.ridePlayers) {\r\n        //             GameManager.instance.RemoteRideOffMerryGoRound(sessionId);\r\n       
+    //         }\r\n        //         this.ridePlayers = [];\r\n        //        
+    for(const rideData of this.rideTargets) {\r\n        //             rideData.isRide
+    = false;\r\n        //         }\r\n        //     }\r\n        // }\r\n       
+    // version 2\r\n        /* Merry Go Round Property */\r\n        this._isPlay
+    = false;\r\n        this.startTime = 4;\r\n        this.time = 0;\r\n       
+    this.playTime = 0;\r\n        this.isStarted = false;\r\n        this._isTriggerOn
+    = false;\r\n    }\r\n    get isPlay() { return this._isPlay; }\r\n    set isPlay(value)
+    {\r\n        if (this._isPlay != value) {\r\n            this.OnIsPlayChanged(value);\r\n           
+    this._isPlay = value;\r\n        }\r\n    }\r\n    get isTriggerOn() { return
+    this._isTriggerOn; }\r\n    set isTriggerOn(value) {\r\n        if (this._isTriggerOn
+    != value) {\r\n            this._isTriggerOn = value;\r\n        }\r\n    }\r\n   
+    /* GameManager */\r\n    RemoteStart() {\r\n        this.anim = this.GetComponent($typeof(UnityEngine_1.Animator));\r\n       
+    this.clipLength = this.clip.length;\r\n        /* MGR Set */\r\n        this.rideTargets
+    = [];\r\n        this.ridePlayers = [];\r\n        for (const trans of this.rideTarget.GetComponentsInChildren($typeof(UnityEngine_1.Transform)))
     {\r\n            if (trans.name == TypeManager_1.Datas.Horse) {\r\n               
     trans.name = `${TypeManager_1.Datas.Horse}_${SyncIndexManager_1.default.MGR_Id}`;\r\n               
     const rideData = {\r\n                    transform: trans,\r\n                   
     isRide: false,\r\n                    id: SyncIndexManager_1.default.MGR_Id++,\r\n               
     };\r\n                this.rideTargets.push(rideData);\r\n            }\r\n       
-    }\r\n    }\r\n    FixedUpdate() {\r\n        /* Main Rotate */\r\n        if
-    (!this.m_tfHelper.isOwner)\r\n            return;\r\n        if (this.isPlay)
-    {\r\n            if (this.timer < this.playTime && this.currentSpeed < this.rotateSpeed
-    - 1) {\r\n                /* Rotate Start : Accel++ */\r\n                this.currentSpeed
-    = UnityEngine_1.Mathf.Lerp(this.currentSpeed, this.rotateSpeed, UnityEngine_1.Time.deltaTime
-    / 2);\r\n            }\r\n            else if (this.timer < this.playTime &&
-    this.currentSpeed >= this.rotateSpeed - 1) {\r\n                /* Rotating */\r\n               
-    this.timer += UnityEngine_1.Time.deltaTime;\r\n                this.currentSpeed
-    = UnityEngine_1.Mathf.Lerp(this.currentSpeed, this.rotateSpeed, UnityEngine_1.Time.deltaTime
-    / 2);\r\n            }\r\n            else if (this.timer > this.playTime &&
-    this.currentSpeed > this.minSpeed) {\r\n                /* Rotate Stop : Accel--
-    */\r\n                this.currentSpeed = UnityEngine_1.Mathf.Lerp(this.currentSpeed,
-    0, UnityEngine_1.Time.deltaTime / 2);\r\n                this.timer += UnityEngine_1.Time.deltaTime;\r\n           
-    }\r\n            else if (this.timer > this.playTime && this.currentSpeed <=
-    this.minSpeed) {\r\n                /* Rotate Stop : Accel-- */\r\n               
-    this.currentSpeed = UnityEngine_1.Mathf.Lerp(this.currentSpeed, 0, UnityEngine_1.Time.deltaTime);\r\n               
-    /* State Change */\r\n                GameManager_1.default.instance.MGRisPlay(false);\r\n               
-    // this.isPlay = false;\r\n            }\r\n            /* Play Rotate */\r\n           
-    const y = (this.currentSpeed * UnityEngine_1.Time.deltaTime) % 360;\r\n           
-    this.transform.eulerAngles = new UnityEngine_1.Vector3(this.transform.rotation.eulerAngles.x,
-    this.transform.rotation.eulerAngles.y - y, this.transform.rotation.eulerAngles.z);\r\n       
-    }\r\n        else {\r\n            /* Stop Rotate */\r\n            this.timer
-    += UnityEngine_1.Time.deltaTime;\r\n            this.currentSpeed = UnityEngine_1.Mathf.Lerp(this.currentSpeed,
-    0, UnityEngine_1.Time.deltaTime);\r\n            /* State Change */\r\n           
-    if (this.timer > this.coolTime) {\r\n                GameManager_1.default.instance.MGRisPlay(true);\r\n               
-    // this.isPlay = true;\r\n            }\r\n        }\r\n        // this.m_tfHelper.rotateSpeed
-    = this.currentSpeed;\r\n    }\r\n    /* Get Ride Horse Target */\r\n    GetRideTarget(sessionId)
+    }\r\n        this.isStarted = true;\r\n    }\r\n    Update() {\r\n        if
+    (!this.isStarted)\r\n            return;\r\n        /* Local Trigger Timer */\r\n       
+    if (this.isTriggerOn) {\r\n            this.time += UnityEngine_1.Time.deltaTime;\r\n           
+    if (this.time > this.startTime) {\r\n                this.isTriggerOn = false;\r\n               
+    this.time = 0;\r\n                GameManager_1.default.instance.MGRisPlay(true);\r\n           
+    }\r\n        }\r\n        else if (this.isPlay) {\r\n            this.playTime
+    += UnityEngine_1.Time.deltaTime;\r\n            if (this.playTime > this.clipLength)
+    {\r\n                this.playTime = 0;\r\n                GameManager_1.default.instance.MGRisPlay(false);\r\n           
+    }\r\n        }\r\n    }\r\n    /* Get Ride Horse Target */\r\n    GetRideTarget(sessionId)
     {\r\n        for (const rideData of this.rideTargets) {\r\n            if (!rideData.isRide)
     {\r\n                rideData.isRide = true;\r\n                this.ridePlayers.push(sessionId);\r\n               
     return rideData.transform.GetChild(0);\r\n            }\r\n        }\r\n       
@@ -74,14 +122,16 @@ ScriptedImporter:
     {\r\n        const index = this.ridePlayers.indexOf(sessionId);\r\n        if
     (index < 0)\r\n            return false;\r\n        this.ridePlayers.splice(index,
     1);\r\n        return true;\r\n    }\r\n    /* On IsPlayState Change */\r\n   
-    OnIsPlayChanged(newVal) {\r\n        this.timer = 0;\r\n        this.buttonObject.SetActive(!newVal);\r\n       
-    /* Player Ride Off */\r\n        if (!newVal) {\r\n            for (const sessionId
-    of this.ridePlayers) {\r\n                GameManager_1.default.instance.RemoteRideOffMerryGoRound(sessionId);\r\n           
+    OnIsPlayChanged(newVal) {\r\n        this.buttonObject.SetActive(!newVal);\r\n       
+    /* Player Ride Off */\r\n        if (newVal) {\r\n            this.anim.SetTrigger(TypeManager_1.Anim.Play);\r\n           
+    this.isTriggerOn = false;\r\n            this.time = 0;\r\n        }\r\n       
+    else {\r\n            for (const sessionId of this.ridePlayers) {\r\n               
+    GameManager_1.default.instance.RemoteRideOffMerryGoRound(sessionId);\r\n           
     }\r\n            this.ridePlayers = [];\r\n            for (const rideData of
     this.rideTargets) {\r\n                rideData.isRide = false;\r\n           
-    }\r\n        }\r\n    }\r\n}\r\nexports.default = MGRManager;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiTUdSTWFuYWdlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIk1HUk1hbmFnZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQSw2Q0FBd0c7QUFDeEcsaURBQXFEO0FBQ3JELGlFQUEwRDtBQUMxRCx5REFBa0Q7QUFDbEQseURBQXlEO0FBQ3pELDBFQUFtRTtBQUVuRSxNQUFxQixVQUFXLFNBQVEscUNBQXFCO0lBQTdEOztRQUVJLDZCQUE2QjtRQUVILGdCQUFXLEdBQVUsRUFBRSxDQUFDO1FBQ3hCLGFBQVEsR0FBVSxFQUFFLENBQUM7UUFDckIsYUFBUSxHQUFVLEVBQUUsQ0FBQztRQUN2QyxZQUFPLEdBQVksS0FBSyxDQUFDO1FBTXpCLFVBQUssR0FBVSxDQUFDLENBQUM7UUFDakIsaUJBQVksR0FBVSxDQUFDLENBQUM7UUFDZixhQUFRLEdBQVUsQ0FBQyxDQUFDO0lBcUh6QyxDQUFDO0lBNUhHLElBQVcsTUFBTSxLQUFjLE9BQU8sSUFBSSxDQUFDLE9BQU8sQ0FBQyxDQUFDLENBQUM7SUFDckQsSUFBVyxNQUFNLENBQUMsS0FBYztRQUM1QixJQUFHLElBQUksQ0FBQyxPQUFPLElBQUksS0FBSztZQUFFLElBQUksQ0FBQyxlQUFlLENBQUMsS0FBSyxDQUFDLENBQUM7UUFDdEQsSUFBSSxDQUFDLE9BQU8sR0FBRyxLQUFLLENBQUM7SUFDekIsQ0FBQztJQWNPLEtBQUs7UUFDVCxrQkFBa0I7UUFDbEIsSUFBSSxDQUFDLFVBQVUsR0FBRyxJQUFJLENBQUMsWUFBWSxTQUFDLDZCQUFtQixFQUFHLENBQUM7UUFDM0QsSUFBSSxDQUFDLFVBQVUsQ0FBQyxXQUFXLEdBQUcsSUFBSSxDQUFDLFdBQVcsQ0FBQztRQUUvQyxhQUFhO1FBQ2IsSUFBSSxDQUFDLFlBQVksR0FBRyxDQUFDLENBQUM7UUFDdEIsSUFBSSxDQUFDLFdBQVcsR0FBRyxFQUFFLENBQUM7UUFDdEIsSUFBSSxDQUFDLFdBQVcsR0FBRyxFQUFFLENBQUM7UUFDdEIsS0FBSSxN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","assetPath":"Assets/Zepeto
-    Multiplay Component/ZepetoScript/SamdasuScript/MGRManager.ts","manifest":{"properties":[{"assembly":"mscorlib","name":"rotateSpeed","type":"System.Single","isArray":false,"initValue":["50"],"enumKeys":[],"enumValues":[],"attributes":[{"name":"Header","args":["\"Rotate
-    Properties\""]},{"name":"SerializeField","args":[]}]},{"assembly":"mscorlib","name":"coolTime","type":"System.Single","isArray":false,"initValue":["15"],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"mscorlib","name":"playTime","type":"System.Single","isArray":false,"initValue":["30"],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"buttonObject","type":"UnityEngine.GameObject","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"Header","args":["\"Ride
-    Properties\""]},{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"rideTarget","type":"UnityEngine.Transform","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]}],"name":"MGRManager","description":"","hasAnimatorMove":false},"isCompiled":true}'
-  typescriptHash: ed5fc2935f4339e1170f56ec45d48172
+    }\r\n        }\r\n    }\r\n}\r\nexports.default = MGRManager;\r\n//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiTUdSTWFuYWdlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIk1HUk1hbmFnZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQSw2Q0FBdUg7QUFDdkgsaURBQXFEO0FBQ3JELGlFQUEwRDtBQUMxRCx5REFBa0Q7QUFDbEQseURBQStEO0FBQy9ELDBFQUFtRTtBQUVuRSxNQUFxQixVQUFXLFNBQVEscUNBQXFCO0lBQTdEO1FBRUksWUFBWTtRQUNaLGdDQUFnQztRQUNoQywrQkFBK0I7UUFDL0IscURBQXFEO1FBQ3JELGtEQUFrRDtRQUNsRCxrREFBa0Q7UUFDbEQsb0NBQW9DO1FBQ3BDLHdEQUF3RDtRQUN4RCxzQ0FBc0M7UUFDdEMsNkRBQTZEO1FBQzdELDRCQUE0QjtRQUM1QixJQUFJO1FBQ0osNEJBQTRCO1FBQzVCLG1DQUFtQztRQUNuQyx3Q0FBd0M7O1FBRXhDLDZCQUE2QjtRQUM3QixxREFBcUQ7UUFDckQsa0RBQWtEO1FBQ2xELGlDQUFpQztRQUNqQyxnQ0FBZ0M7UUFFaEMseUJBQXlCO1FBQ3pCLDBDQUEwQztRQUUxQyxvQkFBb0I7UUFDcEIseUJBQXlCO1FBQ3pCLGtFQUFrRTtRQUNsRSxzREFBc0Q7UUFFdEQsb0JBQW9CO1FBQ3BCLDZCQUE2QjtRQUM3Qiw2QkFBNkI7UUFDN0IsNkJBQTZCO1FBQzdCLGlGQUFpRjtRQUNqRiwwQ0FBMEM7UUFDMUMsd0VBQXdFO1FBQ3hFLHlDQUF5QztRQUN6QyxtQ0FBbUM7UUFDbkMsZ0NBQWdDO1FBQ2hDLGdEQUFnRDtRQUNoRCxpQkFBaUI7UUFDakIsK0NBQStDO1FBQy9DLFlBQVk7UUFDWixRQUFRO1FBQ1IsSUFBSTtRQUVKLDBCQUEwQjtRQUMxQix3QkFBd0I7UUFDeEIsMkNBQTJDO1FBQzNDLHdCQUF3QjtRQUN4QixxRkFBcUY7UUFDckYsMkNBQTJDO1FBQzNDLHVHQUF1RztRQUV2Ryw2RkFBNkY7UUFDN0YsNkJBQTZCO1FBQzdCLDRDQUE0QztRQUM1Qyx1R0FBdUc7UUFFdkcsdUZB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","assetPath":"Assets/Zepeto
+    Multiplay Component/ZepetoScript/SamdasuScript/MGRManager.ts","manifest":{"properties":[{"assembly":"UnityEngine.CoreModule","name":"buttonObject","type":"UnityEngine.GameObject","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"Header","args":["\"Ride
+    Properties\""]},{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.CoreModule","name":"rideTarget","type":"UnityEngine.Transform","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"UnityEngine.AnimationModule","name":"clip","type":"UnityEngine.AnimationClip","isArray":false,"initValue":[],"enumKeys":[],"enumValues":[],"attributes":[{"name":"SerializeField","args":[]}]},{"assembly":"mscorlib","name":"startTime","type":"System.Single","isArray":false,"initValue":["4"],"enumKeys":[],"enumValues":[],"attributes":[{"name":"Header","args":["\"Play
+    Properties\""]},{"name":"SerializeField","args":[]}]}],"name":"MGRManager","description":"","hasAnimatorMove":false},"isCompiled":true}'
+  typescriptHash: 15f543e2fe53387f565a36f4e2d305ae
   onlyWriteTrigger: 0
