@@ -17,8 +17,10 @@ export enum MESSAGE {
     Equip = "Equip",
     EquipChange = "EquipChange",
     Unequip = "Unequip",
+    SyncObjectAnimation = "SyncObjectAnimation",
     LOG = "Log",
     Visible = "Visible",
+    Leaderboard_Update = "Leaderboard_Update",
 
     /** Samdasu **/
     Clear_Stamp = "Clear_Stamp",
@@ -42,6 +44,7 @@ export enum SendName {
     chairId = "chairId",
     gestureName = "gestureName",
     animationParam = "animationParam",
+    cliplength = "cliplength",
     playerAdditionalValue = "playerAdditionalValue",
 
     // Samdasu
@@ -114,6 +117,10 @@ export enum EffectType {
     Firework = 1,
 }
 
+/* Object Animation Sync */
+export interface SyncAnim {
+    currentProgress:number;
+}
 
 
 //////////////////////////////////////////////// About UI Manager
@@ -254,9 +261,8 @@ export interface MGRRide {
 /* LeaderBoard Datas */
 export enum RankData {
     /* LeaderBoard Id */
-    // ScoreId = "e08e19bf-e09b-4e8f-be09-4eb6116c5f8f",
-    ScoreId = "9290993a-299c-462c-a907-3abbdb190d21",
-    TrashScoreId = "3adc3467-a9a1-4e03-a328-10c13cdf1ad5",
+    // TrashScoreId = "3c306291-c963-4a8c-8216-30a89eb208ad",
+    TrashScoreId = "7645ecac-18c9-4435-9996-d4c1d0db5a5e",
     
     /* Recycle Datas */
     Rank_Start = 1,
@@ -283,9 +289,6 @@ export enum UnequipButtonType {
 
 /* Other String Datas Collection */
 export enum Datas {
-    // LeaderBoard Id 
-    TrashScoreId = "9290993a-299c-462c-a907-3abbdb190d21",
-
     // NPC Id
     kuaId = "samdasoostory",
 

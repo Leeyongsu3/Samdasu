@@ -9,6 +9,9 @@ export default class extends Sandbox {
     private _isCreated: boolean = false;
     
     async onCreate(options: SandboxOptions) {
+        const date = new Date();
+        this.state.serverStartTime = date.getTime();
+
         this._modules.push(new SyncComponentModule(this));
         for (const module of this._modules) {
             await module.OnCreate();

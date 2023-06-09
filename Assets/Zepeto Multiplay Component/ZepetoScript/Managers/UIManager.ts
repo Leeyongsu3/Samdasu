@@ -363,7 +363,7 @@ export default class UIManager extends ZepetoScriptBehaviour {
             }
         });
         
-        // /* Branch - Point UI */
+        /* Branch - Point UI */
         const point_kr = pointUI.GetChild(0);
         const point_en = pointUI.GetChild(1);
         const point_nextButtons:Button[] = [];

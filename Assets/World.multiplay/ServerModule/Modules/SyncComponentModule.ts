@@ -127,6 +127,11 @@ export default class SyncComponentModule extends IModule {
             }
         });
 
+        this.server.onMessage(MESSAGE.Leaderboard_Update, (client) => {
+            this.server.broadcast(MESSAGE.Leaderboard_Update);
+        });
+
+
         /** Sample Code **/
         this.server.onMessage(MESSAGE.BlockEnter, (client,transformId:string) => {
             this.server.broadcast(MESSAGE.BlockEnter+transformId, client.sessionId);
@@ -144,6 +149,18 @@ export default class SyncComponentModule extends IModule {
         
 
         /** Samdasu **/
+        this.server.onMessage(MESSAGE.SyncObjectAnimation, (client, message) => {
+            const currentTime = new Date().getTime() - this.server.state.serverStartTime;
+            const currentProgress: number = currentTime % message.cliplength;
+
+            console.log(`[Time] ${currentProgress}`);
+
+            const SyncroRide = {
+                currentProgress: currentProgress,
+            }
+            client.send(MESSAGE.SyncObjectAnimation, SyncroRide);
+        });
+
         this.server.onMessage(MESSAGE.Clear_Stamp, (client, message) => {
             if(!message.stamp) return;
             const player = this.server.state.players.get(client.sessionId);
@@ -370,28 +387,28 @@ export default class SyncComponentModule extends IModule {
         const storage: DataStorage = client.loadDataStorage();
 
         /* Visit Count */
-        let visit_cnt = await storage.get("VisitCount") as number;
+        let visit_cnt = await storage.get(StorageName.VisitCount) as number;
         if (visit_cnt == null) visit_cnt = 0;
         player.visit = visit_cnt;
-        await storage.set("VisitCount", ++visit_cnt);
+        await storage.set(StorageName.VisitCount, ++visit_cnt);
         console.log(`[OnJoin] ${client.sessionId}'s visiting count : ${visit_cnt}`)
 
         /* Trash Count */
-        let trashCount = await storage.get("TrashCount") as number;
+        let trashCount = await storage.get(StorageName.TrashCounts) as number;
         if (trashCount == null) trashCount = 0;
         console.log(`[OnJoin] ${client.sessionId}'s trash count : ${trashCount}`)
         player.samdasu.TrashCount = trashCount;
-        await storage.set("TrashCount", trashCount);
+        await storage.set(StorageName.TrashCounts, trashCount);
 
         /* Trash Score */
-        let score = await storage.get("Score") as number;
+        let score = await storage.get(StorageName.TrashScore) as number;
         if (score == null) score = 0;
         console.log(`[OnJoin] ${client.sessionId}'s score : ${score}`)
         player.samdasu.Score = score;
-        await storage.set("Score", score);
+        await storage.set(StorageName.TrashScore, score);
 
         /* Trash Sticker */
-        let JSON_stickers = await storage.get("Stickers") as string;
+        let JSON_stickers = await storage.get(StorageName.SamdasuStickers) as string;
         if (JSON_stickers == null) {
             this.StickerInit(client.sessionId);
             JSON_stickers = JSON.stringify(player.samdasu.Stickers);
@@ -399,10 +416,10 @@ export default class SyncComponentModule extends IModule {
             this.StickerConvert(client.sessionId, JSON_stickers);
         }
         console.log(`[OnJoin] ${client.sessionId}'s stickers : ${JSON_stickers}`);
-        await storage.set("Stickers", JSON_stickers);
+        await storage.set(StorageName.SamdasuStickers, JSON_stickers);
 
         /* Clear Stamp */
-        let JSON_stamps = await storage.get("Stamps") as string;
+        let JSON_stamps = await storage.get(StorageName.SamdasuStamps) as string;
         if (JSON_stamps == null) {
             this.StampInit(client.sessionId);
             JSON_stamps = JSON.stringify(player.samdasu.Stamps);
@@ -410,7 +427,7 @@ export default class SyncComponentModule extends IModule {
             this.StampConvert(client.sessionId, JSON_stamps);
         }
         console.log(`[OnJoin] ${client.sessionId}'s stamps : ${JSON_stamps}`)
-        await storage.set("Stamps", JSON_stamps);
+        await storage.set(StorageName.SamdasuStamps, JSON_stamps);
 
         /* onJoined End */
         this.server.state.players.set(client.sessionId, player);
@@ -422,21 +439,21 @@ export default class SyncComponentModule extends IModule {
 
         /* Trash Count */
         console.log(`[onLeave] ${client.sessionId}'s trash count : ${player.samdasu.TrashCount}`)
-        await client.loadDataStorage().set("TrashCount", player.samdasu.TrashCount);
+        await client.loadDataStorage().set(StorageName.TrashCounts, player.samdasu.TrashCount);
 
         /* Trash Score */
         console.log(`[onLeave] ${client.sessionId}'s score : ${player.samdasu.Score}`)
-        await client.loadDataStorage().set("Score", player.samdasu.Score);
+        await client.loadDataStorage().set(StorageName.TrashScore, player.samdasu.Score);
 
         /* Trash Sticker */
         const stickers = JSON.stringify(player.samdasu.Stickers);
         console.log(`[onLeave] ${client.sessionId}'s stickers : ${stickers}`)
-        await client.loadDataStorage().set("Stickers", stickers);
+        await client.loadDataStorage().set(StorageName.SamdasuStickers, stickers);
 
         /* Clear Stamp */
         const stamps = JSON.stringify(player.samdasu.Stamps);
         console.log(`[onLeave] ${client.sessionId}'s stamps : ${stamps}`)
-        await client.loadDataStorage().set("Stamps", stamps);
+        await client.loadDataStorage().set(StorageName.SamdasuStamps, stamps);
         
         if(this.sessionIdQueue.includes(client.sessionId)) {
             const leavePlayerIndex = this.sessionIdQueue.indexOf(client.sessionId);
@@ -606,7 +623,9 @@ enum MESSAGE {
     Equip = "Equip",
     EquipChange = "EquipChange",
     Unequip = "Unequip",
+    SyncObjectAnimation = "SyncObjectAnimation",
     Visible = "Visible",
+    Leaderboard_Update = "Leaderboard_Update",
 
     /** Racing Game **/
     StartRunningRequest = "StartRunningRequest",
@@ -626,6 +645,14 @@ enum MESSAGE {
     Ride_OFF = "Ride_OFF",
     MGR_Play = "MGR_Play",
     FlumeRide = "FlumeRide",
+}
+
+enum StorageName {
+    VisitCount = "VisitCount",
+    TrashCounts = "TrashCounts",
+    TrashScore = "TrashScore",
+    SamdasuStickers = "SamdasuStickers",
+    SamdasuStamps = "SamdasuStamps",
 }
 
 /** Samdasu **/

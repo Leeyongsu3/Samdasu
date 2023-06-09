@@ -7,6 +7,7 @@ import { ZepetoWorldMultiplay } from 'ZEPETO.World';
 import SyncIndexManager from '../Common/SyncIndexManager';
 import DOTWeenSyncHelper from '../DOTween/DOTWeenSyncHelper';
 import PlayerSync from '../Player/PlayerSync';
+import FerrisWheelManager from '../SamdasuScript/FerrisWheelManager';
 import FlumeRideManager from '../SamdasuScript/FlumeRideManager';
 import HorseRideManager from '../SamdasuScript/HorseRideManager';
 import MGRManager from '../SamdasuScript/MGRManager';
@@ -22,7 +23,7 @@ import AnimatorSyncHelper from '../Transform/AnimatorSyncHelper';
 import TransformSyncHelper from '../Transform/TransformSyncHelper';
 import EquipManager from './EquipManager';
 import LeaderBoardManager from './LeaderBoardManager';
-import { Anim, ButtonType, CameraMode, Datas, EffectType, ERROR, LandStamp, LoadingType, MESSAGE, SamdasuState, SendName, StampType, SyncChair, SyncRide, UnequipButtonType } from './TypeManager';
+import { Anim, ButtonType, CameraMode, Datas, EffectType, ERROR, LandStamp, LoadingType, MESSAGE, SamdasuState, SendName, StampType, SyncAnim, SyncChair, SyncRide, UnequipButtonType } from './TypeManager';
 import UIManager from './UIManager';
 import VisibleManager from './VisibleManager';
 
@@ -54,6 +55,7 @@ export default class GameManager extends ZepetoScriptBehaviour {
     @Header("* Samdasus Field")
     @Header("Managers")
     @SerializeField() private _leaderboardManager: Transform;
+    @SerializeField() private _ferrisWheelManager: Transform;
     @SerializeField() private _horseRideManager: Transform;
     @SerializeField() private _flumeRideManager: Transform;
     // @SerializeField() private _treeKingManager: Transform;
@@ -63,6 +65,7 @@ export default class GameManager extends ZepetoScriptBehaviour {
     @SerializeField() private _npcManager: Transform;
     @SerializeField() private _oxManager: Transform;
     private leaderboardManager: LeaderBoardManager;
+    private ferrisWheelManager: FerrisWheelManager;
     private horseRideManager: HorseRideManager;
     private flumeRideManager: FlumeRideManager;
     // private treeKingManager: TreeKingManager;
@@ -129,6 +132,19 @@ export default class GameManager extends ZepetoScriptBehaviour {
                         chair.PlayerSitUp(message.OwnerSessionId);
                     }
                 }
+            });
+
+            /* Animation keyframe Sync */
+            // room.AddMessageHandler(MESSAGE.SyncObjectAnimation, (message:SyncAnim) => {
+            //     console.log(`MESSAGE.SyncObjectAnimation 0`);
+            //     if(!this.ferrisWheelManager) return;
+
+            //     console.log(`MESSAGE.SyncObjectAnimation 1`);
+            //     this.ferrisWheelManager.SyncAnimation(message);
+            // });
+
+            this.room.AddMessageHandler(MESSAGE.Leaderboard_Update, (message:any) => {
+                this.leaderboardManager.UpdateScore();
             });
 
             this.room.AddMessageHandler(MESSAGE.Play_Effect, (message:any) => {
@@ -283,6 +299,14 @@ export default class GameManager extends ZepetoScriptBehaviour {
                     /* Remote Start */
                     UIManager.instance.RemoteStart();
                     console.log(`[GameManager] UIManager loaded success`);
+        
+                    const ferrisWheelManager = this._ferrisWheelManager.GetComponent<FerrisWheelManager>();
+                    if(ferrisWheelManager) this.ferrisWheelManager = ferrisWheelManager;
+                    else this.ferrisWheelManager = GameObject.FindObjectOfType<FerrisWheelManager>();
+                    this._ferrisWheelManager = null;
+                    // const clipLength = ferrisWheelManager.RemoteStart();
+                    // this.AnimationSyncRequest(clipLength);
+                    console.log(`[GameManager] FerrisWheelManager loaded success`);
 
                     const flumeRideManager = this._flumeRideManager.GetComponent<FlumeRideManager>();
                     if(flumeRideManager) this.flumeRideManager = flumeRideManager;
@@ -454,6 +478,14 @@ export default class GameManager extends ZepetoScriptBehaviour {
         this.room.Send(MESSAGE.ChairSit, data.GetObject());
     }
 
+    /* Animation Sync */
+    private AnimationSyncRequest(clipLength:number) {
+        if(!this.room || !this.room.IsConnected) return;
+        const data = new RoomData();
+        data.Add(SendName.cliplength, clipLength);
+        this.room.Send(MESSAGE.SyncObjectAnimation, data.GetObject());
+    }
+
     /* Trigger Firework */
     public onTriggerFirework() {
         if(!this.room || !this.room.IsConnected) return;
@@ -467,6 +499,11 @@ export default class GameManager extends ZepetoScriptBehaviour {
         this.player = player;
         UIManager.instance.SetStampUI(this.player.samdasu.Stamps);
         UIManager.instance.SetStickerUI(this.player.samdasu.Stickers);
+    }
+
+    /* Leaderboard Send Update Signal */
+    public SendUpdateRank() {
+        this.room.Send(MESSAGE.Leaderboard_Update);
     }
 
     /* Player Data Update */
@@ -491,9 +528,9 @@ export default class GameManager extends ZepetoScriptBehaviour {
         }
 
         /* Update LeaderBoard */
-        if(changeData[0] || changeData[1]) {
-            this.leaderboardManager.UpdateScore();
-        }
+        // if(changeData[0] || changeData[1]) {
+        //     this.leaderboardManager.UpdateScore();
+        // }
     }
     
     /** Samdasu */

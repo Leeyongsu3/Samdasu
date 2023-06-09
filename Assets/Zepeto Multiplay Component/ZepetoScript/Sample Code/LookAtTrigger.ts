@@ -60,8 +60,7 @@ export default class LookAtTrigger extends ZepetoScriptBehaviour {
 
     /* Player is In Trigger? */
     public get isInTrigger(): boolean {
-        if(this.GetDistanceToLocalPlayer() < this.col.radius) return true;
-        return false;
+        return this.GetDistanceToLocalPlayer() < this.col.radius;
     }
 
     /* Get Distance to Local Player */

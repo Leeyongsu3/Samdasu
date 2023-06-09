@@ -1,5 +1,5 @@
 {
-"State" : {"players" : {"map" : "Player"},"SyncTransforms" : {"map" : "SyncTransform"},"equipDatas" : {"map" : "EquipData"},"visibleZones" : "map"},
+"State" : {"players" : {"map" : "Player"},"SyncTransforms" : {"map" : "SyncTransform"},"equipDatas" : {"map" : "EquipData"},"serverStartTime" : "number"},
 "Player" : {"sessionId" : "string","zepetoHash" : "string","zepetoUserId" : "string","playerAdditionalValue" : "PlayerAdditionalValue","animationParam" : "ZepetoAnimationParam","gestureName" : "string","visit" : "number","samdasu" : "Samdasu"},
 "sVector3" : {"x" : "number","y" : "number","z" : "number"},
 "sQuaternion" : {"x" : "number","y" : "number","z" : "number","w" : "number"},

@@ -4,6 +4,7 @@ import { ZepetoScriptBehaviour } from 'ZEPETO.Script'
 import { GetRangeRankResponse, LeaderboardAPI, ResetRule, SetScoreResponse } from 'ZEPETO.Script.Leaderboard';
 import { Users, ZepetoWorldHelper } from 'ZEPETO.World';
 import SyncIndexManager from '../Common/SyncIndexManager';
+import GameManager from './GameManager';
 import { RankData, RankUI } from './TypeManager';
 
 export default class LeaderBoardManager extends ZepetoScriptBehaviour {
@@ -45,12 +46,21 @@ export default class LeaderBoardManager extends ZepetoScriptBehaviour {
     }
 
     /* Update Local Player's Score */
-    public UpdateScore() {
+    public SetScore() {
         LeaderboardAPI.SetScore(RankData.TrashScoreId, 100, (result:SetScoreResponse) => {
-            this.UpdateRankData();
+            GameManager.instance.SendUpdateRank();
         }, (error:string) => {
             console.error(` UpdateScore error : ${error} `);
         })
+    }
+
+    /* Update Local Player's Score */
+    public UpdateScore() {
+        LeaderboardAPI.SetScore(RankData.TrashScoreId, 0, (result:SetScoreResponse) => {
+        }, (error:string) => {
+            console.error(` UpdateScore error : ${error} `);
+        })
+        this.UpdateRankData();
     }
 
     /* Leaderboard + UserInfo */

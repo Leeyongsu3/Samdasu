@@ -7,6 +7,7 @@ declare module "ZEPETO.Multiplay.Schema" {
 		players: MapSchema<Player>;
 		SyncTransforms: MapSchema<SyncTransform>;
 		equipDatas: MapSchema<EquipData>;
+		serverStartTime: number;
 	}
 	class Player extends Schema {
 		sessionId: string;
@@ -61,8 +62,8 @@ declare module "ZEPETO.Multiplay.Schema" {
 		Acceleration: number;
 		MoveProgress: number;
 		isSit: boolean;
-		isHold: boolean;
 		SamdasuState: number;
+		isHold: boolean;
 	}
 	class Samdasu extends Schema {
 		SamdasuState: number;
@@ -79,5 +80,9 @@ declare module "ZEPETO.Multiplay.Schema" {
 	class Stamp extends Schema {
 		name: string;
 		isClear: boolean;
+	}
+	class VisibleZone extends Schema {
+		name: string;
+		isVisible: boolean;
 	}
 }

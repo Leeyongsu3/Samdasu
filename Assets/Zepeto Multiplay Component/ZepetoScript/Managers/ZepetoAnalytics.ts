@@ -43,14 +43,14 @@ export default class ZepetoAnalytics extends ZepetoScriptBehaviour {
                 }
             }
         }
-        console.log(`[Analytics] GoogleAnalytics SendLogEvent 2 ${ZepetoPlayers.instance.LocalPlayer}`);
-        console.log(`[Analytics] GoogleAnalytics SendLogEvent 3 ${ZepetoPlayers.instance.LocalPlayer.zepetoPlayer}`);
-        console.log(`[Analytics] GoogleAnalytics SendLogEvent 4 ${ZepetoPlayers.instance.LocalPlayer.zepetoPlayer.userId}`);
+        // console.log(`[Analytics] GoogleAnalytics SendLogEvent 2 ${ZepetoPlayers.instance.LocalPlayer}`);
+        // console.log(`[Analytics] GoogleAnalytics SendLogEvent 3 ${ZepetoPlayers.instance.LocalPlayer.zepetoPlayer}`);
+        // console.log(`[Analytics] GoogleAnalytics SendLogEvent 4 ${ZepetoPlayers.instance.LocalPlayer.zepetoPlayer.userId}`);
 
         const tempUserIds = new Array();
         tempUserIds.push(ZepetoPlayers.instance.LocalPlayer.zepetoPlayer.userId);
         let zepetoId = "";
-        console.log(`[Analytics] GoogleAnalytics SendLogEvent 5 `);
+        // console.log(`[Analytics] GoogleAnalytics SendLogEvent 5 `);
         ZepetoWorldHelper.GetUserIdInfo(tempUserIds, (info:Users[]) => {
             zepetoId = info[0].zepetoId;
             console.log(zepetoId + " : " + info[0].zepetoId);
@@ -59,16 +59,16 @@ export default class ZepetoAnalytics extends ZepetoScriptBehaviour {
         });
 
         // 유저 아이디를 받아와서 이벤트 키로 설정하여 전송해야함
-        console.log(`[Analytics] GoogleAnalytics SendLogEvent 4`);
+        // console.log(`[Analytics] GoogleAnalytics SendLogEvent 4`);
         while(true) {
-            console.log(`[Analytics] UnityEngine.WaitForFixedUpdate 0`);
+            // console.log(`[Analytics] UnityEngine.WaitForFixedUpdate 0`);
             yield new UnityEngine.WaitForFixedUpdate();
             if (zepetoId == "") {
-                console.log(`zepetoId == empty`);
+                // console.log(`zepetoId == empty`);
                 continue;
             }
             zepetoId = zepetoId.replace(/\./g, "점"); // '.' 이 들어간 키는 구글 애널리틱스 상에서 받아오지 못하는 오류가 발생하여 '점' 으로 임시 대체
-            console.log(`[Analytics] 이 들어간 키는 구글 애널리틱스 상에서 받아오지 못하는 오류가 발생하여 '점' 으로 임시 대체`);
+            // console.log(`[Analytics] 이 들어간 키는 구글 애널리틱스 상에서 받아오지 못하는 오류가 발생하여 '점' 으로 임시 대체`);
 
             const time = new Date().toString();
             const google = this.analytics.Analytics(AnalyticsType.GoogleAnalytics);
