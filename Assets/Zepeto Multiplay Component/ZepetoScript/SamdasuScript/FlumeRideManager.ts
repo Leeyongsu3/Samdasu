@@ -70,6 +70,7 @@ export default class FlumeRideManager extends ZepetoScriptBehaviour {
         GameManager.instance.CharacterShadowVisibler(ownerSessionId, true);
 
         /* Board Destroy */
+        yield this.wait;
         GameObject.Destroy(board);
     }
 }
