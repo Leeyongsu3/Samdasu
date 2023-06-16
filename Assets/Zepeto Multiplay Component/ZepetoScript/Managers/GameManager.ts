@@ -1,8 +1,9 @@
 import { Animator, BoxCollider, Camera, CharacterController, GameObject, HumanBodyBones, Mathf, MeshRenderer, Quaternion, Random, Transform, Vector3, WaitForSeconds } from 'UnityEngine';
-import { UIZepetoPlayerControl, ZepetoCharacter, ZepetoPlayers } from 'ZEPETO.Character.Controller';
+import { UIZepetoPlayerControl, ZepetoCharacter, ZepetoPlayer, ZepetoPlayers } from 'ZEPETO.Character.Controller';
 import { Room, RoomData } from 'ZEPETO.Multiplay';
 import { Player } from 'ZEPETO.Multiplay.Schema';
 import { ZepetoScriptBehaviour } from 'ZEPETO.Script'
+import { Rank } from 'ZEPETO.Script.Leaderboard';
 import { ZepetoWorldMultiplay } from 'ZEPETO.World';
 import SyncIndexManager from '../Common/SyncIndexManager';
 import DOTWeenSyncHelper from '../DOTween/DOTWeenSyncHelper';
@@ -135,12 +136,13 @@ export default class GameManager extends ZepetoScriptBehaviour {
             });
 
             /* Animation keyframe Sync */
-            room.AddMessageHandler(MESSAGE.SyncObjectAnimation, (message:SyncAnim) => {
+            this.room.AddMessageHandler(MESSAGE.SyncObjectAnimation, (message:SyncAnim) => {
                 if(!this.ferrisWheelManager) return;
                 this.ferrisWheelManager.SyncAnimation(message);
             });
 
             this.room.AddMessageHandler(MESSAGE.Leaderboard_Update, (message:any) => {
+                console.log(`Leaderboard_Update 1`);
                 this.leaderboardManager.UpdateScore();
             });
 
@@ -211,13 +213,6 @@ export default class GameManager extends ZepetoScriptBehaviour {
         console.log(`[GameManager] DOTWeenSyncHelper connected success`);
 
         /* Get Managers */
-        const leaderboardManager = this._leaderboardManager.GetComponent<LeaderBoardManager>();
-        if(leaderboardManager) this.leaderboardManager = leaderboardManager;
-        else this.leaderboardManager = GameObject.FindObjectOfType<LeaderBoardManager>();
-        this._leaderboardManager = null;
-        leaderboardManager.RemoteStart();
-        console.log(`[GameManager] LeaderBoardManager loaded success`);
-        
         const visibleManager = this._visibleManager.GetComponent<VisibleManager>();
         if(visibleManager) this.visibleManager = visibleManager;
         else this.visibleManager = GameObject.FindObjectOfType<VisibleManager>();
@@ -298,6 +293,13 @@ export default class GameManager extends ZepetoScriptBehaviour {
                     /* Remote Start */
                     UIManager.instance.RemoteStart();
                     console.log(`[GameManager] UIManager loaded success`);
+
+                    const leaderboardManager = this._leaderboardManager.GetComponent<LeaderBoardManager>();
+                    if(leaderboardManager) this.leaderboardManager = leaderboardManager;
+                    else this.leaderboardManager = GameObject.FindObjectOfType<LeaderBoardManager>();
+                    this._leaderboardManager = null;
+                    leaderboardManager.RemoteStart(ZepetoPlayers.instance.LocalPlayer.zepetoPlayer.userId);
+                    console.log(`[GameManager] LeaderBoardManager loaded success`);
         
                     const ferrisWheelManager = this._ferrisWheelManager.GetComponent<FerrisWheelManager>();
                     if(ferrisWheelManager) this.ferrisWheelManager = ferrisWheelManager;
@@ -492,9 +494,48 @@ export default class GameManager extends ZepetoScriptBehaviour {
         UIManager.instance.SetStickerUI(this.player.samdasu.Stickers);
     }
 
+    /* Add Point */
+    public AddPoint() {
+        const data = new RoomData();
+        data.Add(SendName.trashCount, 10);
+        this.room.Send(MESSAGE.Add_Point, data.GetObject());
+        this.leaderboardManager.AddScore();
+
+        /* Stamp Check */
+        const trashStamp = SyncIndexManager.STAMPS.get(StampType.STAMP_TRASH);
+        if(!trashStamp.isClear) this.ClearStampMission(StampType.STAMP_TRASH);
+    }
+
     /* Leaderboard Send Update Signal */
     public SendUpdateRank() {
         this.room.Send(MESSAGE.Leaderboard_Update);
+    }
+
+    /* Leaderboard Get Rank */
+    public GetRanked(data:Rank) {
+        // 2023 06 18일 까지는 유지
+        const score = this.player.samdasu.Score - data.score;
+        if(score > 0) {
+            const date = new Date();
+            if(date.getFullYear() == 2023 && date.getMonth()+1 == 6 && date.getDate() <= 18) {
+                console.log(` Catch Date.... ${date.getFullYear()}.${date.getMonth()+1}.${date.getDate()}`);
+                this.leaderboardManager.UpdateScoreAggressive(score);
+                return;
+            }
+        }
+        
+        // when Reset Week
+        if(this.player.samdasu.Score != data.score) {
+            console.log(`[GameManager] Score Reset -Week`);
+            this.SendSetPoint(data.score);
+        }
+    }
+
+    /* Set Score Aggresive */
+    private SendSetPoint(score:number) {
+        const data = new RoomData();
+        data.Add(SendName.SetPoint, score);
+        this.room.Send(MESSAGE.Set_Point, data.GetObject());
     }
 
     /* Player Data Update */
@@ -519,6 +560,7 @@ export default class GameManager extends ZepetoScriptBehaviour {
         }
 
         /* Update LeaderBoard */
+        /* NEVER DONT USE !!! */
         // if(changeData[0] || changeData[1]) {
         //     this.leaderboardManager.UpdateScore();
         // }

@@ -1,8 +1,10 @@
-import { GameObject, RectTransform, Transform, Vector2, Vector3 } from 'UnityEngine';
-import { Text } from 'UnityEngine.UI';
+import { GameObject, RectTransform, Transform, Vector2, Vector3, WaitForSeconds } from 'UnityEngine';
+import { FormerlySerializedAsAttribute } from 'UnityEngine.Serialization';
+import { Button, Text } from 'UnityEngine.UI';
+import { ZepetoPlayers } from 'ZEPETO.Character.Controller';
 import { ZepetoScriptBehaviour } from 'ZEPETO.Script'
 import { GetRangeRankResponse, LeaderboardAPI, ResetRule, SetScoreResponse } from 'ZEPETO.Script.Leaderboard';
-import { Users, ZepetoWorldHelper } from 'ZEPETO.World';
+import { Users, WorldService, ZepetoWorldHelper } from 'ZEPETO.World';
 import SyncIndexManager from '../Common/SyncIndexManager';
 import GameManager from './GameManager';
 import { RankData, RankUI } from './TypeManager';
@@ -15,14 +17,16 @@ export default class LeaderBoardManager extends ZepetoScriptBehaviour {
     private _isStarted: boolean = false;
     public get isStarted(): boolean { return this._isStarted; }
     private set isStarted(value: boolean) { this._isStarted = value; }
+    private isGetPlayer:boolean = false;
 
     /* From GameManager */
-    public RemoteStart() {
+    public RemoteStart(userId:string) {
         for(let i=0; i<this.rankCanvas.childCount; i++) {
             const panel = this.rankCanvas.GetChild(i);
             this.SetRankPanel(panel, i);
         }
         this.UpdateRankData();
+        this.StartCoroutine(this.GetRank(userId));
         this.isStarted = true;
     }
 
@@ -46,12 +50,21 @@ export default class LeaderBoardManager extends ZepetoScriptBehaviour {
     }
 
     /* Update Local Player's Score */
-    public SetScore() {
+    public AddScore() {
         LeaderboardAPI.SetScore(RankData.TrashScoreId, 100, (result:SetScoreResponse) => {
             GameManager.instance.SendUpdateRank();
         }, (error:string) => {
             console.error(` UpdateScore error : ${error} `);
         })
+    }
+
+    /* Update Local Player's Score */
+    public UpdateScoreAggressive(aggresiveScore:number) {
+        LeaderboardAPI.SetScore(RankData.TrashScoreId, aggresiveScore, (result:SetScoreResponse) => {
+        }, (error:string) => {
+            console.error(` UpdateScore error : ${error} `);
+        })
+        this.UpdateRankData();
     }
 
     /* Update Local Player's Score */
@@ -61,6 +74,48 @@ export default class LeaderBoardManager extends ZepetoScriptBehaviour {
             console.error(` UpdateScore error : ${error} `);
         })
         this.UpdateRankData();
+    }
+
+    /* Get Local Player's Rank */
+    public * GetRank(id:string) {
+        let count = 0;
+        let page = 1;
+        let page_limit = 100;
+        let notRanked:boolean = false;
+        let leaderCheck = true;
+        const waitTask = new WaitForSeconds(0.1);
+        
+        while(true) {
+            if(leaderCheck) {
+                leaderCheck = false;
+                count++;
+                if(this.isGetPlayer) break;
+                if(notRanked) {
+                    console.error(`랭킹데이터가 없음`);
+                    break;
+                }
+                
+                LeaderboardAPI.GetRangeRank(RankData.TrashScoreId, page + (page_limit * (count-1)), page_limit * count, ResetRule.week, false, (result: GetRangeRankResponse) => {
+                    /* Get Player Datas */
+                    if (result.rankInfo.rankList) {
+                        for(let i=0; i < result.rankInfo.rankList.length; i++) {
+                            const data = result.rankInfo.rankList.get_Item(i);
+                            if(id != data.member) continue;
+                            this.isGetPlayer = true;
+                            GameManager.instance.GetRanked(data);
+                            break;
+                        }
+                    } else {
+                        notRanked = true;
+                    }
+                    leaderCheck = true;
+                }, (error: string) => {
+                    console.error(error);
+                });
+            } else {
+                yield waitTask;
+            }
+        }
     }
 
     /* Leaderboard + UserInfo */
@@ -95,8 +150,11 @@ export default class LeaderBoardManager extends ZepetoScriptBehaviour {
                 for (const data of info) {
                     console.log(`data.zepetoId ${data.zepetoId} ===> ${data.zepetoId == null}, ${data.zepetoId == "null"}`);
                     
-                    if(data.zepetoId) ids.push(this.ProcessingId(data.zepetoId))
-                    // else ids.push(this.ProcessingId(data.name))
+                    if(data.zepetoId) {
+                        ids.push(this.ProcessingId(data.zepetoId))
+                    } else {
+                        ids.push(this.ProcessingId(data.name))
+                    }
                 }
 
                 /* Update Rank Text */

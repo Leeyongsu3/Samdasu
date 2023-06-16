@@ -353,8 +353,6 @@ export default class UIManager extends ZepetoScriptBehaviour {
             choice_Images.gameObject.SetActive(true);
             stickerUI.gameObject.SetActive(false);
             this.openUI = null;
-            console.log(sticker_nextButton, SyncIndexManager.TrashCount >= 10);
-            
             if(SyncIndexManager.TrashCount >= 10) {
                 this.buyStickerUI.gameObject.SetActive(true);
             } else {
@@ -376,16 +374,8 @@ export default class UIManager extends ZepetoScriptBehaviour {
                 choice_Images.gameObject.SetActive(true);
                 pointUI.gameObject.SetActive(false);
                 this.openUI = null;
-                console.log(point_nextButton, SyncIndexManager.TrashCount >= 10);
-    
                 if(SyncIndexManager.TrashCount >= 10) {
-                    const data = new RoomData();
-                    data.Add(SendName.trashCount, 10);
-                    this.room.Send(MESSAGE.Add_Point, data.GetObject());
-
-                    /* Stamp Check */
-                    const trashStamp = SyncIndexManager.STAMPS.get(StampType.STAMP_TRASH);
-                    if(!trashStamp.isClear) GameManager.instance.ClearStampMission(StampType.STAMP_TRASH);
+                    GameManager.instance.AddPoint();
                 } else {
                     // NEED to UI
                 }
@@ -397,7 +387,6 @@ export default class UIManager extends ZepetoScriptBehaviour {
         const create_en = createUI.GetChild(1);
         const create_nextButton = createUI.GetChild(2).GetComponent<Button>();
         create_nextButton.onClick.AddListener(() => {
-            console.log(create_nextButton);
             if(createIndex == 0) {
                 const count = GameManager.instance.GetAliveTrashCount();
                 if(count > 0) {

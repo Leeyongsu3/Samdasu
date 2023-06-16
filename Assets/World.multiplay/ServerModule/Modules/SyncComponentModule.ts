@@ -128,7 +128,7 @@ export default class SyncComponentModule extends IModule {
         });
 
         this.server.onMessage(MESSAGE.Leaderboard_Update, (client) => {
-            this.server.broadcast(MESSAGE.Leaderboard_Update);
+            this.server.broadcast(MESSAGE.Leaderboard_Update, null);
         });
 
 
@@ -218,6 +218,11 @@ export default class SyncComponentModule extends IModule {
             addSticker.Selected_A.count++;
             addSticker.Selected_B.count++;
             client.send(MESSAGE.Add_Sticker, addSticker);
+        });
+        
+        this.server.onMessage(MESSAGE.Set_Point, (client, message) => {
+            const player = this.server.state.players.get(client.sessionId);
+            player.samdasu.Score = message.SetPoint;
         });
         
         this.server.onMessage(MESSAGE.Add_Point, (client, message) => {
@@ -639,6 +644,7 @@ enum MESSAGE {
     Pick_Trash = "Pick_Trash",
     Add_Sticker = "Add_Sticker",
     Add_Point = "Add_Point",
+    Set_Point = "Set_Point",
     Ride_Horse = "Ride_Horse",
     Ride_Wheel = "Ride_Wheel",
     Ride_MGR = "Ride_MGR",

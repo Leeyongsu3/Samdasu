@@ -27,6 +27,7 @@ export enum MESSAGE {
     Pick_Trash = "Pick_Trash",
     Add_Sticker = "Add_Sticker",
     Add_Point = "Add_Point",
+    Set_Point = "Set_Point",
     Ride_Horse = "Ride_Horse",
     Ride_Wheel = "Ride_Wheel",
     Ride_MGR = "Ride_MGR",
@@ -63,6 +64,7 @@ export enum SendName {
     effectType = "effectType",
     isVisible = "isVisible",
     NeedTo_wait = "NeedTo_wait",
+    SetPoint = "SetPoint",
 }
 
 /* Player Speed Datas Name */
@@ -261,7 +263,7 @@ export interface MGRRide {
 /* LeaderBoard Datas */
 export enum RankData {
     /* LeaderBoard Id */
-    // TrashScoreId = "3c306291-c963-4a8c-8216-30a89eb208ad",
+    // TEST_ID = "2929102c-5e26-4f97-88ea-13f17eca38f5",
     TrashScoreId = "7645ecac-18c9-4435-9996-d4c1d0db5a5e",
     
     /* Recycle Datas */

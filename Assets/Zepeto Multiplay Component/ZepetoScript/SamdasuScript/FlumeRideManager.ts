@@ -3,6 +3,7 @@ import { ZepetoPlayers } from 'ZEPETO.Character.Controller';
 import { ZepetoScriptBehaviour } from 'ZEPETO.Script'
 import GameManager from '../Managers/GameManager';
 import { Anim, SamdasuState } from '../Managers/TypeManager';
+import TransformSyncHelper from '../Transform/TransformSyncHelper';
 
 export default class FlumeRideManager extends ZepetoScriptBehaviour {
 
@@ -46,6 +47,7 @@ export default class FlumeRideManager extends ZepetoScriptBehaviour {
         /* Play Board Animation */
         const boardAnim = board.GetComponent<Animator>();
         boardAnim.SetTrigger(Anim.BoardSlide);
+        this.SyncConnection(ownerSessionId, false);
         if(this.localSessionId == ownerSessionId) GameManager.instance.SetSamdasuState(SamdasuState.Ride_FlumeRide, true);
 
         this.StartCoroutine(this.RideOffFlumeRide(ownerSessionId, board));
@@ -69,8 +71,19 @@ export default class FlumeRideManager extends ZepetoScriptBehaviour {
         character.transform.SetParent(null);
         GameManager.instance.CharacterShadowVisibler(ownerSessionId, true);
 
+        this.SyncConnection(ownerSessionId, true);
+
         /* Board Destroy */
         yield this.wait;
         GameObject.Destroy(board);
+    }
+
+    private SyncConnection(sessionId, connect:boolean) {
+        const character = ZepetoPlayers.instance.GetPlayer(sessionId).character;
+        const helper = character.GetComponent<TransformSyncHelper>();
+        helper.SyncPosition = connect;
+        helper.SyncRotation = connect;
+        console.log(` [SyncConnection] ${this.localSessionId == sessionId?"LocalPlayer":"OtherPlayer"} : ${character.name} is ${connect?"Connected":"Disconnected"}`);
+        
     }
 }
