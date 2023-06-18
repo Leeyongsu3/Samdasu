@@ -3,6 +3,7 @@ import { ZepetoPlayers } from 'ZEPETO.Character.Controller';
 import { ZepetoScriptBehaviour } from 'ZEPETO.Script'
 import GameManager from '../Managers/GameManager';
 import { Anim, SamdasuState } from '../Managers/TypeManager';
+import TESTER from '../TESTER';
 import TransformSyncHelper from '../Transform/TransformSyncHelper';
 
 export default class FlumeRideManager extends ZepetoScriptBehaviour {
