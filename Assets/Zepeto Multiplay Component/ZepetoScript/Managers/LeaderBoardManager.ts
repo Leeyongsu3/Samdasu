@@ -59,13 +59,13 @@ export default class LeaderBoardManager extends ZepetoScriptBehaviour {
     }
 
     /* Update Local Player's Score */
-    public UpdateScoreAggressive(aggresiveScore:number) {
-        LeaderboardAPI.SetScore(RankData.TrashScoreId, aggresiveScore, (result:SetScoreResponse) => {
-        }, (error:string) => {
-            console.error(` UpdateScore error : ${error} `);
-        })
-        this.UpdateRankData();
-    }
+    // public UpdateScoreAggressive(aggresiveScore:number) {
+    //     LeaderboardAPI.SetScore(RankData.TrashScoreId, aggresiveScore, (result:SetScoreResponse) => {
+    //     }, (error:string) => {
+    //         console.error(` UpdateScore error : ${error} `);
+    //     })
+    //     this.UpdateRankData();
+    // }
 
     /* Update Local Player's Score */
     public UpdateScore() {
@@ -91,7 +91,7 @@ export default class LeaderBoardManager extends ZepetoScriptBehaviour {
                 count++;
                 if(this.isGetPlayer) break;
                 if(notRanked) {
-                    console.error(`랭킹데이터가 없음`);
+                    console.error(`랭킹데이터가 없음 : ${id}`);
                     break;
                 }
                 
@@ -120,7 +120,7 @@ export default class LeaderBoardManager extends ZepetoScriptBehaviour {
 
     /* Leaderboard + UserInfo */
     private UpdateRankData() {
-        console.log(`[LeaderBoard] Try to GetRangeRank`);
+        console.log(`[LeaderBoard] Try to GetRangeRank ${RankData.TrashScoreId}`);
         LeaderboardAPI.GetRangeRank(RankData.TrashScoreId, RankData.Rank_Start, RankData.Rank_End, ResetRule.week, false, (result: GetRangeRankResponse) => {
             console.log(`[LeaderBoard] success GetRangeRank`);
             /* Text Clear */
@@ -180,5 +180,42 @@ export default class LeaderBoardManager extends ZepetoScriptBehaviour {
             return beforeId;
         }
         return `${beforeId.slice(0, 6)}***`;
+    }
+
+
+
+    /* Leaderboard GetRank Last Week */
+    public GetRankLastWeek() {
+        console.log(`[LeaderBoard] Try to GetRangeRank`);
+        LeaderboardAPI.GetRangeRank(RankData.TrashScoreId, 1, 15, ResetRule.week, true, (result: GetRangeRankResponse) => {
+            console.log(`[LeaderBoard] success GetRangeRank`);
+            
+            /* Get Player Datas */
+            const mems:string[] = [];
+            if (result.rankInfo.rankList) {
+                for (let i=0; i < result.rankInfo.rankList.length; i++) {
+                    const data = result.rankInfo.rankList.get_Item(i);
+                    mems.push(data.member);
+                    console.log(`Rank : ${data.rank} / Score : ${data.score} / ZepetoId : ${data.member} / Name : ${data.name}`);
+                }
+            }
+
+            console.log(`===============================================`);
+            
+
+            /* Get Player ID */
+            ZepetoWorldHelper.GetUserInfo(mems, (info: Users[]) => {
+                console.log(`[LeaderBoard] success GetUserInfo `);
+                let rank = 1;
+                for (const data of info) {
+                    console.log(`Rank : ${rank++} / ZepetoId : (${data.zepetoId}) / userID : ${data.userOid} / Name : ${data.name}`);
+                }
+
+            }, (error) => {
+                return console.log(error);
+            });
+        }, (error: string) => {
+            console.error(error);
+        });
     }
 }

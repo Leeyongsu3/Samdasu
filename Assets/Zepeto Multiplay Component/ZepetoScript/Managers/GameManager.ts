@@ -455,10 +455,13 @@ export default class GameManager extends ZepetoScriptBehaviour {
                 this.StartCoroutine(this.FlumeRide());
                 break;
 
-            default :
-                this.StartCoroutine(this.FlumeRide());
-                console.error(`타입이 설정되지 않은 버튼이 있습니다. ${btn.name}-${ButtonType[buttonType]}`)
+            case ButtonType.GetRank_LastWeek:
+                this.leaderboardManager.GetRankLastWeek();
                 break;
+
+            default :
+                this.leaderboardManager.GetRankLastWeek();
+                console.error(`타입이 설정되지 않은 버튼이 있습니다. ${btn.name}-${ButtonType[buttonType]}`)
         }
     }
 
@@ -514,15 +517,15 @@ export default class GameManager extends ZepetoScriptBehaviour {
     /* Leaderboard Get Rank */
     public GetRanked(data:Rank) {
         // 2023 06 18일 까지는 유지
-        const score = this.player.samdasu.Score - data.score;
-        if(score > 0) {
-            const date = new Date();
-            if(date.getFullYear() == 2023 && date.getMonth()+1 == 6 && date.getDate() <= 18) {
-                console.log(` Catch Date.... ${date.getFullYear()}.${date.getMonth()+1}.${date.getDate()}`);
-                this.leaderboardManager.UpdateScoreAggressive(score);
-                return;
-            }
-        }
+        // const score = this.player.samdasu.Score - data.score;
+        // if(score > 0) {
+        //     const date = new Date();
+        //     if(date.getFullYear() == 2023 && date.getMonth()+1 == 6 && date.getDate() <= 18) {
+        //         console.log(` Catch Date.... ${date.getFullYear()}.${date.getMonth()+1}.${date.getDate()}`);
+        //         this.leaderboardManager.UpdateScoreAggressive(score);
+        //         return;
+        //     }
+        // }
         
         // when Reset Week
         if(this.player.samdasu.Score != data.score) {
@@ -618,14 +621,13 @@ export default class GameManager extends ZepetoScriptBehaviour {
     private * DrinkSamdasu() {
         /* Player Play Animation */
         const character = ZepetoPlayers.instance.GetPlayer(this.room.SessionId).character;
-        const characterController = character.transform.GetComponent<CharacterController>();
 
         /* Controller OFF */
         this.LocalPlayerControllerSet(false);
 
         /* Player State Set */
         this.SetSamdasuState(SamdasuState.Samdasu_Drink, true);
-        characterController.enabled = false;
+        character.characterController.enabled = false;
 
         /* Player Stop Animation */
         yield new WaitForSeconds(3);
@@ -635,7 +637,7 @@ export default class GameManager extends ZepetoScriptBehaviour {
         
         /* Controller ON */
         this.LocalPlayerControllerSet(true);
-        characterController.enabled = true;
+        character.characterController.enabled = true;
         // destory samdasu in the hand
 
         /* Samdasu Drink Stamp Check */
@@ -672,8 +674,7 @@ export default class GameManager extends ZepetoScriptBehaviour {
     
             /* Controller OFF */
             this.LocalPlayerControllerSet(false);
-            const characterController = character.transform.GetComponent<CharacterController>();
-            characterController.enabled = false;
+            character.characterController.enabled = false;
     
             /* Local Player Ride Off UI */
             UIManager.instance.currentSamdasuState = MESSAGE.Ride_MGR;
@@ -715,8 +716,7 @@ export default class GameManager extends ZepetoScriptBehaviour {
             
             /* Controller ON */
             this.LocalPlayerControllerSet(true);
-            const characterController = character.transform.GetComponent<CharacterController>();
-            characterController.enabled = true;
+            character.characterController.enabled = true;
 
             /* Local Player Get Stamp */
             if(isComplete) {

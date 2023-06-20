@@ -227,6 +227,7 @@ export default class UIManager extends ZepetoScriptBehaviour {
 
         let index = 0;
         this.npcHello.gameObject.SetActive(true);
+        this.openUI = this.npcHello.gameObject;
 
         /* Language */
         this.krObjects.push(kr.gameObject);
@@ -257,6 +258,7 @@ export default class UIManager extends ZepetoScriptBehaviour {
             index = this.ChangeSlide(-1, this.npcTrashUI.gameObject, kr, en);
             if(index == 0) this.openUI = null;
             
+            helpButton.gameObject.SetActive(false);
             if(!SyncIndexManager.Talk_First_Finish) {
                 /* First Talk */
                 slide_Images.gameObject.SetActive(true);
@@ -442,7 +444,6 @@ export default class UIManager extends ZepetoScriptBehaviour {
             const look = button.GetComponent<LookAt>();
             npcButtons.push(look);
         }
-        this.npcTrashButtons = [];
     }
 
     /* Samdasu NPC Horse Rental UI */

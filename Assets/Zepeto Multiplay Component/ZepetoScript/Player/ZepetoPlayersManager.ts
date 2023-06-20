@@ -8,7 +8,6 @@ import PlayerSync from './PlayerSync';
 import TransformSyncHelper,{PositionExtrapolationType, PositionInterpolationType, SyncIndexType} from '../Transform/TransformSyncHelper';
 import GameManager from '../Managers/GameManager';
 import { Datas } from '../Managers/TypeManager';
-import TESTER from '../TESTER';
 
 export enum ZepetoPlayerSpawnType {
     NoneSpawn,//Do not create players

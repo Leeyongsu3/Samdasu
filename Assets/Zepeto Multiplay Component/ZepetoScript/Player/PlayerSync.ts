@@ -71,8 +71,11 @@ export default class PlayerSync extends ZepetoScriptBehaviour {
         animator.SetInteger(Anim.SamdasuState, animationParam.SamdasuState);
 
         /* When Player Ride MGR */
-        const mgrChecker = animationParam.SamdasuState == SamdasuState.Ride_MGR && this.mgrIsPlay;
-        this.tfHelper.SyncRotation = !mgrChecker;
+        // const mgrChecker = animationParam.SamdasuState == SamdasuState.Ride_MGR && this.mgrIsPlay;
+        // const flumeChecker = animationParam.SamdasuState == SamdasuState.Ride_FlumeRide;
+        // this.tfHelper.SyncRotation = (!mgrChecker) && (!flumeChecker);
+        // console.log(`${this.tfHelper.SyncRotation} == (${!mgrChecker}) && ${!flumeChecker}`);
+        
 
         //sync gesture
         if (animationParam.State == CharacterState.Gesture && ( this.UseZepetoGestureAPI || this.GetAnimationClipFromResources )) { 

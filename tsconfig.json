@@ -12,7 +12,7 @@
 		],
 		"types": [
 			"./Assets/World.multiplay/SchemaTypes",
-			"./Library/PackageCache/zepeto.analytics@1.1.0/Runtime",
+			"./Library/PackageCache/zepeto.analytics@1.2.0/Runtime",
 			"./Library/PackageCache/zepeto.world@1.19.0",
 			"./Library/PackageCache/zepeto.world@1.19.0/typings/InputSystem",
 			"./Library/PackageCache/zepeto.world@1.19.0/typings/PostProcessing/Editor",

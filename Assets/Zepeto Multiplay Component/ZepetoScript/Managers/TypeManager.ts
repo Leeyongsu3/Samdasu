@@ -106,6 +106,9 @@ export enum ButtonType {
     EquipHead, EquipRightHand, EquipLeftHand, EquipBody,
     Visible,
     FlumeRide,
+
+    // Developer
+    GetRank, GetRank_LastWeek,
 }
 
 /* Camera Mode Data */
@@ -263,7 +266,7 @@ export interface MGRRide {
 /* LeaderBoard Datas */
 export enum RankData {
     /* LeaderBoard Id */
-    // TEST_ID = "2929102c-5e26-4f97-88ea-13f17eca38f5",
+    TEST_ID = "2929102c-5e26-4f97-88ea-13f17eca38f5",
     TrashScoreId = "7645ecac-18c9-4435-9996-d4c1d0db5a5e",
     
     /* Recycle Datas */
