@@ -9,7 +9,6 @@ import MultiplayManager, { GameObjectStatus } from '../Common/MultiplayManager';
 
 export default class TransformSyncHelper extends ZepetoScriptBehaviour {
     public UpdateOwnerType: UpdateOwner = UpdateOwner.Undefine;
-//
     /** Sync Options **/
     @Header("Position")
     public SyncPosition: boolean = true;
@@ -22,7 +21,7 @@ export default class TransformSyncHelper extends ZepetoScriptBehaviour {
     @Header("Rotation")
     public _SyncRotation: boolean = true;
     set SyncRotation(value:boolean) {
-        console.error(`${this.Id} : ${this._SyncRotation} ====> ${value}`);
+        // console.error(`${this.Id} : ${this._SyncRotation} ====> ${value}`);
         this._SyncRotation = value;
 }
     get SyncRotation() { return this._SyncRotation; }

@@ -19,6 +19,7 @@ export default class FlumeRideManager extends ZepetoScriptBehaviour {
         }
     }
     private wait:WaitForSeconds;
+    private waitSync:WaitForSeconds;
 
     /* Button Control */
     public WaitRide(ownerSessionId:string, isWait:boolean) {
@@ -32,6 +33,7 @@ export default class FlumeRideManager extends ZepetoScriptBehaviour {
     private RideFlumeRide(ownerSessionId:string) {
         /* Get Player */
         const character = ZepetoPlayers.instance.GetPlayer(ownerSessionId).character;
+        const helper = character.GetComponent<TransformSyncHelper>();
 
         /* Controller OFF */
         character.characterController.enabled = false;
@@ -47,9 +49,7 @@ export default class FlumeRideManager extends ZepetoScriptBehaviour {
         /* Play Board Animation */
         const boardAnim = board.GetComponent<Animator>();
         boardAnim.SetTrigger(Anim.BoardSlide);
-        const helper = character.GetComponent<TransformSyncHelper>();
         helper.SyncRotation = false;
-        console.log(`${character} : SyncRotation 0 ${helper.SyncRotation}`);
         
         if(this.localSessionId == ownerSessionId) GameManager.instance.SetSamdasuState(SamdasuState.Ride_FlumeRide, true);
 
@@ -62,10 +62,8 @@ export default class FlumeRideManager extends ZepetoScriptBehaviour {
         const character = ZepetoPlayers.instance.GetPlayer(ownerSessionId).character;
         const helper = character.GetComponent<TransformSyncHelper>();
 
-        console.log(`${character} : SyncRotation 0-1 ${helper.SyncRotation}`);
         if(!this.wait) this.wait = new WaitForSeconds(5);
         yield this.wait;
-        console.log(`${character} : SyncRotation 0-2 ${helper.SyncRotation}`);
 
         /* Controller ON */
         character.characterController.enabled = true;
@@ -76,9 +74,9 @@ export default class FlumeRideManager extends ZepetoScriptBehaviour {
         character.transform.SetParent(null);
         GameManager.instance.CharacterShadowVisibler(ownerSessionId, true);
 
-        console.log(`${character} : SyncRotation 1 ${helper.SyncRotation}`);
+        if(!this.waitSync) this.waitSync = new WaitForSeconds(0.5);
+        yield this.waitSync;
         helper.SyncRotation = true;
-        console.log(`${character} : SyncRotation 2 ${helper.SyncRotation}`);
 
         /* Board Destroy */
         yield this.wait;
