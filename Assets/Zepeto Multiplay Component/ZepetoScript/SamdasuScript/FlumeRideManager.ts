@@ -40,6 +40,7 @@ export default class FlumeRideManager extends ZepetoScriptBehaviour {
         /* Ride Slide Board */
         const board = GameObject.Instantiate(this.board, this.transformSupporter) as GameObject;
         character.Teleport(board.transform.position, Quaternion.Euler(0, 180, 0));
+        character.transform.rotation = Quaternion.Euler(0, 180, 0);
         character.transform.SetParent(board.transform);
         GameManager.instance.CharacterShadowVisibler(ownerSessionId, false);
 

@@ -20,7 +20,12 @@ export default class TransformSyncHelper extends ZepetoScriptBehaviour {
     @Tooltip("The creditworthiness of the offset figure of the extrapolation.") public extraMultipler: number = 1;
     @Tooltip("This is the given speed for lerp / movetoward / fixedspeed options.")public moveSpeed: number = 10;
     @Header("Rotation")
-    public SyncRotation: boolean = true;
+    public _SyncRotation: boolean = true;
+    set SyncRotation(value:boolean) {
+        console.error(`${this.Id} : ${this._SyncRotation} ====> ${value}`);
+        this._SyncRotation = value;
+}
+    get SyncRotation() { return this._SyncRotation; }
     public RotationInterpolationType: RotationInterpolationType = RotationInterpolationType.Lerp;
     public rotateSpeed: number = 100;
     @Header("Scale")
