@@ -688,7 +688,7 @@ export default class GameManager extends ZepetoScriptBehaviour {
     public RemoteRideOffMerryGoRound(sessionId:string) {
         if(this.room.SessionId == sessionId) {
             const data = new RoomData();
-            data.Add(SendName.SamdasuState, MESSAGE.Ride_MGR);
+            data.Add(SendName.SamdasuState, SamdasuState.NONE);
             data.Add(SendName.isComplete, true);
             this.room.Send(MESSAGE.Ride_OFF, data.GetObject());
         }

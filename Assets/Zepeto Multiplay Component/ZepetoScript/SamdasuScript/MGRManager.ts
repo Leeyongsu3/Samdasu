@@ -8,7 +8,6 @@ import TransformSyncHelper from '../Transform/TransformSyncHelper';
 
 export default class MGRManager extends ZepetoScriptBehaviour {
 
-    // version 2
     /* Merry Go Round Property */
     @Header("Rotate Properties")
     private _isPlay: boolean = false;
@@ -71,26 +70,26 @@ export default class MGRManager extends ZepetoScriptBehaviour {
         this.isStarted = true;
     }
     
-    private Update() {
-        if(!this.isStarted) return;
+    // private Update() {
+    //     if(!this.isStarted) return;
 
-        /* Local Trigger Timer */
-        // if(this.isTriggerOn) {
-        //     this.time += Time.deltaTime;
-        //     if(this.time > this.startTime) {
-        //         this.isTriggerOn = false;
-        //         this.time = 0;
-        //         GameManager.instance.MGRisPlay(true);
-        //     }
+    //     /* Local Trigger Timer */
+    //     // if(this.isTriggerOn) {
+    //     //     this.time += Time.deltaTime;
+    //     //     if(this.time > this.startTime) {
+    //     //         this.isTriggerOn = false;
+    //     //         this.time = 0;
+    //     //         GameManager.instance.MGRisPlay(true);
+    //     //     }
 
-        // } else if(this.isPlay) {
-        //     this.playTime += Time.deltaTime;
-        //     if(this.playTime > this.clipLength) {
-        //         this.playTime = 0;
-        //         GameManager.instance.MGRisPlay(false);
-        //     }
-        // }
-    }
+    //     // } else if(this.isPlay) {
+    //     //     this.playTime += Time.deltaTime;
+    //     //     if(this.playTime > this.clipLength) {
+    //     //         this.playTime = 0;
+    //     //         GameManager.instance.MGRisPlay(false);
+    //     //     }
+    //     // }
+    // }
 
     /* Trigger Wait 4 Seconds */
     private * StartTrigger() {
